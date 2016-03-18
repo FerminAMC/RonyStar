@@ -112,4 +112,9 @@ class Bullet{
     image(icon, posXL, posYU);
   }
   
+  void hit(boolean destroy){
+    //se espera que bala desaparezca y muestre explosion
+    //image()
+  }
+  
 }
