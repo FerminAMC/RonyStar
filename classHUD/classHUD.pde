@@ -1,27 +1,20 @@
 class HUD{
   PImage lives;
-  PImage progress[];
+  PImage progress;
   int score;
   int time;
   
-  HUD(){
-    String path;
+  public HUD(){
     lives = loadImage(".png");
-    for(int i = 0; i < 100; i++){
-      path = "" + i + ".png";
-      progress[i] = loadImage(path);
-    }
+    progress = loadImage(".png");
     score = 0;
     time = 0;
   }
   
-  HUD(int enemies){
+  public HUD(int enemies){
     String path;
     lives = loadImage(".png");
-    for(int i = 0; i < 100; i++){
-      path = "" + (100/enemies)*i + ".png";
-      progress[i] = loadImage(path);
-    }
+    progress = loadImage(".png");
     score = 0;
     time = 0;
   }
@@ -37,15 +30,13 @@ class HUD{
     */
   }
   
-  PImage[] getProgress(){
+  PImage getProgress(){
     return progress;
   }
   
-  void setProgress(PImage progress[]){
+  void setProgress(PImage progress){
     int i;
-    for(i = 0; i < progress.length; i++){
-      this.progress[i] = progress[i];
-    }
+    this.progress = progress;
   }
   
   int getScore(){
@@ -74,12 +65,8 @@ class HUD{
   }
   
   void reset(int enemies){
-    String path;
     lives = loadImage(".png");
-    for(int i = 0; i < 100; i++){
-      path = "" + (100/enemies)*i + ".png";
-      progress[i] = loadImage(path);
-    }
+    progress = loadImage(".png");
     score = 0;
     time = 0;
   }
