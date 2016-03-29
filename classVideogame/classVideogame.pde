@@ -1,5 +1,5 @@
 class videogame{
-  Bullet[] = new Bullet();
+  Bullet[]  = new Bullet();
   
 
 

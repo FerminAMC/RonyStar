@@ -2,13 +2,13 @@ class Level{
 int enemiesNumber;
 int levelNumber;
 int maxSeconds;
-  class Level(){
+  public Level(){
     enemiesNumber = 10;
     levelNumber = 1;
     maxSeconds = 60;
   }
   
-  class Level(int en, int ln, int ms){
+  public Level(int en, int ln, int ms){
     enemiesNumber = en;
     levelNumber = ln;
     maxSeconds = ms;
