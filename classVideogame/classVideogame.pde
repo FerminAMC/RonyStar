@@ -1,3 +1,4 @@
+
 Videogame vid;
 Bullet bala;
 Character rony;
@@ -6,6 +7,7 @@ HUD hud;
 Level l;
 
 void setup(){
+
   
    size(1000,400);
    
