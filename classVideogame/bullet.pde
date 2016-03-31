@@ -11,9 +11,9 @@ class Bullet{
   
   public Bullet(){
    damage = 10;
+   icon = loadImage("../Sprites/bullet.jpg");
    posXL = 20;
    posXR = posXL +icon.width;
-   icon = loadImage("");
    posYU = 200;
    posYD = posYU + icon.height;
    speedX = 1.02;

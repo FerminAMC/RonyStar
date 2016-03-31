@@ -1,31 +1,31 @@
+
 abstract class Element{
-  PImage image[];
+  PImage image;
   int posXL;
   int posXR;
   int posYU;
   int posYD;
   float speedX;
   float speedY;
-  boolean collide(){};
+  //boolean collide(){};
 }
 
 
 class Character extends Element{
   int lives;
   int score;
-  boolean powerUp[];
+  boolean [] powerUp = new boolean[3] ;
   
   public Character(){ 
-    for(int i = 0; i < 10; i++){
-      image[i] = null;
-    }
+    
+    image = loadImage("../Characters/RonyNA.png");
     posXL = 0;
-    posXR = posXL + image[0].width;
+    posXR = posXL + image.width;
     posYU = 0;
-    posYD = posYU + image[0].height;
+    posYD = posYU + image.height;
     lives = 0;
     score = 0;
-    powerUp[0] = false;
+    powerUp[0] = true;
     speedX = 0;
     speedY = 0;
   }
@@ -35,7 +35,7 @@ class Character extends Element{
     posXR = this.posXL + image.width;
     this.posYU = posYU;
     posYD = this.posYU + image.height;
-    this.image[0] = image;
+    this.image = image;
     this.lives = lives;
     this.score = score;
     this.powerUp[0] = powerUp;
@@ -97,17 +97,17 @@ class Character extends Element{
   
   void bulletCollide(Bullet e){
     boolean destroy = false;
-    if(e.getSpeedX < 0 && e.getPosXL() < posXR && posYU > e.getPosYD && posYD < e.getPosYU){
+    if(e.getSpeedX() < 0 && e.getPosXL() < posXR && posYU > e.getPosYD() && posYD < e.getPosYU()){
       lives--;
       e.hit(destroy);
-    } else if(e.getSpeedX > 0 && e.getPosXR() > posXL && posYU > e.getPosYD && posYD < e.getPosYU){
+    } else if(e.getSpeedX() > 0 && e.getPosXR() > posXL && posYU > e.getPosYD() && posYD < e.getPosYU()){
       lives--;
       e.hit(destroy);
     }
   }
   
   void pintate(){
-    image(image[0],posXL, posYU);
+    image(image,posXL, posYU);
   }
   
   void moveRight(){

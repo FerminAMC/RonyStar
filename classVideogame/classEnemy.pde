@@ -6,12 +6,12 @@ class Enemy extends Element{
     int resistance = 0;
     int value = 0;
     for(int i = 0; i < 10; i++){
-      image[i] = null;
+      image = null;
     }
     posXL = 0;
-    posXR = posXL + image[0].width;
+    posXR = posXL + image.width;
     posYU = 0;
-    posYD = posYU + image[0].height;
+    posYD = posYU + image.height;
     speedX = 0;
     speedY = 0;
   }
@@ -21,7 +21,7 @@ class Enemy extends Element{
     posXR = this.posXL + image.width;
     this.posYU = posYU;
     posYD = this.posYU + image.height;
-    this.image[0] = image;
+    this.image = image;
     this.resistance = resistance;
     this.value = value;
     this.speedX = speedX;
@@ -78,17 +78,17 @@ class Enemy extends Element{
   
   void bulletCollide(Bullet e){
     boolean destroy = false;
-    if(e.getSpeedX < 0 && e.getPosXL() < posXR && posYU > e.getPosYD && posYD < e.getPosYU){
+    if(e.getSpeedX() < 0 && e.getPosXL() < posXR && posYU > e.getPosYD() && posYD < e.getPosYU()){
       resistance--;
       e.hit(destroy);
-    } else if(e.getSpeedX > 0 && e.getPosXR() > posXL && posYU > e.getPosYD && posYD < e.getPosYU){
+    } else if(e.getSpeedX() > 0 && e.getPosXR() > posXL && posYU > e.getPosYD() && posYD < e.getPosYU()){
       resistance--;
       e.hit(destroy);
     }
   }
   
   void pintate(){
-    image(image[0],posXL, posYU);
+    image(image,posXL, posYU);
   }
   
   void moveRight(){
