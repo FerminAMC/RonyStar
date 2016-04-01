@@ -24,28 +24,53 @@ void draw(){
 }
 
 void keyPressed(){
+    if(key == 'w' || key == 'W'){
+      if(MENU == true){
+        menu.up();
+      }
+    }
+    if(key == 's' || key == 'S'){
+      if(MENU == true){
+        menu.down();
+      }
+    }
     if(key == 'd' || key == 'D'){
       if(MENU == true){
-        
+        menu.left();
+      }else{
+        mR = true;
       }
-      mR = true;
     }
     if(key == 'a' || key == 'A'){
-      mL = true;
+      if(MENU == true){
+        menu.right();
+      }else{
+        mL = true;
+      }
     }
     if(key == ' '){
-      j = true;
+      if(!MENU){
+        j = true;
+      }
+    }
+    if(keyCode == ENTER){
+      if(MENU == true){
+        MENU = menu.select();
+      }
     }
   }
   
   void keyReleased(){
     if(key == 'd' || key == 'D'){
+      if(!MENU)
       mR = false;
     }
     if(key == 'a' || key == 'A'){
+      if(!MENU)
       mL = false;
     }
     if(key == ' '){
+      if(!MENU)
       j = false;
     }
 }
