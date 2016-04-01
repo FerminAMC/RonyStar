@@ -1,16 +1,4 @@
 
-abstract class Element{
-  PImage image;
-  int posXL;
-  int posXR;
-  int posYU;
-  int posYD;
-  float speedX;
-  float speedY;
-  //boolean collide(){};
-}
-
-
 class Character extends Element{
   int lives;
   int score;
@@ -30,7 +18,7 @@ class Character extends Element{
     speedY = 0;
   }
   
-  public Character(PImage image, int lives, int score, boolean powerUp, int posXL, int posYU, int speedX, int speedY){
+  public Character(PImage image, int lives, int score, boolean powerUp, int posXL, int posYU, int speedX, float speedY){
     this.posXL = posXL;
     posXR = this.posXL + image.width;
     this.posYU = posYU;
@@ -110,22 +98,34 @@ class Character extends Element{
     image(image,posXL, posYU);
   }
   
-  void moveRight(){
-    posXL += speedX;
-  }
-  
-  void moveLeft(){
-    posXL -= speedX;
-  }
-  
-  void jump(){
-    for(int i = 0; i < 50; i += speedY){
-      posYU += speedY;
-      pintate();
+  void moveRight(boolean mR){
+    if(mR && posXR < width){
+      posXL += speedX;
+      posXR += speedX;
     }
-    for(int i = 0; i < 50; i += speedY){
-      posYU -= speedY;
-      pintate();
+  }
+  
+  void moveLeft(boolean mL){
+    if(mL && posXL > 0){
+      posXL -= speedX;
+      posXR -= speedX;
+    }
+  }
+  
+  void jump(boolean j){
+    if(j && posYU > 0){
+      for(int i = 0; i < 50; i += speedY){
+        posYU -= speedY;
+        posYD -= speedY;
+        //pintate();
+      }
+    }
+    if(!j && posYD < height){
+      for(int i = 0; i < 50; i += speedY){
+        posYU += speedY;
+        posYD += speedY;
+        //pintate();
+      }
     }
   }
   
