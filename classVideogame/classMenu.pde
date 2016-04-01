@@ -3,19 +3,7 @@
 2 - Menu Pausa
 3 - Instrucciones
 */
-Menu menu;
-void setup(){
-  size(600,600);
-  menu = new Menu();
-}
-void keyPressed(){
-  if(keyCode == DOWN){
-    menu.down();
-  }
-}
-void draw(){
-  menu.pintate();
-}
+
 class Menu{
   int menuNumber;   
   float selectorX;
@@ -27,10 +15,9 @@ class Menu{
     selectorY = 120;
   }
   
-  public Menu(int menuNumber, float x, float y){
+  public Menu(int menuNumber){
     this.menuNumber = menuNumber;
-    this.selectorX = x;
-    this.selectorY = y;
+    
   }
   
   void pintate(){
