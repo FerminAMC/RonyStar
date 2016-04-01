@@ -80,7 +80,7 @@ class Menu{
   }
   
   void drawStart(){
-    fill(180);
+    fill(90);
     textSize(40);
     textAlign(CENTER);
     text("Rony Star", width/2 , 50);
@@ -91,17 +91,23 @@ class Menu{
   }
   
   void drawInstructions(){
-    fill(180);
+    PImage wasd, space;
+    wasd = loadImage("../Sprites/wasd.png");
+    space = loadImage("../Sprites/spaceKey.png");
+    space.resize(250, 50);
+    fill(90);
     textSize(40);
     textAlign(CENTER);
     text("¿Cómo jugar?", width/2, 50);
-    PImage teclas;
-    teclas = loadImage("../teclas.png");
-    image(teclas, 50, 50);
+    textSize(30);
+    text("Para moverte usa:", width/6, height/3 - 30);
+    text("Para disparar usa:", width/3 * 2, height/3 - 30);
+    image(wasd, width/6, height/3);
+    image(space, width/3 * 2, height/3);
   }
   
   void drawSelector(){
-    fill(180);
+    fill(255);
     rect(this.selectorX, this.selectorY, 30, 30);
   }
   

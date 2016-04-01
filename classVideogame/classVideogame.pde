@@ -10,9 +10,11 @@ Menu menu;
 boolean MENU;
 
 void setup(){
-
+  //fullScreen();
+   size(2400,960);
+   //size(1000,400);
    vid = new Videogame();
-   size(1000,400);
+   
    MENU = true;
    
 }
