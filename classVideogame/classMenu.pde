@@ -8,6 +8,7 @@ class Menu{
   int menuNumber;   
   float selectorX;
   float selectorY;
+  private PImage wasd, space;
   
   public Menu(){
     menuNumber = 1;
@@ -15,10 +16,14 @@ class Menu{
     setSelectorY();
   }
   
-  public Menu(int menuNumber){
+  public Menu(int menuNumber, PImage wasd, PImage space){
     this.menuNumber = menuNumber;
     setSelectorX();
     setSelectorY();
+    
+    this.wasd = wasd;
+    this.space = space;
+    space.resize(250, 50);
   }
   
   void setMenuNumber(int mn){
@@ -32,7 +37,7 @@ class Menu{
   void setSelectorX(){
     switch(this.getMenuNumber()){
       case 1:
-      this.selectorX = width/2 - 50;
+      this.selectorX = width/2.0 - 50;
       break;
       case 2:
       break;
@@ -48,7 +53,7 @@ class Menu{
   void setSelectorY(){
     switch(this.getMenuNumber()){
       case 1:
-      this.selectorY = height/3 - 30;
+      this.selectorY = height/3.0 - 30;
       break;
       case 2:
       break;
@@ -83,27 +88,24 @@ class Menu{
     fill(90);
     textSize(40);
     textAlign(CENTER);
-    text("Rony Star", width/2 , 50);
+    text("Rony Star", width/2.0 , 50);
     textSize(30);
     textAlign(LEFT);
-    text("Empezar juego", width/2, height/3);
-    text("Instrucciones", width/2, height/3 * 2);
+    text("Empezar juego", width/2.0, height/3.0);
+    text("Instrucciones", width/2.0, height/3.0 * 2);
   }
   
   void drawInstructions(){
-    PImage wasd, space;
-    wasd = loadImage("../Sprites/wasd.png");
-    space = loadImage("../Sprites/spaceKey.png");
-    space.resize(250, 50);
+    
     fill(90);
     textSize(40);
     textAlign(CENTER);
-    text("¿Cómo jugar?", width/2, 50);
+    text("¿Cómo jugar?", width/2.0, 50);
     textSize(30);
-    text("Para moverte usa:", width/6, height/3 - 30);
-    text("Para disparar usa:", width/3 * 2, height/3 - 30);
-    image(wasd, width/6, height/3);
-    image(space, width/3 * 2, height/3);
+    text("Para moverte usa:", width/6.0, height/3.0 - 30);
+    text("Para disparar usa:", width/3.0 * 2, height/3.0 - 30);
+    image(wasd, width/6.0, height/3.0);
+    image(space, width/3.0 * 2, height/3.0);
   }
   
   void drawSelector(){
@@ -115,7 +117,7 @@ class Menu{
     switch(this.getMenuNumber()){
       case 1:
       //Si el selector está en la opción de instrucciones...
-      if(this.getSelectorY() == ((height/3)*2)-30){
+      if(this.getSelectorY() == ((height/3.0)*2)-30){
         this.setMenuNumber(3);
         return true;
       }else{
@@ -132,8 +134,8 @@ class Menu{
   void up(){
     switch(this.getMenuNumber()){
       case 1:
-      this.selectorY -= height/3;
-      this.selectorY = (this.selectorY <= 50)? selectorY = ((height/3) * 2)-30 : selectorY;
+      this.selectorY -= height/3.0;
+      this.selectorY = (this.selectorY <= 50)? selectorY = ((height/3.0) * 2)-30 : selectorY;
       break;
       case 2:
       break;
@@ -144,8 +146,8 @@ class Menu{
   void down(){
     switch(this.getMenuNumber()){
       case 1:
-      this.selectorY += height/3;
-      this.selectorY = (this.selectorY >= height - 50)? selectorY = height/3 - 30 : selectorY;
+      this.selectorY += height/3.0;
+      this.selectorY = (this.selectorY >= height - 50)? selectorY = height/3.0 - 30 : selectorY;
       break;
       case 2:
       break;

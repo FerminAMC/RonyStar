@@ -102,11 +102,11 @@ class Enemy extends Element{
   void jump(){
     for(int i = 0; i < 50; i += speedY){
       posYU += speedY;
-      pintate();
+      //pintate();
     }
     for(int i = 0; i < 50; i += speedY){
       posYU -= speedY;
-      pintate();
+      //pintate();
     }
   }
 }

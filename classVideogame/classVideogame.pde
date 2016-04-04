@@ -9,14 +9,27 @@ boolean mR, mL, j;
 Menu menu;
 boolean MENU;
 
+PImage iRony;
+PImage iEnemy;
+PImage icon, wasd, space;
+void settings(){
+  //fullScreen(); 
+  size(1000,500);
+}
+
 void setup(){
-  //fullScreen();
-   size(2400,960);
-   //size(1000,400);
+   frameRate(200);
+   iRony = loadImage("../Characters/RonyNA.png");
+   iEnemy = loadImage("../Characters/robot.png");
+   iRony.resize(50, 50);
+   iEnemy.resize(50, 50);
+   wasd = loadImage("../Sprites/wasd.png");
+   space = loadImage("../Sprites/spaceKey.png");
+   icon = loadImage("../Sprites/bullet.jpg");
+   textFont(loadFont("../fonts/majorforce.ttf"));
    vid = new Videogame();
    
    MENU = true;
-   
 }
 
 void draw(){
@@ -26,6 +39,7 @@ void draw(){
 }
 
 void keyPressed(){
+  if(keyPressed == true){
     if(key == 'w' || key == 'W'){
       if(MENU == true){
         menu.up();
@@ -61,6 +75,7 @@ void keyPressed(){
       }
     }
   }
+ }
   
   void keyReleased(){
     if(key == 'd' || key == 'D'){
@@ -81,21 +96,20 @@ class Videogame{
   
   
   private boolean mR, mL;
-  private PImage iRony, iEnemy;
+  //private PImage iRony, iEnemy;
   public Videogame(){
     l = new Level();
-    iRony = loadImage("../Characters/RonyNA.png");
-    iEnemy = loadImage("../Characters/robot.png");
-    iRony.resize(50, 50);
-    iEnemy.resize(50, 50);
-    rony = new Character(iRony, 3, 0, false, 20, 350, 5, .01);
-    bala = new Bullet();
+    //iRony = loadImage("../Characters/RonyNA.png");
+    //iEnemy = loadImage("../Characters/robot.png");
+    //iRony.resize(50, 50);
+    //iEnemy.resize(50, 50);
+    rony = new Character(iRony, 3, 0, false, 20, height - iRony.height, 5, .01);
+    bala = new Bullet(10,20,20+icon.width,height/2,(height/2)+icon.height,icon, 1.02,1);
     e = new Enemy(iEnemy, 1, 100, 800, 50, 5, 1);
-    menu = new Menu(1);
+    //menu = new Menu(1, wasd, space);
   }
   
   void start(){
-  
   
   }
   void move(boolean mR, boolean mL, boolean j){
