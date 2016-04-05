@@ -19,7 +19,9 @@ class Bullet{
    speedX = 1.02;
    speedY = 1;
   }
-  public Bullet(int damage, int posXL, int posXR, int posYU, int posYD, PImage icon, int posY, float speedX, float speedY){
+  
+  public Bullet(int damage, int posXL, int posXR, int posYU, int posYD, PImage icon, float speedX, float speedY){
+
     this.damage = damage;
     this.posXL = posXL;
     this.posXR = posXR;

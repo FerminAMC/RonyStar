@@ -1,4 +1,5 @@
-class Enemy extends Element{
+
+/*class Enemy extends Element{
   int resistance;
   int value;
   
@@ -102,11 +103,12 @@ class Enemy extends Element{
   void jump(){
     for(int i = 0; i < 50; i += speedY){
       posYU += speedY;
-      pintate();
+      //pintate();
     }
     for(int i = 0; i < 50; i += speedY){
       posYU -= speedY;
-      pintate();
+      //pintate();
     }
   }
 }
+*/
