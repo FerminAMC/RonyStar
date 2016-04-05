@@ -1,54 +1,27 @@
 
 class Bullet{
-  int damage;
-  int posXL;
-  int posXR;
   PImage icon;
-  int posYU;
-  int posYD;
-  float speedX;
-  float speedY;
+  PVector position;
+  float direction;
+  PVector velocity;
+  int damage;
   
   public Bullet(){
    damage = 10;
    icon = loadImage("../Sprites/bullet.jpg");
-   posXL = 20;
-   posXR = posXL +icon.width;
-   posYU = 200;
-   posYD = posYU + icon.height;
-   speedX = 1.02;
-   speedY = 1;
+   position = new PVector(0,0);
+   this.position = new PVector(0,0);
+   this.direction = 1;
+   this.velocity = new PVector(0,0);
   }
   
-  public Bullet(int damage, int posXL, int posXR, int posYU, int posYD, PImage icon, float speedX, float speedY){
+  public Bullet(PImage image, float direction, float posX, float posY, int damage){
 
     this.damage = damage;
-    this.posXL = posXL;
-    this.posXR = posXR;
-    this.icon = icon;
-    this.posYU = posYU;
-    this.posYD = posYD;
-    this.speedX = speedX;
-    this.speedY = speedY;
-  }
-
-  void moveRight(){
-    posXL += speedX;
-  }
-  
-  void moveLeft(){
-    posXL -= speedX;
-  }
-  
-  void moveDown(){
-    posYU += speedY;
-  }
-  
-  void moveUp(){
-    posYU -= speedY;
-  }
-  void collide(){
-      
+    this.position = new PVector(posX, posY);
+    this.icon = image;
+    this.direction = direction;
+    this.velocity = new PVector(0,0);
   }
   
   int getDamage(){
@@ -56,21 +29,16 @@ class Bullet{
   }
   
   void setDamage(int damage){
-  this.damage = damage;
+    this.damage = damage;
   }
   
-  int getPosXL(){
-    return posXL;
+  PVector getPosition(){
+    return position;
   }
   
-  void setPosXL(int posXL){
-    this.posXL = posXL;
+  void setPosition(PVector position){
+    this.position = position;
   }
-  
-  int getPosXR(){
-    return posXR;
-  }
-  
 
   PImage getIcon(){
     return icon;
@@ -80,43 +48,25 @@ class Bullet{
     this.icon = icon;
   }
   
-  int getPosYU(){
-    return posYU;
+  PVector getVelocity(){
+    return velocity;
   }
   
-  void setPosYU(int posYU){
-    this.posYU = posYU;
-  }
-  
-  int getPosYD(){
-    return posYD;
-  }
-  
- 
-  
-  float getSpeedX(){
-    return speedX;
-  }
-  
-  void setSpeedX(float speedX){
-    this.speedX = speedX;
-  }
-  
-  float getSpeedY(){
-    return speedY;
-  }
-  
-  void setSpeedY(float speedY){
-    this.speedY = speedY;
+  void setSpeedX(PVector velocity){
+    this.velocity = velocity;
   }
   
   void pintate(){
-    image(icon, posXL, posYU);
-  }
-  
-  void hit(boolean destroy){
-    //se espera que bala desaparezca y muestre explosion
-    //image()
+    pushMatrix();
+   
+    translate(position.x, position.y);
+     
+    // Always scale after translate and rotate.
+    // We're using direction because a -1 scale flips the image in that direction.
+    scale(direction, 1);
+    imageMode(CENTER);
+    image(icon, 0, -icon.height/2);
+    popMatrix();
   }
   
 }
