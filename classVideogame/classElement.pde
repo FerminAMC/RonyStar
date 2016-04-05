@@ -1,11 +1,9 @@
 
 abstract class Element{
   PImage image;
-  int posXL;
-  int posXR;
-  int posYU;
-  int posYD;
-  float speedX;
-  float speedY;
-  //boolean collide(){};
+  PVector position;
+  float direction;
+  PVector velocity;
+  float jumpSpeed;
+  float walkSpeed;
 }

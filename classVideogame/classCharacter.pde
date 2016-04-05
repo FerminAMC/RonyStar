@@ -7,36 +7,36 @@ class Character extends Element{
   public Character(){ 
     
     image = loadImage("../Characters/RonyNA.png");
-    posXL = 0;
-    posXR = posXL + image.width;
-    posYU = 0;
-    posYD = posYU + image.height;
+    position = new PVector(0, 0); 
+    direction = 1;
+    velocity = new PVector(0, 0);
+    jumpSpeed = 0;
+    walkSpeed = 0;
+    gravity = 0;
     lives = 0;
     score = 0;
     powerUp[0] = true;
-    speedX = 0;
-    speedY = 0;
   }
   
-  public Character(PImage image, int lives, int score, boolean powerUp, int posXL, int posYU, int speedX, float speedY){
-    this.posXL = posXL;
-    posXR = this.posXL + image.width;
-    this.posYU = posYU;
-    posYD = this.posYU + image.height;
+  public Character(PImage image, int lives, int score, boolean powerUp, float posX, float posY, float jumpSpeed, float walkSpeed){ 
     this.image = image;
+    image.resize(50,50);
+    position = new PVector(posX, posY);
+    direction = 1;
+    velocity = new PVector(0, 0);
+    this.jumpSpeed = jumpSpeed;
+    this.walkSpeed = walkSpeed;
     this.lives = lives;
     this.score = score;
     this.powerUp[0] = powerUp;
-    this.speedX = speedX;
-    this.speedY = speedY;
   } 
   
-  void setPosXL(int posXL){
-    this.posXL = posXL;
+  void setPosX(float posX){
+    position.x = posX;
   }
   
-  void setPosYU(int posYU){
-    this.posYU = posYU;
+  void setPosY(float posY){
+    position.y = posY;
   }
   
   void setLives(int lives){
@@ -47,28 +47,24 @@ class Character extends Element{
     this.score = score;
   }
   
-  void setSpeedX(int speedX){
-    this.speedX = speedX;
+  void setVelX(float velX){
+    velocity.x = velX;
   }
   
-  void setSpeedY(int speedY){
-    this.speedY = speedY;
+  void setVelY(float velY){
+    velocity.y = velY;
   }
   
-  int getPosXL(){
-    return posXL;
+  void setDirection(float direction){
+    this.direction = direction;
   }
   
-  int getPosXR(){
-    return posXR;
+  float getPosX(){
+    return position.x;
   }
   
-  int getPosYU(){
-    return posYU;
-  }
-  
-  int getPostYD(){
-    return posYD;
+  float getPosY(){
+    return position.y;
   }
   
   boolean getPowerup(int i){
@@ -83,50 +79,49 @@ class Character extends Element{
     return score;
   }
   
-  void bulletCollide(Bullet e){
-    boolean destroy = false;
-    if(e.getSpeedX() < 0 && e.getPosXL() < posXR && posYU > e.getPosYD() && posYD < e.getPosYU()){
-      lives--;
-      e.hit(destroy);
-    } else if(e.getSpeedX() > 0 && e.getPosXR() > posXL && posYU > e.getPosYD() && posYD < e.getPosYU()){
-      lives--;
-      e.hit(destroy);
-    }
+  float getDirection(){
+    return direction;
   }
-  
-  void pintate(){
-    image(image,posXL, posYU);
-  }
-  
-  void moveRight(boolean mR){
-    if(mR && posXR < width){
-      posXL += speedX;
-      posXR += speedX;
+
+  void move(float left, float right, float up, float gravity){
+    if(position.y < height){
+      velocity.y += gravity;
     }
-  }
-  
-  void moveLeft(boolean mL){
-    if(mL && posXL > 0){
-      posXL -= speedX;
-      posXR -= speedX;
+    else{
+      velocity.y = 0;
     }
-  }
-  
-  void jump(boolean j){
-    if(j && posYU > 0){
-      for(int i = 0; i < 50; i += speedY){
-        posYU -= speedY;
-        posYD -= speedY;
-        //pintate();
-      }
+    
+    //Jump
+    if(position.y >= height && up != 0){
+      velocity.y = -jumpSpeed;
     }
-    if(!j && posYD < height){
-      for(int i = 0; i < 50; i += speedY){
-        posYU += speedY;
-        posYD += speedY;
-        //pintate();
-      }
+    
+    //Walk left and right
+    velocity.x = walkSpeed * (left + right);
+    
+    PVector nextPosition = new PVector(position.x, position.y);
+    nextPosition.add(velocity);
+    
+    // Check collision with edge of screen and don't move if at the edge
+    float offset = 0;
+    if (nextPosition.x - image.width/2 > offset && nextPosition.x < (width - image.width/2 - offset))
+    {
+      position.x = nextPosition.x;
     }
+    if (nextPosition.y + image.height/2 > offset && nextPosition.y < (height + image.height/2 - offset))
+    {
+      position.y = nextPosition.y;
+    }
+    
+    pushMatrix();
+   
+    translate(position.x, position.y);
+     
+    // Always scale after translate and rotate.
+    // We're using direction because a -1 scale flips the image in that direction.
+    scale(direction, 1);
+    imageMode(CENTER);
+    image(image, 0, -image.height/2);
+    popMatrix();
   }
-  
 }

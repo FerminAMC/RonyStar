@@ -1,4 +1,4 @@
-class Enemy extends Element{
+/*class Enemy extends Element{
   int resistance;
   int value;
   
@@ -110,3 +110,4 @@ class Enemy extends Element{
     }
   }
 }
+*/

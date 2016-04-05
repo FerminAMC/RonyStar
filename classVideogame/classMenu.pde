@@ -40,6 +40,7 @@ class Menu{
       this.selectorX = width/2.0 - 50;
       break;
       case 2:
+      this.selectorX = width/3 * 2 -30;
       break;
       case 3:
       break;
@@ -56,6 +57,7 @@ class Menu{
       this.selectorY = height/3.0 - 30;
       break;
       case 2:
+      this.selectorY = height/3-50;
       break;
       case 3:
       break;
@@ -75,6 +77,8 @@ class Menu{
       drawSelector();
       break;
       case 2:
+      drawPause();
+      drawSelector();
       break;
       case 3:
       background(0);
@@ -108,6 +112,20 @@ class Menu{
     image(space, width/3.0 * 2, height/3.0);
   }
   
+  void drawPause(){
+    fill(180);
+    textSize(40);
+    textAlign(CENTER);
+    text("Rony Star", width/2, 50);
+    textSize(30);
+    textAlign(LEFT);
+    text("Reanudar", width/2, height/5 +30);
+    text("Reiniciar nivel", width/2, (height/5*2)+30);
+    text("Ayuda", width/2, (height/5*3)+30);
+    text("Salir", width/2, (height/5*4)+30);
+    
+  }
+  
   void drawSelector(){
     fill(255);
     rect(this.selectorX, this.selectorY, 30, 30);
@@ -124,6 +142,18 @@ class Menu{
         return false;
       }
       case 2:
+      //Menu pausa
+      if(this.getSelectorY() == height/5 +30){
+        return false;
+      }else if(this.getSelectorY() == ((height/5*2)+30)){
+        return false;
+      }else if(this.getSelectorY() ==(height/5*3)+30){
+        this.setMenuNumber(3); 
+      }else if(this.getSelectorY() ==(height/5*4)+30){
+        
+      }else{
+        return false;
+      }
       break;
       case 3:
       break;
@@ -138,6 +168,9 @@ class Menu{
       this.selectorY = (this.selectorY <= 50)? selectorY = ((height/3.0) * 2)-30 : selectorY;
       break;
       case 2:
+      this.selectorY -= height/5;
+      this.selectorY = (this.selectorY <= 50)? selectorY = ((height/5) * 4) : selectorY;
+      
       break;
       case 3:
       break;
@@ -150,6 +183,9 @@ class Menu{
       this.selectorY = (this.selectorY >= height - 50)? selectorY = height/3.0 - 30 : selectorY;
       break;
       case 2:
+      this.selectorY += height/5;
+      this.selectorY = (this.selectorY >= height - 50)? selectorY = height/3-50 : selectorY;
+      
       break;
       case 3:
       break;

@@ -2,23 +2,21 @@
 Videogame vid;
 Bullet bala;
 Character rony;
-Enemy e;
+//Enemy e;
 HUD hud;
 Level l;
-boolean mR, mL, j;
+float right, left, up, gravity = .5;
 Menu menu;
 boolean MENU;
 
 PImage iRony;
 PImage iEnemy;
 PImage icon, wasd, space;
-void settings(){
-  //fullScreen(); 
-  size(1000,500);
-}
+PFont fuente;
 
 void setup(){
-   frameRate(200);
+   fullScreen(); 
+   //size(1000,400);
    iRony = loadImage("../Characters/RonyNA.png");
    iEnemy = loadImage("../Characters/robot.png");
    iRony.resize(50, 50);
@@ -26,7 +24,9 @@ void setup(){
    wasd = loadImage("../Sprites/wasd.png");
    space = loadImage("../Sprites/spaceKey.png");
    icon = loadImage("../Sprites/bullet.jpg");
-   textFont(loadFont("../fonts/majorforce.ttf"));
+   fuente = createFont("../fonts/majorforce.ttf", 32);
+   //fuente = createFont("../fonts/justice.ttf", 32);
+   textFont(fuente);
    vid = new Videogame();
    
    MENU = true;
@@ -35,7 +35,8 @@ void setup(){
 void draw(){
   background(0);
   vid.pintate();
-  vid.move(mR, mL, j);
+  if(!MENU)
+  vid.move(right, left, up, gravity);
 }
 
 void keyPressed(){
@@ -43,6 +44,9 @@ void keyPressed(){
     if(key == 'w' || key == 'W'){
       if(MENU == true){
         menu.up();
+      }
+      else{
+        up = -1;
       }
     }
     if(key == 's' || key == 'S'){
@@ -54,25 +58,32 @@ void keyPressed(){
       if(MENU == true){
         menu.left();
       }else{
-        mR = true;
+        right = 1;
+        rony.setDirection(1);
       }
     }
     if(key == 'a' || key == 'A'){
       if(MENU == true){
         menu.right();
       }else{
-        mL = true;
+        left = -1;
+        rony.setDirection(-1);
       }
     }
-    if(key == ' '){
-      if(!MENU){
-        j = true;
-      }
-    }
+    
     if(keyCode == ENTER){
       if(MENU == true){
         MENU = menu.select();
       }
+    }
+    
+    if(key == 'p' || key == 'P'){
+      if(MENU == true && menu.menuNumber == 2){
+          MENU = false;
+        }  
+        MENU = true;
+        menu.setMenuNumber(2);
+        
     }
   }
  }
@@ -80,15 +91,15 @@ void keyPressed(){
   void keyReleased(){
     if(key == 'd' || key == 'D'){
       if(!MENU)
-      mR = false;
+      right = 0;
     }
     if(key == 'a' || key == 'A'){
       if(!MENU)
-      mL = false;
+      left = 0;
     }
-    if(key == ' '){
+    if(key == 'w' || key == 'W'){
       if(!MENU)
-      j = false;
+      up = 0;
     }
 }
 
@@ -103,19 +114,17 @@ class Videogame{
     //iEnemy = loadImage("../Characters/robot.png");
     //iRony.resize(50, 50);
     //iEnemy.resize(50, 50);
-    rony = new Character(iRony, 3, 0, false, 20, height - iRony.height, 5, .01);
+    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height, 10, 4);
     bala = new Bullet(10,20,20+icon.width,height/2,(height/2)+icon.height,icon, 1.02,1);
-    e = new Enemy(iEnemy, 1, 100, 800, 50, 5, 1);
-    //menu = new Menu(1, wasd, space);
+    //e = new Enemy(iEnemy, 1, 100, 800, 50, 5, 1);
+    menu = new Menu(1, wasd, space);
   }
   
   void start(){
   
   }
-  void move(boolean mR, boolean mL, boolean j){
-    rony.moveRight(mR);
-    rony.moveLeft(mL);
-    rony.jump(j);
+  void move(float right, float left, float up, float gravity){
+    rony.move(left, right, up, gravity);
   }
   
   void pintate(){
@@ -123,10 +132,6 @@ class Videogame{
       menu.pintate();
     }else{
       bala.pintate();
-      rony.pintate();
-      e.pintate();
-      //e.pintate();
-      //hud.pintate();
     }
   }
   

@@ -30,5 +30,4 @@ class Map {
   void pintate(int x){
     image(background,x-100,0);
   }
-  
-}
+} 
