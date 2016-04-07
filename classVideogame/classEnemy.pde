@@ -1,40 +1,39 @@
-
-/*class Enemy extends Element{
+class Enemy extends Element{
   int resistance;
   int value;
   
   public Enemy(){
     int resistance = 0;
     int value = 0;
-    for(int i = 0; i < 10; i++){
-      image = null;
-    }
-    posXL = 0;
-    posXR = posXL + image.width;
-    posYU = 0;
-    posYD = posYU + image.height;
-    speedX = 0;
-    speedY = 0;
+    PImage image = null;
+    position = new PVector(0, 0);
+    direction = 0;
+    velocity = new PVector(0, 0);
+    jumpSpeed = 0;
+    walkSpeed = 0;
   }
   
-  public Enemy(PImage image, int resistance, int value, int posXL, int posYU, int speedX, int speedY){
-    this.posXL = posXL;
-    posXR = this.posXL + image.width;
-    this.posYU = posYU;
-    posYD = this.posYU + image.height;
+  public Enemy(PImage image, int resistance, int value, PVector charPos, float jumpSpeed, float walkSpeed){
     this.image = image;
     this.resistance = resistance;
     this.value = value;
-    this.speedX = speedX;
-    this.speedY = speedY;
+    if(charPos.x > width/2){
+      this.position = new PVector(charPos.x + 100, charPos.y + 100);
+    }
+    else{
+      this.position = new PVector(charPos.x - 100, charPos.y + 100);
+    }
+    velocity = new PVector(0, 0);
+    this.jumpSpeed = jumpSpeed;
+    this.walkSpeed = walkSpeed;
   }
   
-  void setPosXL(int posXL){
-    this.posXL = posXL;
+  void setPosX(float posX){
+    position.x = posX;
   }
   
-  void setPosYU(int posYU){
-    this.posYU = posYU;
+  void setPosY(float posY){
+    position.y = posY;
   }
   
   void setResistance(int resistance){
@@ -45,28 +44,20 @@
     this.value = value;
   }
   
-  void setSpeedX(int speedX){
-    this.speedX = speedX;
+  void setVelX(float velX){
+    velocity.x = velX;
   }
   
-  void setSpeedY(int speedY){
-    this.speedY = speedY;
+  void setVelY(float velY){
+    velocity.y = velY;
   }
   
-  int getPosXL(){
-    return posXL;
+  PVector getPos(){
+    return position;
   }
   
-  int getPosXR(){
-    return posXR;
-  }
-  
-  int getPosYU(){
-    return posYU;
-  }
-  
-  int getPostYD(){
-    return posYD;
+  PVector getVel(){
+    return velocity;
   }
   
   int getResistance(){
@@ -77,38 +68,21 @@
     return value;
   }
   
-  void bulletCollide(Bullet e){
-    boolean destroy = false;
-    if(e.getSpeedX() < 0 && e.getPosXL() < posXR && posYU > e.getPosYD() && posYD < e.getPosYU()){
-      resistance--;
-      e.hit(destroy);
-    } else if(e.getSpeedX() > 0 && e.getPosXR() > posXL && posYU > e.getPosYD() && posYD < e.getPosYU()){
-      resistance--;
-      e.hit(destroy);
-    }
-  }
-  
   void pintate(){
-    image(image,posXL, posYU);
+    pushMatrix();
+    translate(position.x, position.y);
+    scale(direction, 1);
+    imageMode(CENTER);
+    image(image, 0, -image.height/2);
+    popMatrix();
   }
   
-  void moveRight(){
-    posXL += speedX;
-  }
-  
-  void moveLeft(){
-    posXL -= speedX;
-  }
-  
-  void jump(){
-    for(int i = 0; i < 50; i += speedY){
-      posYU += speedY;
-      //pintate();
+  void move(){
+    if(position.y < height){
+      velocity.y += gravity;
     }
-    for(int i = 0; i < 50; i += speedY){
-      posYU -= speedY;
-      //pintate();
+    else{
+      velocity.y = 0;
     }
   }
 }
-*/

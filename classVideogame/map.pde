@@ -31,7 +31,7 @@ class Map {
   
   void pintate(Character rony){
     //x = constrain(rony.getPosX(), 0, background.width - background.width);
-    image(background, 5*background.width/10-rony.getPosX()*2, h/2); 
+    image(background, 5*background.width/10-rony.getPos().x * 2, h/2); 
 
     //image(background,w/2,h/2);
 } 

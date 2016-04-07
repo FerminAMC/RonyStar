@@ -59,12 +59,12 @@ class Character extends Element{
     this.direction = direction;
   }
   
-  float getPosX(){
-    return position.x;
+  PVector getPos(){
+    return position;
   }
   
-  float getPosY(){
-    return position.y;
+  PVector getVel(){
+    return velocity;
   }
   
   boolean getPowerup(int i){
