@@ -46,7 +46,7 @@ class Character extends Element{
   void setScore(int score){
     this.score = score;
   }
-
+  
   void setVelX(float velX){
     velocity.x = velX;
   }
@@ -112,16 +112,23 @@ class Character extends Element{
     {
       position.y = nextPosition.y;
     }
-    
+  }
+  
+  void collide(PVector v){
+    PVector nextPosition = new PVector(position.x, position.y);
+    nextPosition.add(velocity);
+    if(nextPosition.x + image.width/2 > v.x && nextPosition.y > v.y){
+      position.x = v.x - image.width/2;
+    }
+  }
+  
+  void pintate(){
     pushMatrix();
-   
     translate(position.x, position.y);
-     
-    // Always scale after translate and rotate.
-    // We're using direction because a -1 scale flips the image in that direction.
     scale(direction, 1);
     imageMode(CENTER);
     image(image, 0, -image.height/2);
     popMatrix();
   }
+  
 }
