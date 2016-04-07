@@ -11,23 +11,28 @@ class Map {
     gravity = 1;
     w = background.width;
     h = background.height;
+ 
   }
-  
-  public Map(String path, float grav, int w, int h){
-    background = loadImage(path);
+  public Map(PGraphics path, float grav, int w, int h){
+    background = path;
+    //background.resize(displayWidth, displayHeight);
     gravity = grav;
     this.w = w;
     this.h = h;
   }
   
-  public Map(String path, float grav){
-    background = loadImage(path);
+  public Map(PGraphics map, float grav){
+    background = map;
+    //background.resize(displayWidth, displayHeight);
     gravity = grav;
     w = background.width;
     h = background.height;
   }
   
-  void pintate(int x){
-    image(background,x-100,0);
-  }
+  void pintate(Character rony){
+    //x = constrain(rony.getPosX(), 0, background.width - background.width);
+    image(background, 5*background.width/10-rony.getPosX()*2, h/2); 
+
+    //image(background,w/2,h/2);
 } 
+}

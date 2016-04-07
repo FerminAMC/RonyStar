@@ -77,6 +77,7 @@ class Menu{
       drawSelector();
       break;
       case 2:
+      background(0);
       drawPause();
       drawSelector();
       break;

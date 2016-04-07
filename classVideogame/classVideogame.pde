@@ -1,3 +1,11 @@
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
+Map mapa;
 Videogame vid;
 ArrayList<Bullet> bala;
 Character rony;
@@ -11,12 +19,37 @@ boolean MENU;
 ArrayList<Animation> animacion;
 int lastBulletRony = 0;
 PImage iRony, iEnemy, iBullet;
-PImage wasd, space;
+PImage wasd, space, icon;
 PFont fuente;
 PVector v = new PVector(300,750);
-void setup(){
-   fullScreen(); 
-   //size(1000,400);
+//PImage mapimg;
+
+PImage mapa1;
+PImage mapa2;
+PImage mapa3;
+PGraphics combinacion;
+//tipo de archivos necesarios para el audio
+AudioSnippet s2;
+AudioSnippet flush;
+//objetos minim
+Minim minim;
+Minim s2min;
+
+
+void setup(){ //flScreen(); 
+    size(800, 668);
+    mapa1 = loadImage("../Sprites/lvl_1.png");
+    mapa2 = loadImage("../Sprites/lvl_2.png");
+    mapa3 = loadImage("../Sprites/lvl_3.png");
+    
+    combinacion = createGraphics(2228, 668, JAVA2D);
+    
+    combinacion.beginDraw();
+    combinacion.image(mapa1, 0,0);
+    combinacion.image(mapa2, 980, 0);
+    combinacion.image(mapa3,1959,0);
+    combinacion.endDraw();
+
    iRony = loadImage("../Characters/RonyNA.png");
    iEnemy = loadImage("../Characters/robot.png");
    iRony.resize(50, 50);
@@ -26,16 +59,21 @@ void setup(){
    
    wasd = loadImage("../Sprites/wasd.png");
    space = loadImage("../Sprites/spaceKey.png");
+
    //fuente = createFont("../fonts/majorforce.ttf", 32);
    fuente = createFont("../fonts/justice.ttf", 32);
-   textFont(fuente);
    vid = new Videogame();
-   MENU = true;
    animacion = new ArrayList();
+   textFont(fuente);
+   MENU = true;
+   
+   minim = new Minim(this);
+   s2min = new Minim(this);
+   flush = minim.loadSnippet("bullet.mp3");
+   s2 = s2min.loadSnippet("bullet.mp3");
 }
 
 void draw(){
-  background(0);
   vid.pintate();
   if(!MENU){
     vid.move(right, left, up, gravity);
@@ -49,9 +87,11 @@ void draw(){
       }
     }
   }
-}
+ }
 
-void keyPressed(){
+  
+
+  void keyPressed(){
   if(keyPressed == true){
     if(key == 'w' || key == 'W'){
       if(MENU == true){
@@ -80,11 +120,14 @@ void keyPressed(){
       }else{
         left = -1;
         rony.setDirection(-1);
+        
       }
     }
     
     if(key == ' ' && millis() - lastBulletRony > 500){
       if(!MENU){
+        flush.rewind();
+        flush.play();
         lastBulletRony = millis();
         bala.add(new Bullet(iBullet, rony.getDirection(), rony.getPosX() , rony.getPosY(), 0, 20 * rony.getDirection(), 0));
       }
@@ -99,7 +142,8 @@ void keyPressed(){
     if(key == 'p' || key == 'P'){
       if(MENU == true && menu.menuNumber == 2){
           MENU = false;
-        }  
+        }
+        
         MENU = true;
         menu.setMenuNumber(2);
         
@@ -130,10 +174,14 @@ class Videogame{
   
   public Videogame(){
     l = new Level();
-    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height, 20, 10);
+    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height, 20, 2);
     bala = new ArrayList();
-    
     menu = new Menu(1, wasd, space);
+    mapa = new Map(combinacion, 0);
+  }
+  void start(){
+  
+
   }
   
   void move(float right, float left, float up, float gravity){
@@ -141,6 +189,7 @@ class Videogame{
   }
   
   void pintate(){
+   mapa.pintate(rony);
     if(MENU == true){
       menu.pintate();
     }else{

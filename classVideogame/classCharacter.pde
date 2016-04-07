@@ -104,7 +104,7 @@ class Character extends Element{
     
     // Check collision with edge of screen and don't move if at the edge
     float offset = 0;
-    if (nextPosition.x - image.width/2 > offset && nextPosition.x < (width - image.width/2 - offset))
+    if (nextPosition.x - image.width/2 > offset && nextPosition.x < (width - image.width/2 - 53))
     {
       position.x = nextPosition.x;
     }
