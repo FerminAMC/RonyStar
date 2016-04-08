@@ -83,6 +83,7 @@ class Enemy extends Element{
     //Walk left and right
     velocity.x = -walkSpeed;
     
+    
     PVector nextPosition = new PVector(position.x, position.y);
     nextPosition.add(velocity);
     // Check collision with edge of screen and don't move if at the edge
@@ -90,15 +91,19 @@ class Enemy extends Element{
     if (nextPosition.x + image.width/2 >= offset && nextPosition.x <= (width + image.width/2))
     {
       position.x = nextPosition.x;
+    
     }
     if (nextPosition.y + image.height/2 >= offset && nextPosition.y <= (500 + image.height/2 - offset))
     {
       position.y = nextPosition.y;
     }
+    if (nextPosition.x + image.width/2 <= offset && nextPosition.x >= (width + image.width/2)){
+    rony.lives -= 1;
+    }
   }
   
   boolean die(){
-    if(resistance <= 0){
+    if(resistance <= -1){
       return true;
     }
     else return false;

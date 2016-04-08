@@ -210,6 +210,7 @@ class Videogame{
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2));
+    hud = new HUD();
   }
   void restart(){
     rony.icon = iRony;
@@ -241,10 +242,12 @@ class Videogame{
     }
     else{
       rony.pintate();
+      hud.pintate();
       for(Enemy e : enemy){
         e.pintate();
         if(e.die()){
           enemy.remove(e);
+          rony.score +=100;
           break;
         }
       }

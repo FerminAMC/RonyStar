@@ -3,13 +3,14 @@ class HUD{
   PImage progress[];
   int score;
   int time;
+  int livesText = 3;
   
   HUD(){
     String path;
-    lives = loadImage(".png");
+    //lives = loadImage(".png");
     for(int i = 0; i < 100; i++){
       path = "" + i + ".png";
-      progress[i] = loadImage(path);
+     // progress[i] = loadImage(path);
     }
     score = 0;
     time = 0;
@@ -17,7 +18,7 @@ class HUD{
   
   HUD(int enemies){
     String path;
-    lives = loadImage(".png");
+    //lives = loadImage(".png");
     for(int i = 0; i < 100; i++){
       path = "" + (100/enemies)*i + ".png";
       progress[i] = loadImage(path);
@@ -25,17 +26,17 @@ class HUD{
     score = 0;
     time = 0;
   }
-  
+  /*
   PImage getLives(){
     return lives;
   }
   
   void setLives(PImage lives){    //Aquí puede ser que reciba el path de la imagen en vez de la imagen
     this.lives = lives;
-    /*
+    
     this.lives = loadImage(lives);
-    */
-  }
+    
+  }*/
   
   PImage[] getProgress(){
     return progress;
@@ -64,21 +65,44 @@ class HUD{
     this.time = time;
   }
   
+    int getLivesText(){
+    return livesText;
+  }
+  
+  void setLivesText(){
+    this.livesText = livesText;
+  }
+  
   void pintate(){
-    int interval = 10;
+    int interval = 64;
     time = interval - int(millis()/1000);
-    text(time, width - 30, 30);
+    if(time > 9){
+      
+   fill(255);
+   text("Time: " + time, width-500, 30);
+    } else {
+     textSize(40);
+     fill(255, 0, 50);
+     text("Time: " + time, width-510, 35);
+    }
+    fill(255);
+    textSize(28);
+    text("Score: " +rony.score, width-200, 30);
+    text("Lives: " +livesText, width -800, 30); 
     if(time == 0){
+      textSize(58);
+      fill(0);
+      text("Game Over", 278, 400);
       stop();
     }
   }
   
   void reset(int enemies){
     String path;
-    lives = loadImage(".png");
+    //lives = loadImage(".png");
     for(int i = 0; i < 100; i++){
       path = "" + (100/enemies)*i + ".png";
-      progress[i] = loadImage(path);
+      //progress[i] = loadImage(path);
     }
     score = 0;
     time = 0;
