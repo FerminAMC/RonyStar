@@ -74,7 +74,7 @@ class Enemy extends Element{
   }
   
   void move(float gravity){
-    if(position.y < height){
+    if(position.y < 500){
       velocity.y += gravity;
     }
     else{
@@ -91,7 +91,7 @@ class Enemy extends Element{
     {
       position.x = nextPosition.x;
     }
-    if (nextPosition.y + image.height/2 >= offset && nextPosition.y <= (height + image.height/2 - offset))
+    if (nextPosition.y + image.height/2 >= offset && nextPosition.y <= (500 + image.height/2 - offset))
     {
       position.y = nextPosition.y;
     }

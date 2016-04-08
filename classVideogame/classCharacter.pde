@@ -1,143 +1,154 @@
-
-class Character extends Element{
+class Character {
+  int x,y;
+  float xSpeed,ySpeed;
+  float accel,deccel;
+  float maxXspd,maxYspd;
+  float xSave,ySave;
+  int xRep,yRep;
+  float gravity;
+  PImage icon;
+  float direction;
   int lives;
   int score;
-  boolean [] powerUp = new boolean[3] ;
+  boolean powerUp[];
+  float jumpSpeed, walkSpeed;
   
-  public Character(){ 
+  Character(PImage icon, int lives, int score, boolean powerUP, int _x, int _y, float jumpSpeed, float walkSpeed ) {
+    //(PImage image, int lives, int score, boolean powerUp, 
+    //float posX, float posY, float jumpSpeed, float walkSpeed)
+    this.icon = icon;
+    x = _x;
+    y = _y;
+    xSpeed = 0;
+    ySpeed = 0;
+    accel = 0.5;
+    deccel = 0.5;
+    maxXspd = 5;
+    maxYspd = 20;
+    xSave = 0;
+    ySave = 0;
+    xRep = 0;
+    yRep = 0;
+    gravity = 0.25;
+    //Si direction es = NULL todo rony se va al carajo
+    direction = 1;
+  }
+  void move(float right, float left, float up, float movX) {
+    if ( right != 0 ) {
+      xSpeed += accel;
+      if ( xSpeed > maxXspd ) {
+        xSpeed = maxXspd;
+      }
+    }
+    else if ( left != 0) {
+      xSpeed -= accel;
+      if ( xSpeed < -maxXspd ) {
+        xSpeed = -maxXspd;
+      }
+    }
+    else { //neither right or left pressed, decelerate
+      if ( xSpeed > 0 ) {
+        xSpeed -= deccel;
+        if ( xSpeed < 0 ) {
+          xSpeed = 0;
+        }
+      }
+      else if ( xSpeed < 0 ) {
+        xSpeed += deccel;
+        if ( xSpeed > 0 ) {
+          xSpeed = 0;
+        }
+      }
+    }
     
-    image = loadImage("../Characters/RonyNA.png");
-    position = new PVector(0, 0); 
-    direction = 1;
-    velocity = new PVector(0, 0);
-    jumpSpeed = 0;
-    walkSpeed = 0;
-    gravity = 0;
-    lives = 0;
-    score = 0;
-    powerUp[0] = true;
+    if ( up != 0) {
+      if ( !place_free(x,y+25) || !place_free(x+24,y+25) ) {
+        ySpeed = -8.3;
+      }
+    }
+    
+    ySpeed += this.gravity;
+    
+    /*
+    // The technique used for movement involves taking the integer (without the decimal)
+    // part of the player's xSpeed and ySpeed for the number of pixels to try to move,
+    // respectively.  The decimal part is accumulated in xSave and ySave so that once
+    // they reach a value of 1, the player should try to move 1 more pixel.  This jump
+    // is not normally visible if it is moving fast enough.  This method is used because
+    // is guarantees that movement is pixel perfect because the player's position will
+    // always be at a whole number.  Whole number positions prevents problems when adding
+    // new elements like jump through blocks or slopes.
+    */
+    xRep = 0; //should be zero because the for loops count it down but just as a safety
+    yRep = 0;
+    xRep += floor(abs(xSpeed));
+    yRep += floor(abs(ySpeed));
+    xSave += abs(xSpeed)-floor(abs(xSpeed));
+    ySave += abs(ySpeed)-floor(abs(ySpeed));
+    int signX = (xSpeed<0) ? -1 : 1;
+    int signY = (ySpeed<0) ? -1 : 1;
+    //when the player is moving a direction collision is tested for only in that direction
+    //the offset variables are used for this in the for loops below
+    int offsetX = (xSpeed<0) ? -24 : 24;
+    int offsetY = (ySpeed<0) ? -24 : 24;
+    
+    if ( xSave >= 1 ) {
+      xSave -= 1;
+      xRep++;
+    }
+    if ( ySave >= 1 ) {
+      ySave -= 1;
+      yRep++;
+    }
+
+    for ( ; yRep > 0; yRep-- ) {
+      if ( place_free(x,y+offsetY+signY) && place_free(x+12,y+offsetY+signY) ) {
+        y += signY;
+      }
+      else {
+        ySpeed = 0;
+      }
+    }
+    for ( ; xRep > 0; xRep-- ) {
+      if ( place_free(x+offsetX+signX,y) && place_free(x+offsetX+signX,y+12) ) {
+        x += signX;
+      }
+      else {
+        xSpeed = 0;
+      }
+    }
+      
+  }
+  float getPosX(){
+    return x;
   }
   
-  public Character(PImage image, int lives, int score, boolean powerUp, float posX, float posY, float jumpSpeed, float walkSpeed){ 
-    this.image = image;
-    image.resize(50,50);
-    position = new PVector(posX, posY);
-    direction = 1;
-    velocity = new PVector(0, 0);
-    this.jumpSpeed = jumpSpeed;
-    this.walkSpeed = walkSpeed;
-    this.lives = lives;
-    this.score = score;
-    this.powerUp[0] = powerUp;
-  } 
-  
-  void setPosX(float posX){
-    position.x = posX;
+  float getPosY(){
+    return y;
   }
-  
-  void setPosY(float posY){
-    position.y = posY;
-  }
-  
-  void setLives(int lives){
-    this.lives = lives;
-  }
-  
-  void setScore(int score){
-    this.score = score;
-  }
-  
-  void setVelX(float velX){
-    velocity.x = velX;
-  }
-  
-  void setVelY(float velY){
-    velocity.y = velY;
-  }
-  
-  void setDirection(float direction){
-    this.direction = direction;
-  }
-  
-  PVector getPos(){
-    return position;
-  }
-  
-  PVector getVel(){
-    return velocity;
-  }
-  
-  boolean getPowerup(int i){
-    return powerUp[i];
-  }
-  
-  int getLives(){
-    return lives;
-  }
-  
-  int getScore(){
-    return score;
-  }
-  
   float getDirection(){
     return direction;
   }
-
-  void move(float left, float right, float up, float gravity){
-    if(position.y < height){
-      velocity.y += gravity;
-    }
-    else{
-      velocity.y = 0;
-    }
-    
-    //Jump
-    if(position.y >= height && up != 0){
-      velocity.y = -jumpSpeed;
-    }
-    
-    //Walk left and right
-    velocity.x = walkSpeed * (left + right);
-    
-    PVector nextPosition = new PVector(position.x, position.y);
-    nextPosition.add(velocity);
-    
-    // Check collision with edge of screen and don't move if at the edge
-    float offset = 0;
-    
-    if (nextPosition.x - image.width/2 >= offset && nextPosition.x <= (width - image.width/2 - 53))
-    {
-      position.x = nextPosition.x;
-    }
-    
-    if (nextPosition.y + image.height/2 >= offset && nextPosition.y <= (height + image.height/2 - offset))
-    {
-      position.y = nextPosition.y;
-    }
-    
-    /*if(nextPosition.x + image.width/2 >= e.getPos().x - e.image.width/2 && nextPosition.x - image.width/2 <= e.getPos().x + e.image.width/2
-      && nextPosition.y + image.height/2 >= e.getPos().y - e.image.height/2
-    ){
-      position.y  = position.y;
-      lives--;
-    }*/
+  
+  void setDirection(float dir){
+    this.direction = dir;
   }
   
-  void collide(PVector v){
-    PVector nextPosition = new PVector(position.x, position.y);
-    nextPosition.add(velocity);
-    if(nextPosition.x + image.width/2 >= v.x && nextPosition.y >= v.y){
-      position.x = v.x - image.width/2;
-    }
-  }
-  
-  void pintate(){
+  void pintate() {
     pushMatrix();
-    translate(position.x, position.y);
+    translate(x,y);
     scale(direction, 1);
     imageMode(CENTER);
-    image(image, 0, -image.height/2);
+    image(icon, 0, 0);
     popMatrix();
+    
+    /*pushMatrix();
+    fill(255,0,0);
+    noStroke();
+    rectMode(CORNER);
+    rect(x,y,50,50);
+    fill(255,255,255);
+    popMatrix();*/
   }
   
   boolean die(){
@@ -146,5 +157,4 @@ class Character extends Element{
     }
     else return false;
   }
-  
 }

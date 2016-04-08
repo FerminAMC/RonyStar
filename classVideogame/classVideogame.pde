@@ -12,7 +12,7 @@ Character rony;
 ArrayList <Enemy> enemy;
 HUD hud;
 Level l;
-float right, left, up, gravity = 1;
+float right, left, up, gravity = .25;
 Menu menu;
 boolean MENU;
 
@@ -21,8 +21,7 @@ int lastBulletRony = 0;
 PImage iRony, iEnemy, iBullet;
 PImage wasd, space, icon;
 PFont fuente;
-PVector v = new PVector(300,750);
-//PImage mapimg;
+//PVector v = new PVector(300,750);
 
 PImage mapa1;
 PImage mapa2;
@@ -35,19 +34,22 @@ AudioSnippet flush;
 Minim minim;
 Minim s2min;
 
+int WIDTH = 800/50;
+int HEIGHT = 650/50;
+int[][] screen = new int[HEIGHT][WIDTH];
 
 void setup(){ //flScreen(); 
-    size(800, 668);
+    size(800, 650);
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
     
-    combinacion = createGraphics(2228, 668, JAVA2D);
+    combinacion = createGraphics(2200, 650, JAVA2D);
     
     combinacion.beginDraw();
     combinacion.image(mapa1, 0,0);
-    combinacion.image(mapa2, 980, 0);
-    combinacion.image(mapa3,1959,0);
+    combinacion.image(mapa2, 611, 0);
+    combinacion.image(mapa3,1221,0);
     combinacion.endDraw();
 
    iRony = loadImage("../Characters/RonyNA.png");
@@ -75,13 +77,43 @@ void setup(){ //flScreen();
 
 void draw(){
   vid.pintate();
-  if(!MENU && !rony.die()){
+  if(!MENU){
     vid.move(right, left, up, gravity);
-    rony.collide(v);
+    for(Animation anim : animacion){
+      if(anim.turnOff()){
+        animacion.remove(anim);
+        break;
+      }else{
+        anim.pintate();
+      }
+    }
+    noStroke();
+    for ( int ix = 0; ix < WIDTH; ix++ ) {
+      for ( int iy = 0; iy < HEIGHT; iy++ ) {
+        if(iy == 10){
+          screen[iy][ix] = 1;
+        }else{
+          fill(240,200,50);
+          switch(screen[iy][ix]) {
+            case 1: rect(ix*50,iy*50,50,20);
+          }
+        }
+      }
+    }
   }
  }
 
-  
+boolean place_free(int xx, int yy){
+  //checks if a given point (xx,yy) is free (no block at that point) or not
+  yy = int(floor(yy/50.0));
+  xx = int(floor(xx/50.0));
+  if ( xx > -1 && xx < screen[0].length && yy > -1 && yy < screen.length ) {
+    if ( screen[yy][xx] == 0 ) {
+      return true;
+    }
+  }
+  return false;
+}  
 
   void keyPressed(){
   if(keyPressed == true){
@@ -90,7 +122,7 @@ void draw(){
         menu.up();
       }
       else{
-        up = -1;
+        up = 1;
       }
     }
     if(key == 's' || key == 'S'){
@@ -102,7 +134,8 @@ void draw(){
       if(MENU == true){
         menu.left();
       }else{
-        right = 1;
+        left = 1;
+        //right = 1;
         rony.setDirection(1);
       }
     }
@@ -110,18 +143,21 @@ void draw(){
       if(MENU == true){
         menu.right();
       }else{
-        left = -1;
+        right = 1;
+        //left = 1;
         rony.setDirection(-1);
         
       }
     }
     
-    if(key == ' ' /*&& millis() - lastBulletRony > 500*/){
+    if(key == ' ' && millis() - lastBulletRony > 500){
       if(!MENU){
         flush.rewind();
         flush.play();
         lastBulletRony = millis();
-        bala.add(new Bullet(iBullet, rony.getDirection(), rony.getPos(), 0, 20 * rony.getDirection(), 0));
+        bala.add(new Bullet(iBullet, -rony.getDirection(), rony.getPosX() , rony.getPosY() + 25, 0, 20 * rony.getDirection(), 0));
+        //  public Bullet(PImage image, float direction, PVector pos, int damage, float spX, float spY){
+
       }
     }
     
@@ -148,11 +184,11 @@ void draw(){
   void keyReleased(){
     if(key == 'd' || key == 'D'){
       if(!MENU)
-      right = 0;
+      left = 0;
     }
     if(key == 'a' || key == 'A'){
       if(!MENU)
-      left = 0;
+      right = 0;
     }
     if(key == 'w' || key == 'W'){
       if(!MENU)
@@ -168,29 +204,27 @@ class Videogame{
   
   public Videogame(){
     l = new Level();
-    //se pone el gravity por 5 para que colisione bien con el piso, no se por que pasa
-    //si se cambia el gravity eso se va al carajo
-    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height, 20, 2);
     enemy = new ArrayList();
+    rony = new Character(iRony, 5, 0, false, 40, 450, 15, 2);
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2));
   }
   void restart(){
-  rony.image = iRony;
-  rony.lives = 3;
-  rony.score = 0;
-  rony.powerUp[0] = false;
-  rony.position.x = 45;
-  rony.position.y = height - iRony.height;
-  rony.jumpSpeed = 20;
-  rony.walkSpeed = 2;
-  for(Enemy e : enemy){
-    e.resistance = 2;
-    e.position.x = width - 100;
-    e.position.y = height - iEnemy.height - (gravity*5);
-  }
+    rony.icon = iRony;
+    rony.lives = 3;
+    rony.score = 0;
+    rony.powerUp[0] = false;
+    rony.x = 45;
+    rony.y = height - iRony.height;
+    rony.jumpSpeed = 20;
+    rony.walkSpeed = 2;
+    for(Enemy e : enemy){
+      e.resistance = 2;
+      e.position.x = width - 100;
+      e.position.y = height - iEnemy.height - (gravity*5);
+    }
 }
   
   void move(float right, float left, float up, float gravity){
@@ -218,7 +252,7 @@ class Videogame{
       int spawnT = interval - int(millis()/10);
       if(spawnT % 103 == 0){
         frameRate(5);
-        enemy.add(new Enemy(iEnemy, 1, 100, width - 100 + 10, height - iEnemy.height - (gravity*5), 20, 2));
+        enemy.add(new Enemy(iEnemy, 1, 100, width - 100 + 10, 500 - iEnemy.height - (gravity*5), 20, 2));
       }
       frameRate(60);
       System.out.println(spawnT);
@@ -245,5 +279,11 @@ class Videogame{
     }
     }
   }
-  
+}
+
+void mousePressed() {
+//Left click creates/destroys a block
+  if ( mouseButton == LEFT ) {
+    screen[int(floor(mouseY/50.0))][int(floor(mouseX/50.0))] ^= 1;
+  }
 }

@@ -15,10 +15,10 @@ class Bullet{
    this.velocity = new PVector(0,0);
   }
   
-  public Bullet(PImage image, float direction, PVector pos, int damage, float spX, float spY){
+  public Bullet(PImage image, float direction, float posX, float posY, int damage, float spX, float spY){
 
     this.damage = damage;
-    this.position = new PVector(pos.x, pos.y);
+    this.position = new PVector(posX, posY);
     this.icon = image;
     this.direction = direction;
     this.velocity = new PVector(spX,spY);
