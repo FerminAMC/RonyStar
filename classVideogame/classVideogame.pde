@@ -9,10 +9,9 @@ Map mapa;
 Videogame vid;
 ArrayList<Bullet> bala;
 Character rony;
-//Enemy e;
 HUD hud;
 Level l;
-float right, left, up, gravity = 1;
+float right, left, up, gravity = .25;
 Menu menu;
 boolean MENU;
 
@@ -21,8 +20,7 @@ int lastBulletRony = 0;
 PImage iRony, iEnemy, iBullet;
 PImage wasd, space, icon;
 PFont fuente;
-PVector v = new PVector(300,750);
-//PImage mapimg;
+//PVector v = new PVector(300,750);
 
 PImage mapa1;
 PImage mapa2;
@@ -35,19 +33,22 @@ AudioSnippet flush;
 Minim minim;
 Minim s2min;
 
+int WIDTH = 800/50;
+int HEIGHT = 650/50;
+int[][] screen = new int[HEIGHT][WIDTH];
 
 void setup(){ //flScreen(); 
-    size(800, 668);
+    size(800, 650);
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
     
-    combinacion = createGraphics(2228, 668, JAVA2D);
+    combinacion = createGraphics(2200, 650, JAVA2D);
     
     combinacion.beginDraw();
     combinacion.image(mapa1, 0,0);
-    combinacion.image(mapa2, 980, 0);
-    combinacion.image(mapa3,1959,0);
+    combinacion.image(mapa2, 611, 0);
+    combinacion.image(mapa3,1221,0);
     combinacion.endDraw();
 
    iRony = loadImage("../Characters/RonyNA.png");
@@ -77,7 +78,7 @@ void draw(){
   vid.pintate();
   if(!MENU){
     vid.move(right, left, up, gravity);
-    rony.collide(v);
+    //rony.collide(v);
     for(Animation anim : animacion){
       if(anim.turnOff()){
         animacion.remove(anim);
@@ -86,10 +87,32 @@ void draw(){
         anim.pintate();
       }
     }
+    noStroke();
+    for ( int ix = 0; ix < WIDTH; ix++ ) {
+    for ( int iy = 0; iy < HEIGHT; iy++ ) {
+      if(iy == 10){
+        screen[iy][ix] = 1;
+      }else{
+        switch(screen[iy][ix]) {
+          case 1: rect(ix*50,iy*50,50,50);
+        }
+      }
+    }
+  }
   }
  }
 
-  
+boolean place_free(int xx, int yy){
+  //checks if a given point (xx,yy) is free (no block at that point) or not
+  yy = int(floor(yy/50.0));
+  xx = int(floor(xx/50.0));
+  if ( xx > -1 && xx < screen[0].length && yy > -1 && yy < screen.length ) {
+    if ( screen[yy][xx] == 0 ) {
+      return true;
+    }
+  }
+  return false;
+}  
 
   void keyPressed(){
   if(keyPressed == true){
@@ -98,7 +121,7 @@ void draw(){
         menu.up();
       }
       else{
-        up = -1;
+        up = 1;
       }
     }
     if(key == 's' || key == 'S'){
@@ -110,7 +133,8 @@ void draw(){
       if(MENU == true){
         menu.left();
       }else{
-        right = 1;
+        left = 1;
+        //right = 1;
         rony.setDirection(1);
       }
     }
@@ -118,7 +142,8 @@ void draw(){
       if(MENU == true){
         menu.right();
       }else{
-        left = -1;
+        right = 1;
+        //left = 1;
         rony.setDirection(-1);
         
       }
@@ -129,7 +154,7 @@ void draw(){
         flush.rewind();
         flush.play();
         lastBulletRony = millis();
-        bala.add(new Bullet(iBullet, rony.getDirection(), rony.getPosX() , rony.getPosY(), 0, 20 * rony.getDirection(), 0));
+        bala.add(new Bullet(iBullet, -rony.getDirection(), rony.getPosX() , rony.getPosY() + 25, 0, 20 * rony.getDirection(), 0));
       }
     }
     
@@ -154,11 +179,11 @@ void draw(){
   void keyReleased(){
     if(key == 'd' || key == 'D'){
       if(!MENU)
-      right = 0;
+      left = 0;
     }
     if(key == 'a' || key == 'A'){
       if(!MENU)
-      left = 0;
+      right = 0;
     }
     if(key == 'w' || key == 'W'){
       if(!MENU)
@@ -174,7 +199,9 @@ class Videogame{
   
   public Videogame(){
     l = new Level();
-    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height, 20, 2);
+    rony = new Character(iRony, 5, 0, false, 100, 50, 15, 2);
+    //(PImage image, int lives, int score, boolean powerUp, 
+    //float posX, float posY, float jumpSpeed, float walkSpeed)
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
@@ -204,5 +231,11 @@ class Videogame{
       } 
     }
   }
-  
+}
+
+void mousePressed() {
+//Left click creates/destroys a block
+  if ( mouseButton == LEFT ) {
+    screen[int(floor(mouseY/50.0))][int(floor(mouseX/50.0))] ^= 1;
+  }
 }
