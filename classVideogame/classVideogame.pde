@@ -9,7 +9,7 @@ Map mapa;
 Videogame vid;
 ArrayList<Bullet> bala;
 Character rony;
-//Enemy e;
+Enemy enemy;
 HUD hud;
 Level l;
 float right, left, up, gravity = 1;
@@ -129,7 +129,7 @@ void draw(){
         flush.rewind();
         flush.play();
         lastBulletRony = millis();
-        bala.add(new Bullet(iBullet, rony.getDirection(), rony.getPosX() , rony.getPosY(), 0, 20 * rony.getDirection(), 0));
+        bala.add(new Bullet(iBullet, rony.getDirection(), rony.getPos(), 0, 20 * rony.getDirection(), 0));
       }
     }
     
@@ -176,7 +176,9 @@ class Videogame{
   
   public Videogame(){
     l = new Level();
-    rony = new Character(iRony, 3, 0, false, 45, height - iRony.height, 20, 2);
+    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height, 20, 2);
+    enemy = new Enemy(iEnemy, 2, 100, rony.getPos(), 20, 2);
+
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
@@ -196,13 +198,15 @@ class Videogame{
   
   void move(float right, float left, float up, float gravity){
     rony.move(left, right, up, gravity);
+    enemy.move();
   }
   
   void pintate(){
    mapa.pintate(rony);
     if(MENU == true){
       menu.pintate();
-    }else{
+    }
+    else{
       rony.pintate();
       for(Bullet b : bala){
         b.pintate();
@@ -211,7 +215,8 @@ class Videogame{
           bala.remove(b);
           break;
         }
-      } 
+      }
+      enemy.pintate();
     }
   }
   
