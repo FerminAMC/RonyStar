@@ -135,7 +135,7 @@ void draw(){
     
     if(keyCode == ENTER){
       if(MENU == true){
-        MENU = menu.select();
+        MENU = menu.select(vid);
       }
     }
     
@@ -143,7 +143,9 @@ void draw(){
       if(MENU == true && menu.menuNumber == 2){
           MENU = false;
         }
-        
+        right = 0;
+        left = 0;
+        up = 0;
         MENU = true;
         menu.setMenuNumber(2);
         
@@ -174,15 +176,23 @@ class Videogame{
   
   public Videogame(){
     l = new Level();
-    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height, 20, 2);
+    rony = new Character(iRony, 3, 0, false, 45, height - iRony.height, 20, 2);
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
   }
-  void start(){
-  
+  void restart(){
+   
+  rony.image = iRony;
+  rony.lives = 3;
+  rony.score = 0;
+  rony.powerUp[0] = false;
+  rony.position.x = 45;
+  rony.position.y = height-iRony.height;
+  rony.jumpSpeed = 20;
+  rony.walkSpeed = 2;
 
-  }
+}
   
   void move(float right, float left, float up, float gravity){
     rony.move(left, right, up, gravity);

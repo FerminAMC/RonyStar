@@ -57,11 +57,19 @@ class Menu{
       this.selectorY = height/3.0 - 30;
       break;
       case 2:
-      this.selectorY = height/3-50;
+      this.selectorY = 2;
       break;
       case 3:
       break;
     }
+  }
+  
+  void coordenadaY(float y){
+    this.selectorY = y;
+  }
+  
+  void coordenadaX(float x){
+    this.selectorX = x;
   }
   
   float getSelectorY(){
@@ -101,16 +109,18 @@ class Menu{
   }
   
   void drawInstructions(){
-    
+    imageMode(CORNER);
     fill(90);
     textSize(40);
     textAlign(CENTER);
     text("¿Cómo jugar?", width/2.0, 50);
     textSize(30);
-    text("Para moverte usa:", width/6.0, height/3.0 - 30);
+    text("Para moverte usa:", width/5.0 , height/3.0 - 30);
+    image(wasd, width/5.0-150, height/3.0);
     text("Para disparar usa:", width/3.0 * 2, height/3.0 - 30);
-    image(wasd, width/6.0, height/3.0);
-    image(space, width/3.0 * 2, height/3.0);
+    image(space, width/3.0 * 2-150, height/3.0);
+    fill(90);
+    text("¡A jugar!", width/2, height/3*2);
   }
   
   void drawPause(){
@@ -132,31 +142,43 @@ class Menu{
     rect(this.selectorX, this.selectorY, 30, 30);
   }
   
-  boolean select(){
+  boolean select(Videogame v){
     switch(this.getMenuNumber()){
       case 1:
       //Si el selector está en la opción de instrucciones...
       if(this.getSelectorY() == ((height/3.0)*2)-30){
         this.setMenuNumber(3);
+        this.coordenadaX(width/2-110);
         return true;
       }else{
+        this.coordenadaY(height/5);
         return false;
       }
       case 2:
       //Menu pausa
-      if(this.getSelectorY() == height/5 +30){
+      if(this.getSelectorY() == height/5){
         return false;
-      }else if(this.getSelectorY() == ((height/5*2)+30)){
+      }else if(this.getSelectorY() == ((height/5*2))){
+        v.restart();
         return false;
-      }else if(this.getSelectorY() ==(height/5*3)+30){
+      }else if(this.getSelectorY() ==(height/5*3)){
         this.setMenuNumber(3); 
-      }else if(this.getSelectorY() ==(height/5*4)+30){
-        
-      }else{
-        return false;
+        coordenadaX(width/2-110);
+        coordenadaY((height/3.0 * 2)-30);
+        return true;
+      }else if(this.getSelectorY() ==(height/5*4)){
+        setup();
+        draw();
+        this.setMenuNumber(1);
+        return true ;
       }
       break;
       case 3:
+        if(this.getSelectorX() == width/2-110){
+         draw();
+         coordenadaX(width/2-50);
+         coordenadaY(height/5);           return false;
+        }
       break;
     }
     return true;
@@ -170,7 +192,7 @@ class Menu{
       break;
       case 2:
       this.selectorY -= height/5;
-      this.selectorY = (this.selectorY <= 50)? selectorY = ((height/5) * 4) : selectorY;
+      this.selectorY = (this.selectorY <= 100)? selectorY = ((height/5) * 4) : selectorY;
       
       break;
       case 3:
@@ -185,7 +207,7 @@ class Menu{
       break;
       case 2:
       this.selectorY += height/5;
-      this.selectorY = (this.selectorY >= height - 50)? selectorY = height/3-50 : selectorY;
+      this.selectorY = (this.selectorY >= height - 50)? selectorY = height/3-90 : selectorY;
       
       break;
       case 3:
@@ -200,6 +222,7 @@ class Menu{
       case 2:
       break;
       case 3:
+      
       break;
     }
   }
