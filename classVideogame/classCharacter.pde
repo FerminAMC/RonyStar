@@ -83,7 +83,7 @@ class Character extends Element{
     return direction;
   }
 
-  void move(float left, float right, float up, float gravity){
+  void move(float left, float right, float up, float gravity, Enemy e){
     if(position.y < height){
       velocity.y += gravity;
     }
@@ -104,9 +104,13 @@ class Character extends Element{
     
     // Check collision with edge of screen and don't move if at the edge
     float offset = 0;
+    
     if (nextPosition.x - image.width/2 > offset && nextPosition.x < (width - image.width/2 - 53))
     {
       position.x = nextPosition.x;
+    }
+    if(nextPosition.x + image.width/2 > e.getPos().x - e.image.width/2 && nextPosition.x - image.width/2 < e.getPos().x + e.image.width/2){
+      lives--;
     }
     if (nextPosition.y + image.height/2 > offset && nextPosition.y < (height + image.height/2 - offset))
     {
@@ -129,6 +133,13 @@ class Character extends Element{
     imageMode(CENTER);
     image(image, 0, -image.height/2);
     popMatrix();
+  }
+  
+  boolean die(){
+    if(lives <= 0){
+      return true;
+    }
+    else return false;
   }
   
 }
