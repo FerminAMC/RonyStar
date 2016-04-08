@@ -13,16 +13,12 @@ class Enemy extends Element{
     walkSpeed = 0;
   }
   
-  public Enemy(PImage image, int resistance, int value, PVector charPos, float jumpSpeed, float walkSpeed){
+  public Enemy(PImage image, int resistance, int value, float posX, float posY, float jumpSpeed, float walkSpeed){
     this.image = image;
     this.resistance = resistance;
     this.value = value;
-    if(charPos.x > width/2){
-      this.position = new PVector(charPos.x + 100, charPos.y + 100);
-    }
-    else{
-      this.position = new PVector(charPos.x - 100, charPos.y + 100);
-    }
+    position = new PVector(posX, posY);
+    direction = 1;
     velocity = new PVector(0, 0);
     this.jumpSpeed = jumpSpeed;
     this.walkSpeed = walkSpeed;
@@ -77,12 +73,28 @@ class Enemy extends Element{
     popMatrix();
   }
   
-  void move(){
+  void move(float gravity){
     if(position.y < height){
       velocity.y += gravity;
     }
     else{
       velocity.y = 0;
     }
+    //Walk left and right
+    velocity.x = -walkSpeed;
+    
+    PVector nextPosition = new PVector(position.x, position.y);
+    nextPosition.add(velocity);
+    // Check collision with edge of screen and don't move if at the edge
+    float offset = 0;
+    if (nextPosition.x - image.width/2 > offset && nextPosition.x < (width - image.width/2))
+    {
+      position.x = nextPosition.x;
+    }
+    if (nextPosition.y + image.height/2 > offset && nextPosition.y < (height + image.height/2 - offset))
+    {
+      position.y = nextPosition.y;
+    }
   }
+  
 }

@@ -75,17 +75,9 @@ void setup(){ //flScreen();
 
 void draw(){
   vid.pintate();
-  if(!MENU){
+  if(!MENU && !rony.die()){
     vid.move(right, left, up, gravity);
     rony.collide(v);
-    for(Animation anim : animacion){
-      if(anim.turnOff()){
-        animacion.remove(anim);
-        break;
-      }else{
-        anim.pintate();
-      }
-    }
   }
  }
 
@@ -176,9 +168,10 @@ class Videogame{
   
   public Videogame(){
     l = new Level();
-    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height, 20, 2);
-    enemy = new Enemy(iEnemy, 2, 100, rony.getPos(), 20, 2);
-
+    //se pone el gravity por 5 para que colisione bien con el piso, no se por que pasa
+    //si se cambia el gravity eso se va al carajo
+    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height - (gravity*5), 20, 2);
+    enemy = new Enemy(iEnemy, 2, 100, width - 100, height - iEnemy.height - (gravity*5), 20, 2);
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
@@ -197,8 +190,8 @@ class Videogame{
 }
   
   void move(float right, float left, float up, float gravity){
-    rony.move(left, right, up, gravity);
-    enemy.move();
+    rony.move(left, right, up, gravity, enemy);
+    enemy.move(gravity);
   }
   
   void pintate(){
@@ -208,6 +201,7 @@ class Videogame{
     }
     else{
       rony.pintate();
+      enemy.pintate();
       for(Bullet b : bala){
         b.pintate();
         if(b.hit()){
@@ -216,7 +210,14 @@ class Videogame{
           break;
         }
       }
-      enemy.pintate();
+      for(Animation anim : animacion){
+      if(anim.turnOff()){
+        animacion.remove(anim);
+        break;
+      }else{
+        anim.pintate();
+      }
+    }
     }
   }
   
