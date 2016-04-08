@@ -68,8 +68,12 @@ class Bullet{
     popMatrix();
   }
   
-  boolean hit(){
-    if(this.position.x + this.icon.width >= width || this.position.x <= 0){
+  boolean hit(Enemy e){
+    if(this.position.x + this.icon.width >= width || this.position.x <= 0 || 
+    (this.position.x + this.icon.width > e.position.x - e.image.width/2 && this.position.x - this.icon.width/2 < e.position.x + e.image.width/2 
+    && this.position.y - this.icon.height/2 >= e.position.y - e.image.height/2)
+    ){
+      e.resistance--;
       return true;
     }
     return false;

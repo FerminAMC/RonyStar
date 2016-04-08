@@ -177,16 +177,17 @@ class Videogame{
     mapa = new Map(combinacion, 0);
   }
   void restart(){
-   
   rony.image = iRony;
   rony.lives = 3;
   rony.score = 0;
   rony.powerUp[0] = false;
   rony.position.x = 45;
-  rony.position.y = height-iRony.height;
+  rony.position.y = height - iRony.height;
   rony.jumpSpeed = 20;
   rony.walkSpeed = 2;
-
+  enemy.resistance = 2;
+  enemy.position.x = width - 100;
+  enemy.position.y = height - iEnemy.height - (gravity*5);
 }
   
   void move(float right, float left, float up, float gravity){
@@ -204,7 +205,7 @@ class Videogame{
       enemy.pintate();
       for(Bullet b : bala){
         b.pintate();
-        if(b.hit()){
+        if(b.hit(enemy)){
           animacion.add(new Animation("../Sprites/bulletHit/bulletHit", 25, b.position.x, b.position.y));
           bala.remove(b);
           break;

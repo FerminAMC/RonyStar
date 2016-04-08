@@ -109,12 +109,17 @@ class Character extends Element{
     {
       position.x = nextPosition.x;
     }
-    if(nextPosition.x + image.width/2 > e.getPos().x - e.image.width/2 && nextPosition.x - image.width/2 < e.getPos().x + e.image.width/2){
-      lives--;
-    }
+    
     if (nextPosition.y + image.height/2 > offset && nextPosition.y < (height + image.height/2 - offset))
     {
       position.y = nextPosition.y;
+    }
+    
+    if(nextPosition.x + image.width/2 > e.getPos().x - e.image.width/2 && nextPosition.x - image.width/2 < e.getPos().x + e.image.width/2
+      && nextPosition.y + image.height/2 > e.getPos().y - e.image.height/2
+    ){
+      position.y  = position.y;
+      lives--;
     }
   }
   

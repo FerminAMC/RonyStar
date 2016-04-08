@@ -87,13 +87,19 @@ class Enemy extends Element{
     nextPosition.add(velocity);
     // Check collision with edge of screen and don't move if at the edge
     float offset = 0;
-    if (nextPosition.x - image.width/2 > offset && nextPosition.x < (width - image.width/2))
+    if (nextPosition.x + image.width/2 > offset && nextPosition.x < (width + image.width/2))
     {
       position.x = nextPosition.x;
     }
     if (nextPosition.y + image.height/2 > offset && nextPosition.y < (height + image.height/2 - offset))
     {
       position.y = nextPosition.y;
+    }
+  }
+  
+  void die(){
+    if(resistance <= 0){
+      
     }
   }
   
