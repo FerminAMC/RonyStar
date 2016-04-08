@@ -9,7 +9,7 @@ Map mapa;
 Videogame vid;
 ArrayList<Bullet> bala;
 Character rony;
-Enemy enemy;
+ArrayList <Enemy> enemy;
 HUD hud;
 Level l;
 float right, left, up, gravity = 1;
@@ -116,7 +116,7 @@ void draw(){
       }
     }
     
-    if(key == ' ' && millis() - lastBulletRony > 500){
+    if(key == ' ' /*&& millis() - lastBulletRony > 500*/){
       if(!MENU){
         flush.rewind();
         flush.play();
@@ -170,11 +170,12 @@ class Videogame{
     l = new Level();
     //se pone el gravity por 5 para que colisione bien con el piso, no se por que pasa
     //si se cambia el gravity eso se va al carajo
-    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height - (gravity*5), 20, 2);
-    enemy = new Enemy(iEnemy, 2, 100, width - 100, height - iEnemy.height - (gravity*5), 20, 2);
+    rony = new Character(iRony, 3, 0, false, 100, height - iRony.height, 20, 2);
+    enemy = new ArrayList();
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2));
   }
   void restart(){
   rony.image = iRony;
@@ -185,14 +186,18 @@ class Videogame{
   rony.position.y = height - iRony.height;
   rony.jumpSpeed = 20;
   rony.walkSpeed = 2;
-  enemy.resistance = 2;
-  enemy.position.x = width - 100;
-  enemy.position.y = height - iEnemy.height - (gravity*5);
+  for(Enemy e : enemy){
+    e.resistance = 2;
+    e.position.x = width - 100;
+    e.position.y = height - iEnemy.height - (gravity*5);
+  }
 }
   
   void move(float right, float left, float up, float gravity){
-    rony.move(left, right, up, gravity, enemy);
-    enemy.move(gravity);
+    for(Enemy e : enemy){
+      e.move(gravity);
+    }
+    rony.move(left, right, up, gravity);
   }
   
   void pintate(){
@@ -202,14 +207,33 @@ class Videogame{
     }
     else{
       rony.pintate();
-      enemy.pintate();
-      for(Bullet b : bala){
-        b.pintate();
-        if(b.hit(enemy)){
-          animacion.add(new Animation("../Sprites/bulletHit/bulletHit", 25, b.position.x, b.position.y));
-          bala.remove(b);
+      for(Enemy e : enemy){
+        e.pintate();
+        if(e.die()){
+          enemy.remove(e);
           break;
         }
+      }
+      int interval = 5;
+      int spawnT = interval - int(millis()/10);
+      if(spawnT % 103 == 0){
+        frameRate(5);
+        enemy.add(new Enemy(iEnemy, 1, 100, width - 100 + 10, height - iEnemy.height - (gravity*5), 20, 2));
+      }
+      frameRate(60);
+      System.out.println(spawnT);
+      boolean aux = false;
+      for(Bullet b : bala){
+        b.pintate();
+        for(Enemy e : enemy){
+          if(b.hit(e)){
+            animacion.add(new Animation("../Sprites/bulletHit/bulletHit", 25, b.position.x, b.position.y));
+            bala.remove(b);
+            aux = true;
+            break;
+          }
+        }
+        if(aux)break;
       }
       for(Animation anim : animacion){
       if(anim.turnOff()){

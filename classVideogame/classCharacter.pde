@@ -83,7 +83,7 @@ class Character extends Element{
     return direction;
   }
 
-  void move(float left, float right, float up, float gravity, Enemy e){
+  void move(float left, float right, float up, float gravity){
     if(position.y < height){
       velocity.y += gravity;
     }
@@ -105,28 +105,28 @@ class Character extends Element{
     // Check collision with edge of screen and don't move if at the edge
     float offset = 0;
     
-    if (nextPosition.x - image.width/2 > offset && nextPosition.x < (width - image.width/2 - 53))
+    if (nextPosition.x - image.width/2 >= offset && nextPosition.x <= (width - image.width/2 - 53))
     {
       position.x = nextPosition.x;
     }
     
-    if (nextPosition.y + image.height/2 > offset && nextPosition.y < (height + image.height/2 - offset))
+    if (nextPosition.y + image.height/2 >= offset && nextPosition.y <= (height + image.height/2 - offset))
     {
       position.y = nextPosition.y;
     }
     
-    if(nextPosition.x + image.width/2 > e.getPos().x - e.image.width/2 && nextPosition.x - image.width/2 < e.getPos().x + e.image.width/2
-      && nextPosition.y + image.height/2 > e.getPos().y - e.image.height/2
+    /*if(nextPosition.x + image.width/2 >= e.getPos().x - e.image.width/2 && nextPosition.x - image.width/2 <= e.getPos().x + e.image.width/2
+      && nextPosition.y + image.height/2 >= e.getPos().y - e.image.height/2
     ){
       position.y  = position.y;
       lives--;
-    }
+    }*/
   }
   
   void collide(PVector v){
     PVector nextPosition = new PVector(position.x, position.y);
     nextPosition.add(velocity);
-    if(nextPosition.x + image.width/2 > v.x && nextPosition.y > v.y){
+    if(nextPosition.x + image.width/2 >= v.x && nextPosition.y >= v.y){
       position.x = v.x - image.width/2;
     }
   }

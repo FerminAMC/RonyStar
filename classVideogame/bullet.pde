@@ -68,14 +68,26 @@ class Bullet{
     popMatrix();
   }
   
+  //posXR = this.position.x + this.icon.width/2
+  //posXL = this.position.x - this.icon.width/2
+  //posYU = this.position.y - this.icon.height/2
+  //posYD = this.position.y + this.icon.height/2
+  //isqE = e.position.x - e.image.width/2
+  //derE = e.position.x + e.image.width/2
+  //upE = e.position.y - e.image.height/2
+  //downE = e.position.y + e.image.height/2
   boolean hit(Enemy e){
-    if(this.position.x + this.icon.width >= width || this.position.x <= 0 || 
-    (this.position.x + this.icon.width > e.position.x - e.image.width/2 && this.position.x - this.icon.width/2 < e.position.x + e.image.width/2 
-    && this.position.y - this.icon.height/2 >= e.position.y - e.image.height/2)
+    if(this.position.x + this.icon.width/2 >= width || this.position.x <= 0){
+      return true;
+    }
+    else if(this.position.x + this.icon.width/2 >= e.position.x - e.image.width/2 && 
+    this.position.x - this.icon.width/2 <= e.position.x + e.image.width/2 && 
+    this.position.y + this.icon.height/2 >= e.position.y - e.image.height/2 &&
+    this.position.y - this.icon.height/2 <= e.position.y + e.image.height/2
     ){
       e.resistance--;
       return true;
     }
-    return false;
+    else return false;
   }
 }
