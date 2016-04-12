@@ -255,7 +255,7 @@ class Videogame{
       int spawnT = interval - int(millis()/10);
       if(spawnT % 103 == 0){
         frameRate(5);
-        enemy.add(new Enemy(iEnemy, 1, 100, width - 100 + 10, 500 - iEnemy.height - (gravity*5), 20, 2));
+        enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2));
       }
       frameRate(60);
       System.out.println(spawnT);
