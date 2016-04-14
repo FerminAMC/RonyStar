@@ -34,8 +34,9 @@ AudioSnippet flush;
 Minim minim;
 Minim s2min;
 
-int WIDTH = 800/50;
-int HEIGHT = 650/50;
+int tamX = 50, tamY = 20;
+int WIDTH = 800/tamX;
+int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 
 void setup(){ //flScreen(); 
@@ -90,12 +91,12 @@ void draw(){
     noStroke();
     for ( int ix = 0; ix < WIDTH; ix++ ) {
       for ( int iy = 0; iy < HEIGHT; iy++ ) {
-        if(iy == 10){
+        if(iy == 25){
           screen[iy][ix] = 1;
         }else{
           fill(240,200,50);
           switch(screen[iy][ix]) {
-            case 1: rect(ix*50,iy*50,50,20);
+            case 1: rect(ix*tamX,iy*tamY,tamX,tamY);
           }
         }
       }
@@ -105,8 +106,8 @@ void draw(){
 
 boolean place_free(int xx, int yy){
   //checks if a given point (xx,yy) is free (no block at that point) or not
-  yy = int(floor(yy/50.0));
-  xx = int(floor(xx/50.0));
+  yy = int(floor((float)yy/tamY));
+  xx = int(floor((float)xx/tamX));
   if ( xx > -1 && xx < screen[0].length && yy > -1 && yy < screen.length ) {
     if ( screen[yy][xx] == 0 ) {
       return true;
@@ -155,7 +156,7 @@ boolean place_free(int xx, int yy){
         flush.rewind();
         flush.play();
         lastBulletRony = millis();
-        bala.add(new Bullet(iBullet, -rony.getDirection(), rony.getPosX() , rony.getPosY() + 25, 0, 20 * rony.getDirection(), 0));
+        bala.add(new Bullet(iBullet, -rony.getDirection(), rony.getPosX() , rony.getPosY(), 0, 20 * rony.getDirection(), 0, "rony"));
         //  public Bullet(PImage image, float direction, PVector pos, int damage, float spX, float spY){
 
       }
@@ -209,7 +210,7 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2));
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2, "normal"));
     hud = new HUD();
   }
   void restart(){
@@ -231,6 +232,11 @@ class Videogame{
   void move(float right, float left, float up, float gravity){
     for(Enemy e : enemy){
       e.move(gravity);
+      if(e.getTiempoVida() % 103 == 0){
+        flush.rewind();
+        flush.play();
+        bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 , e.getPosY(), 0, 20 * e.getDirection(), 0, "normalEnemy"));
+      }
     }
     rony.move(left, right, up, gravity);
   }
@@ -255,10 +261,14 @@ class Videogame{
       int spawnT = interval - int(millis()/10);
       if(spawnT % 103 == 0){
         frameRate(5);
-        enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2));
+        enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "normal"));
+      }
+      if(spawnT % 203 == 0){
+        frameRate(5);
+        enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "brincador"));
       }
       frameRate(60);
-      System.out.println(spawnT);
+      //System.out.println(spawnT);
       boolean aux = false;
       for(Bullet b : bala){
         b.pintate();
@@ -287,6 +297,6 @@ class Videogame{
 void mousePressed() {
 //Left click creates/destroys a block
   if ( mouseButton == LEFT ) {
-    screen[int(floor(mouseY/50.0))][int(floor(mouseX/50.0))] ^= 1;
+    screen[int(floor((float)mouseY/tamY))][int(floor((float)mouseX/tamX))] ^= 1;
   }
 }

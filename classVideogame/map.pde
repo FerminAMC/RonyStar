@@ -33,7 +33,7 @@ class Map {
     float x = background.width/2 - rony.getPosX()*2;
     float x1 = (x >= -274)? x : -274;
     float y = h/2;
-    println(x);
+    //println(x);
     image(background, x1 , y); 
   } 
 }

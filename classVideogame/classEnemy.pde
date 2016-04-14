@@ -4,19 +4,11 @@ class Enemy extends Element{
   int direction;
   float xSave,ySave;
   int xRep, yRep;
+  String tipo;//Puede ser uno normal, volador, brincador, boss, etc;
+  boolean jump = false;
+  int tiempoVida;
   
-  public Enemy(){
-    int resistance = 0;
-    int value = 0;
-    PImage image = null;
-    position = new PVector(0, 0);
-    direction = 1;
-    velocity = new PVector(0, 0);
-    jumpSpeed = 0;
-    walkSpeed = 0;
-  }
-  
-  public Enemy(PImage image, int resistance, int value, float posX, float posY, float jumpSpeed, float walkSpeed){
+  public Enemy(PImage image, int resistance, int value, float posX, float posY, float jumpSpeed, float walkSpeed, String tipo){
     this.image = image;
     this.resistance = resistance;
     this.value = value;
@@ -27,6 +19,12 @@ class Enemy extends Element{
     this.walkSpeed = walkSpeed;
     xSave = 0;
     ySave = 0;
+    this.tipo = tipo;
+    tiempoVida = 0;
+  }
+  
+  int getTiempoVida(){
+    return tiempoVida;
   }
   
   void setPosX(float posX){
@@ -53,8 +51,24 @@ class Enemy extends Element{
     velocity.y = velY;
   }
   
+  float getPosX(){
+    return position.x;
+  }
+  
+  float getPosY(){
+    return position.y;
+  }
+  
   PVector getPos(){
     return position;
+  }
+  
+  int getDirection(){
+    return direction;
+  }
+  
+  void setDirection(int dir){
+    this.direction = dir;
   }
   
   PVector getVel(){
@@ -72,19 +86,20 @@ class Enemy extends Element{
   void pintate(){
     pushMatrix();
     translate(position.x, position.y);
-    scale(direction, 1);
+    scale(-direction, 1);
     imageMode(CENTER);
     image(image, 0, 0);
     popMatrix();
+    tiempoVida++;
   }
   
   void move(float gravity){
-    /*if(position.y < 500){
-      velocity.y += gravity;
+    
+    if(tipo == "brincador" && jump == true){
+      if ( !place_free(round(position.x),round(position.y)+25) || !place_free(round(position.x)+24,round(position.y)+25) ) {
+        velocity.y = -8.3;
+      }
     }
-    else{
-      velocity.y = 0;
-    }*/
     
     velocity.y += gravity;
     //Walk left and right
@@ -116,12 +131,14 @@ class Enemy extends Element{
       ySave -= 1;
       yRep++;
     }
-
+   
+    
     for ( ; yRep > 0; yRep-- ) {
       if ( place_free(x,y+offsetY+signY) && place_free(x+12,y+offsetY+signY) ) {
         y += signY;
       }
       else {
+        jump = (signY > 0)? true: false;
         ySpeed = 0;
       }
     }
@@ -131,6 +148,7 @@ class Enemy extends Element{
       }
       else {
         xSpeed = 0;
+        direction *= -1;
       }
     }
     
