@@ -18,6 +18,21 @@ class Animation {
     this.ypos = ypos;
   }
   
+  Animation(String imagePrefix, int count, float xpos, float ypos, int resX, int resY){
+  imageCount = count;
+    images = new PImage[imageCount];
+
+    for (int i = 0; i < imageCount; i++) {
+      // Use nf() to number format 'i' into four digits
+      String filename = imagePrefix + nf(i, 4) + ".gif";
+      images[i] = loadImage(filename);
+      images[i].resize(resX, resY);
+    }
+    
+    this.xpos = xpos;
+    this.ypos = ypos;
+  }
+  
   boolean turnOff(){
     return frame == imageCount - 1;
   }
