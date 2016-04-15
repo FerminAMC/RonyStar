@@ -103,7 +103,7 @@ class Character {
     }
 
     for ( ; yRep > 0; yRep-- ) {
-      if ( place_free(x,y+offsetY+signY) && place_free(x+12,y+offsetY+signY) ) {
+      if ( place_free(x-24,y+offsetY+signY) && place_free(x+24,y+offsetY+signY) ) {
         y += signY;
       }
       else {
