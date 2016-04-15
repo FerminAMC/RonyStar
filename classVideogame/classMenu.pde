@@ -81,6 +81,8 @@ class Menu{
       case 1:
       //Menu Start
       background(0);
+      
+      start.pintate();
       drawStart();
       drawSelector();
       break;

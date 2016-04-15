@@ -4,7 +4,12 @@ import ddf.minim.effects.*;
 import ddf.minim.signals.*;
 import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
+import processing.sound.*;
 
+AudioPlayer player;
+Minim back;
+
+Animation start;
 Map mapa;
 Videogame vid;
 ArrayList<Bullet> bala;
@@ -15,6 +20,7 @@ Level l;
 float right, left, up, gravity = .25;
 Menu menu;
 boolean MENU;
+int ln;
 
 ArrayList<Animation> animacion;
 int lastBulletRony = 0;
@@ -37,6 +43,7 @@ Minim s2min;
 int WIDTH = 800/50;
 int HEIGHT = 650/50;
 int[][] screen = new int[HEIGHT][WIDTH];
+
 
 void setup(){ //flScreen(); 
     size(800, 650);
@@ -61,6 +68,8 @@ void setup(){ //flScreen();
    
    wasd = loadImage("../Sprites/wasd.png");
    space = loadImage("../Sprites/spaceKey.png");
+   
+   start = new Animation("../Sprites/menuinicio/menuinicio", 89, 0, height/2, width, height);
 
    //fuente = createFont("../fonts/majorforce.ttf", 32);
    fuente = createFont("../fonts/justice.ttf", 32);
@@ -73,9 +82,20 @@ void setup(){ //flScreen();
    s2min = new Minim(this);
    flush = minim.loadSnippet("bullet.mp3");
    s2 = s2min.loadSnippet("bullet.mp3");
+   
+   back = new Minim(this);
+   player = back.loadFile("piratas.mp3",2048);
+   player.loop();
 }
 
 void draw(){
+  println(rony.getPosX());
+  s2.rewind();
+  s2.play();
+  
+  
+  
+  
   vid.pintate();
   if(!MENU){
     vid.move(right, left, up, gravity);
@@ -168,8 +188,10 @@ boolean place_free(int xx, int yy){
     }
     
     if(key == 'p' || key == 'P'){
+      player.pause();
       if(MENU == true && menu.menuNumber == 2){
           MENU = false;
+          player.play();
         }
         right = 0;
         left = 0;
@@ -212,6 +234,10 @@ class Videogame{
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2));
     hud = new HUD();
   }
+  
+  void increaseLevel(){
+    l.setLevelNumber(ln++);
+  }
   void restart(){
     rony.icon = iRony;
     rony.lives = 3;
@@ -235,9 +261,15 @@ class Videogame{
     rony.move(left, right, up, gravity);
   }
   
+  void gana(){
+    println("Ora pinches vergas");
+    
+}
+  
   void pintate(){
    mapa.pintate(rony);
     if(MENU == true){
+     
       menu.pintate();
     }
     else{
@@ -258,7 +290,7 @@ class Videogame{
         enemy.add(new Enemy(iEnemy, 1, 100, width - 100 + 10, 500 - iEnemy.height - (gravity*5), 20, 2));
       }
       frameRate(60);
-      System.out.println(spawnT);
+      //System.out.println(spawnT);
       boolean aux = false;
       for(Bullet b : bala){
         b.pintate();
@@ -279,7 +311,17 @@ class Videogame{
       }else{
         anim.pintate();
       }
+      
+      
     }
+    if(rony.getPosX() >= 750 && enemy.size()==1){
+        text("Has ganado", height/2, width/2);
+        //aumentar de nivel y reiniciar tiempo
+        increaseLevel();
+        Level l2 = new Level(50,2,60);
+        
+        
+     }
     }
   }
 }
