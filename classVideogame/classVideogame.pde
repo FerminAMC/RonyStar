@@ -216,15 +216,14 @@ class Videogame{
     rony.icon = iRony;
     rony.lives = 3;
     rony.score = 0;
-    rony.powerUp[0] = false;
     rony.x = 45;
-    rony.y = height - iRony.height;
+    rony.y = 450 - iRony.height;
     rony.jumpSpeed = 20;
     rony.walkSpeed = 2;
     for(Enemy e : enemy){
       e.resistance = 2;
       e.position.x = width - 100;
-      e.position.y = height - iEnemy.height - (gravity*5);
+      e.position.y = 450 - iEnemy.height - (gravity*5);
     }
 }
   

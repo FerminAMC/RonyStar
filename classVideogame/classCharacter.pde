@@ -22,10 +22,10 @@ class Character {
     xSpeed = 0;
     ySpeed = 0;
     lives = 3;
-    accel = 0.5;
-    deccel = 0.5;
-    maxXspd = 5;
-    maxYspd = 20;
+    accel = 0.3;
+    deccel = 0.8;
+    maxXspd = 2;
+    maxYspd = 5;
     xSave = 0;
     ySave = 0;
     xRep = 0;
@@ -63,8 +63,8 @@ class Character {
     }
     
     if ( up != 0) {
-      if ( !place_free(x,y+25) || !place_free(x+24,y+25) ) {
-        ySpeed = -8.3;
+      if ((!place_free(x,y+25) || !place_free(x+24,y+25))) {
+        ySpeed = -7.3;
       }
     }
     
