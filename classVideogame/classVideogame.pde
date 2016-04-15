@@ -24,7 +24,7 @@ int ln;
 
 ArrayList<Animation> animacion;
 int lastBulletRony = 0;
-PImage iRony, iEnemy, iBullet;
+PImage iRony, iEnemy, iBullet, shipBullet, iShip;
 PImage wasd, space, icon;
 PFont fuente;
 //PVector v = new PVector(300,750);
@@ -66,6 +66,10 @@ void setup(){ //flScreen();
    iEnemy.resize(50, 50);
    iBullet = loadImage("../Sprites/bullet.png");
    iBullet.resize(50,50);
+   shipBullet = loadImage("../Sprites/shipBullet.png");
+   shipBullet.resize(50,50);
+   iShip = loadImage("../Characters/Nave1.gif");
+   iShip.resize(50,50);
    
    wasd = loadImage("../Sprites/wasd.png");
    space = loadImage("../Sprites/spaceKey.png");
@@ -176,8 +180,8 @@ boolean place_free(int xx, int yy){
         flush.rewind();
         flush.play();
         lastBulletRony = millis();
-        bala.add(new Bullet(iBullet, -rony.getDirection(), rony.getPosX() , rony.getPosY(), 0, 20 * rony.getDirection(), 0, "rony"));
-        //  public Bullet(PImage image, float direction, PVector pos, int damage, float spX, float spY){
+        bala.add(new Bullet(iBullet, -rony.getDirection(), rony.getPosX() , rony.getPosY(), 0, 20 * rony.getDirection(),  0, "rony"));
+        //  public Bullet(PImage image, float direction, PVector pos, int damage, float spX, float spY, String tipo){
 
       }
     }
@@ -233,6 +237,9 @@ class Videogame{
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2, "normal"));
+    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, "volador"));
+    //public Enemy(PImage image, int resistance, int value, float posX, float posY,
+    //float jumpSpeed, float walkSpeed, String tipo){
     hud = new HUD();
   }
   
@@ -261,7 +268,11 @@ class Videogame{
       if(e.getTiempoVida() % 103 == 0){
         flush.rewind();
         flush.play();
-        bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 , e.getPosY(), 0, 20 * e.getDirection(), 0, "normalEnemy"));
+        if(e.getTipo() == "volador"){
+          bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() , e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy"));
+        }else{
+          bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 , e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
+        }
       }
     }
     rony.move(left, right, up, gravity);

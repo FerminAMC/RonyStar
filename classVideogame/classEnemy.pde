@@ -83,6 +83,10 @@ class Enemy extends Element{
     return value;
   }
   
+  String getTipo(){
+    return tipo;
+  }
+  
   void pintate(){
     pushMatrix();
     translate(position.x, position.y);
@@ -100,8 +104,10 @@ class Enemy extends Element{
         velocity.y = -8.3;
       }
     }
+    if(tipo != "volador"){
+      velocity.y += gravity;
+    }
     
-    velocity.y += gravity;
     //Walk left and right
     velocity.x = direction * walkSpeed;
     
@@ -134,7 +140,7 @@ class Enemy extends Element{
    
     
     for ( ; yRep > 0; yRep-- ) {
-      if ( place_free(x,y+offsetY+signY) && place_free(x+12,y+offsetY+signY) ) {
+      if ( place_free(x-24,y+offsetY+signY) && place_free(x+24,y+offsetY+signY) ) {
         y += signY;
       }
       else {

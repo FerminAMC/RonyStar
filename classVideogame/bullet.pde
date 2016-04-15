@@ -6,7 +6,7 @@ class Bullet{
   PVector velocity;
   int damage;
   boolean hit;
-  float xSave;
+  float xSave, ySave;
   String tipo; //Rony, normalEnemy, aerea, boss, cohete, etc
   
   public Bullet(){
@@ -27,6 +27,7 @@ class Bullet{
     this.velocity = new PVector(spX,spY);
     hit = false;
     xSave = 0;
+    ySave = 0;
     this.tipo = tipo;
   }
   
@@ -65,22 +66,42 @@ class Bullet{
   void pintate(){
     
     //velocity.x *= -direction;
-    
+    float ySpeed = velocity.y;
     float xSpeed = velocity.x;
     int x = round(position.x);
     int y = round(position.y);
     
     int xRep = 0; //should be zero because the for loops count it down but just as a safety
+    int yRep = 0;
     xRep += floor(abs(xSpeed));
+    yRep += floor(abs(ySpeed));
     xSave += abs(xSpeed)-floor(abs(xSpeed));
+    ySave += abs(ySpeed)-floor(abs(ySpeed));
     int signX = (xSpeed<0) ? -1 : 1;
+    int signY = (ySpeed<0) ? 1 : 1;
     //when the player is moving a direction collision is tested for only in that direction
     //the offset variables are used for this in the for loops below
     int offsetX = (xSpeed<0) ? -24 : 24;
+    int offsetY = (ySpeed<0) ? 0 : 0;
     
     if ( xSave >= 1 ) {
       xSave -= 1;
       xRep++;
+    }
+    if ( ySave >= 1 ) {
+      ySave -= 1;
+      yRep++;
+    }
+    
+    
+    for ( ; yRep > 0; yRep-- ) {
+      if ( place_free(x-24,y+offsetY+signY) && place_free(x+24,y+offsetY+signY) ) {
+        y += signY;
+      }
+      else {
+        ySpeed = 0;
+        hit = true;
+      }
     }
     for ( ; xRep > 0; xRep-- ) {
       if ( place_free(x+offsetX+signX,y) && place_free(x+offsetX+signX,y+12) ) {
@@ -93,13 +114,15 @@ class Bullet{
     }
     
     position.x = x;
+    position.y = y;
     velocity.x = xSpeed;
+    velocity.y = ySpeed;
     
     pushMatrix();
     translate(position.x, position.y + 25);
     // Always scale after translate and rotate.
     // We're using direction because a -1 scale flips the image in that direction.
-    scale(-direction,1);
+    scale(-direction, 1);
     imageMode(CENTER);
     image(icon, 0, -icon.height/2);
     popMatrix();
