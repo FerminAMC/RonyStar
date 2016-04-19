@@ -80,19 +80,19 @@ class Menu{
     switch(this.menuNumber){
       case 1:
       //Menu Start
-      background(0);
+      buffer.background(0);
       
       start.pintate();
       drawStart();
       drawSelector();
       break;
       case 2:
-      background(0);
+      buffer.background(0);
       drawPause();
       drawSelector();
       break;
       case 3:
-      background(0);
+      buffer.background(0);
       drawInstructions();
       drawSelector();
       break;
@@ -100,14 +100,14 @@ class Menu{
   }
   
   void drawStart(){
-    fill(90);
-    textSize(40);
-    textAlign(CENTER);
-    text("Rony Star", width/2.0 , 50);
-    textSize(30);
-    textAlign(LEFT);
-    text("Empezar juego", width/2.0, height/3.0);
-    text("Instrucciones", width/2.0, height/3.0 * 2);
+    buffer.fill(90);
+    buffer.textSize(40);
+    buffer.textAlign(CENTER);
+    buffer.text("Rony Star", width/2.0 , 50);
+    buffer.textSize(30);
+    buffer.textAlign(LEFT);
+    buffer.text("Empezar juego", width/2.0, height/3.0);
+    buffer.text("Instrucciones", width/2.0, height/3.0 * 2);
   }
   
   void drawInstructions(){
@@ -140,8 +140,8 @@ class Menu{
   }
   
   void drawSelector(){
-    fill(255);
-    rect(this.selectorX, this.selectorY, 30, 30);
+    buffer.fill(255);
+    buffer.rect(this.selectorX, this.selectorY, 30, 30);
   }
   
   boolean select(Videogame v){

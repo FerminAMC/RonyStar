@@ -88,12 +88,12 @@ class Enemy extends Element{
   }
   
   void pintate(){
-    pushMatrix();
-    translate(position.x, position.y);
-    scale(-direction, 1);
-    imageMode(CENTER);
-    image(image, 0, 0);
-    popMatrix();
+    buffer.pushMatrix();
+    buffer.translate(position.x, position.y);
+    buffer.scale(-direction, 1);
+    buffer.imageMode(CENTER);
+    buffer.image(image, 0, 0);
+    buffer.popMatrix();
     tiempoVida++;
   }
   
@@ -110,6 +110,7 @@ class Enemy extends Element{
     
     //Walk left and right
     velocity.x = direction * walkSpeed;
+    
     
     float xSpeed = velocity.x;
     float ySpeed = velocity.y;
@@ -160,25 +161,8 @@ class Enemy extends Element{
     
     position.x = x;
     position.y = y;
-    velocity.x = xSpeed;
+    velocity.x = xSpeed - offset;
     velocity.y = ySpeed;
-    
-    /*PVector nextPosition = new PVector(position.x, position.y);
-    nextPosition.add(velocity);
-    // Check collision with edge of screen and don't move if at the edge
-    float offset = 0;
-    if (nextPosition.x + image.width/2 >= offset && nextPosition.x <= (width + image.width/2))
-    {
-      position.x = nextPosition.x;
-    
-    }
-    if (nextPosition.y + image.height/2 >= offset && nextPosition.y <= (500 + image.height/2 - offset))
-    {
-      position.y = nextPosition.y;
-    }
-    if (nextPosition.x + image.width/2 <= offset && nextPosition.x >= (width + image.width/2)){
-    rony.lives -= 1;
-    }*/
   }
   
   boolean die(){

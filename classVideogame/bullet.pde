@@ -118,14 +118,14 @@ class Bullet{
     velocity.x = xSpeed;
     velocity.y = ySpeed;
     
-    pushMatrix();
-    translate(position.x, position.y + 25);
+    buffer.pushMatrix();
+    buffer.translate(position.x, position.y + 25);
     // Always scale after translate and rotate.
     // We're using direction because a -1 scale flips the image in that direction.
-    scale(-direction, 1);
-    imageMode(CENTER);
-    image(icon, 0, -icon.height/2);
-    popMatrix();
+    buffer.scale(-direction, 1);
+    buffer.imageMode(CENTER);
+    buffer.image(icon, 0, -icon.height/2);
+    buffer.popMatrix();
   }
   
   boolean hit(Enemy e){

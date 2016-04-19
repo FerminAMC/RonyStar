@@ -39,7 +39,7 @@ class Animation {
   
   void pintate() {
       frame = (frame+1) % imageCount;
-      image(images[frame], xpos, ypos - images[frame].height/2);
+      buffer.image(images[frame], xpos, ypos - images[frame].height/2);
   }
   
   int getWidth() {

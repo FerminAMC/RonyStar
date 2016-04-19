@@ -78,22 +78,22 @@ class HUD{
     time = interval - int(millis()/1000);
     if(time > 9){
       
-   fill(255);
-   text("Time: " + time, width-500, 30);
+   buffer.fill(255);
+   buffer.text("Time: " + time, width-500, 30);
     } else {
-     textSize(40);
-     fill(255, 0, 50);
-     text("Time: " + time, width-510, 35);
+    buffer.textSize(40);
+     buffer.fill(255, 0, 50);
+     buffer.text("Time: " + time, width-510, 35);
     }
-    fill(255);
-    textSize(28);
-    text("Score: " +rony.score, width-200, 30);
-    text("Lives: " +livesText, width -800, 30); 
+    buffer.fill(255);
+    buffer.textSize(28);
+    buffer.text("Score: " +rony.score, width-200, 30);
+    buffer.text("Lives: " +livesText, width -800, 30); 
     if(time == 0){
-      textSize(58);
-      fill(0);
-      text("Game Over", 278, 400);
-      stop();
+      buffer.textSize(58);
+      buffer.fill(0);
+      buffer.text("Game Over", 278, 400);
+      //stop();
     }
   }
   

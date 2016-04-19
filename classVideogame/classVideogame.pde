@@ -29,6 +29,7 @@ PImage wasd, space, icon;
 PFont fuente;
 //PVector v = new PVector(300,750);
 
+PGraphics buffer;
 PImage mapa1;
 PImage mapa2;
 PImage mapa3;
@@ -41,13 +42,15 @@ Minim minim;
 Minim s2min;
 
 int tamX = 50, tamY = 20;
-int WIDTH = 800/tamX;
+int WIDTH = 2200/tamX;
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 
+int offset;
 
 void setup(){ //flScreen(); 
-    size(800, 650);
+    size(800, 650, P2D);
+    frameRate(60);
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
@@ -74,6 +77,8 @@ void setup(){ //flScreen();
    wasd = loadImage("../Sprites/wasd.png");
    space = loadImage("../Sprites/spaceKey.png");
    
+   buffer = createGraphics(width, height, P2D);
+   
    start = new Animation("../Sprites/menuinicio/menuinicio", 89, 0, height/2, width, height);
 
    //fuente = createFont("../fonts/majorforce.ttf", 32);
@@ -91,16 +96,17 @@ void setup(){ //flScreen();
    back = new Minim(this);
    player = back.loadFile("piratas.mp3",2048);
    player.loop();
+   
+   offset = 0;
 }
 
 void draw(){
-  println(rony.getPosX());
+  
   s2.rewind();
   s2.play();
-  
-  
-  
-  
+  offset = int(offset - rony.xSpeed);
+  buffer.beginDraw();
+  mapa.drawboard(0.0, offset);
   vid.pintate();
   if(!MENU){
     vid.move(right, left, up, gravity);
@@ -112,26 +118,29 @@ void draw(){
         anim.pintate();
       }
     }
-    noStroke();
+    buffer.noStroke();
     for ( int ix = 0; ix < WIDTH; ix++ ) {
       for ( int iy = 0; iy < HEIGHT; iy++ ) {
         if(iy == 25){
           screen[iy][ix] = 1;
         }else{
-          fill(240,200,50);
+          buffer.fill(240,200,50);
           switch(screen[iy][ix]) {
-            case 1: rect(ix*tamX,iy*tamY,tamX,tamY);
+            case 1: buffer.rect(ix * tamX + offset,iy*tamY,tamX,tamY);
           }
         }
       }
     }
   }
+  buffer.endDraw();
+  image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
  }
 
 boolean place_free(int xx, int yy){
   //checks if a given point (xx,yy) is free (no block at that point) or not
   yy = int(floor((float)yy/tamY));
-  xx = int(floor((float)xx/tamX));
+  xx += abs(offset);
+  xx = int(floor((xx)/50.0));
   if ( xx > -1 && xx < screen[0].length && yy > -1 && yy < screen.length ) {
     if ( screen[yy][xx] == 0 ) {
       return true;
@@ -232,7 +241,7 @@ class Videogame{
   public Videogame(){
     l = new Level();
     enemy = new ArrayList();
-    rony = new Character(iRony, 5, 0, false, 40, 450, 15, 2);
+    rony = new Character(iRony, 5, 0, false, 100, 450, 15, 2);
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
@@ -284,7 +293,8 @@ class Videogame{
 }
   
   void pintate(){
-   mapa.pintate(rony);
+   //mapa.pintate(rony);
+   
     if(MENU == true){
      
       menu.pintate();
@@ -303,14 +313,14 @@ class Videogame{
       int interval = 5;
       int spawnT = interval - int(millis()/10);
       if(spawnT % 103 == 0){
-        frameRate(5);
+        //frameRate(5);
         enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "normal"));
       }
       if(spawnT % 203 == 0){
-        frameRate(5);
+        //frameRate(5);
         enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "brincador"));
       }
-      frameRate(60);
+      //frameRate(60);
       //System.out.println(spawnT);
       boolean aux = false;
       for(Bullet b : bala){
@@ -350,6 +360,7 @@ class Videogame{
 void mousePressed() {
 //Left click creates/destroys a block
   if ( mouseButton == LEFT ) {
-    screen[int(floor((float)mouseY/tamY))][int(floor((float)mouseX/tamX))] ^= 1;
+    screen[int(floor((float)mouseY/tamY))][int(floor((float)(mouseX + abs(offset)) / tamX))] ^= 1;
+    println((mouseX + abs(offset)) / tamX);
   }
 }

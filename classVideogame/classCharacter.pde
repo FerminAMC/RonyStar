@@ -112,7 +112,7 @@ class Character {
     }
     for ( ; xRep > 0; xRep-- ) {
       if ( place_free(x+offsetX+signX,y) && place_free(x+offsetX+signX,y+12) ) {
-        x += signX;
+        //x += signX;
       }
       else {
         xSpeed = 0;
@@ -136,12 +136,12 @@ class Character {
   }
   
   void pintate() {
-    pushMatrix();
-    translate(x,y);
-    scale(direction, 1);
-    imageMode(CENTER);
-    image(icon, 0, 0);
-    popMatrix();
+    buffer.pushMatrix();
+    buffer.translate(x,y);
+    buffer.scale(direction, 1);
+    buffer.imageMode(CENTER);
+    buffer.image(icon, 0, 0);
+    buffer.popMatrix();
     
     /*pushMatrix();
     fill(255,0,0);
