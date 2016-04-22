@@ -136,8 +136,8 @@ class Bullet{
       return true;
     }
     else if(tipo == "rony"){
-      if(this.position.x + this.icon.width/2 >= e.position.x - e.image.width/2 && 
-        this.position.x - this.icon.width/2 <= e.position.x + e.image.width/2 && 
+      if(this.position.x + this.icon.width/2 >= offset+e.position.x - e.image.width/2 && 
+        this.position.x - this.icon.width/2 <= offset+e.position.x + e.image.width/2 && 
         this.position.y + this.icon.height/2 >= e.position.y - e.image.height/2 &&
         this.position.y - this.icon.height/2 <= e.position.y + e.image.height/2
         ){

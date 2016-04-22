@@ -105,6 +105,7 @@ void draw(){
   s2.rewind();
   s2.play();
   offset = int(offset - rony.xSpeed);
+  println(offset);
   buffer.beginDraw();
   mapa.drawboard(0.0, offset);
   vid.pintate();
@@ -140,7 +141,7 @@ boolean place_free(int xx, int yy){
   //checks if a given point (xx,yy) is free (no block at that point) or not
   yy = int(floor((float)yy/tamY));
   xx += abs(offset);
-  xx = int(floor((xx)/50.0));
+  xx = int(floor((float)xx/tamX));
   if ( xx > -1 && xx < screen[0].length && yy > -1 && yy < screen.length ) {
     if ( screen[yy][xx] == 0 ) {
       return true;
@@ -245,7 +246,7 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2, "normal"));
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2, "equis"));
     enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, "volador"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, String tipo){
@@ -272,19 +273,21 @@ class Videogame{
 }
   
   void move(float right, float left, float up, float gravity){
-    for(Enemy e : enemy){
-      e.move(gravity);
-      if(e.getTiempoVida() % 103 == 0){
-        flush.rewind();
-        flush.play();
-        if(e.getTipo() == "volador"){
-          bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() , e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy"));
-        }else{
-          bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 , e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
+    if(!MENU){
+      for(Enemy e : enemy){
+        e.move(gravity);
+        if(e.getTiempoVida() % 103 == 0){
+          flush.rewind();
+          flush.play();
+          if(e.getTipo() == "volador"){
+            bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() + offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy"));
+          }else{
+            bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 + offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
+          }
         }
       }
+      rony.move(left, right, up, gravity);
     }
-    rony.move(left, right, up, gravity);
   }
   
   void gana(){
@@ -361,6 +364,5 @@ void mousePressed() {
 //Left click creates/destroys a block
   if ( mouseButton == LEFT ) {
     screen[int(floor((float)mouseY/tamY))][int(floor((float)(mouseX + abs(offset)) / tamX))] ^= 1;
-    println((mouseX + abs(offset)) / tamX);
   }
 }
