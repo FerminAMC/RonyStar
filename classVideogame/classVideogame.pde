@@ -44,25 +44,19 @@ AudioSnippet flush;
 Minim minim;
 Minim s2min;
 
-<<<<<<< HEAD
-int tamX = 50, tamY = 20;
-int WIDTH = 2200/tamX;
-int HEIGHT = 650/tamY;
-int[][] screen = new int[HEIGHT][WIDTH];
-=======
+
 AudioPlayer player;
 Minim back;
 
 AudioPlayer playerCount;
 Minim count;
 
->>>>>>> countdown
 
 int offset;
 
 void setup(){ //flScreen(); 
     size(800, 650, P2D);
-    frameRate(60);
+    //frameRate(60);
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
@@ -108,13 +102,10 @@ void setup(){ //flScreen();
    count = new Minim(this);
    player = back.loadFile("piratas.mp3",2048);
    playerCount = count.loadFile("countdown.mp3", 2048);
-   player.loop();
-<<<<<<< HEAD
-   
+   player.loop();   
    offset = 0;
-=======
    count = new Minim(this);
->>>>>>> countdown
+
 }
 
 void draw(){
