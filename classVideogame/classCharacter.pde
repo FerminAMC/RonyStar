@@ -64,7 +64,7 @@ class Character {
     
     if ( up != 0) {
       if ( !place_free(x,y+25) || !place_free(x+24,y+25) ) {
-        ySpeed = -8.3;
+        ySpeed = -6.3;
       }
     }
     

@@ -74,13 +74,16 @@ class HUD{
   }
   
   void pintate(){
-    int interval = 64;
+    int interval = 60;
     time = interval - int(millis()/1000);
     if(time > 9){
       
    fill(255);
    text("Time: " + time, width-500, 30);
     } else {
+      player.close();
+      playerCount.play();
+      
      textSize(40);
      fill(255, 0, 50);
      text("Time: " + time, width-510, 35);
@@ -90,6 +93,8 @@ class HUD{
     text("Score: " +rony.score, width-200, 30);
     text("Lives: " +livesText, width -800, 30); 
     if(time == 0){
+      playerCount.close();
+      
       textSize(58);
       fill(0);
       text("Game Over", 278, 400);

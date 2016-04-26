@@ -1,4 +1,3 @@
-
 class Bullet{
   PImage icon;
   PVector position;
