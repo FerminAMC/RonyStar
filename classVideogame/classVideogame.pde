@@ -6,34 +6,37 @@ import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
 import processing.sound.*;
 
-AudioPlayer player;
-Minim back;
 
 Animation start;
 Map mapa;
 Videogame vid;
-ArrayList<Bullet> bala;
+ArrayList <Bullet> bala;
 Character rony;
 ArrayList <Enemy> enemy;
+ArrayList<Animation> animacion;
 HUD hud;
 Level l;
-float right, left, up, gravity = .25;
 Menu menu;
+
+
+float right, left, up, gravity = .25;
 boolean MENU;
 int ln;
-
-ArrayList<Animation> animacion;
+int tamX = 50, tamY = 20;
+int WIDTH = 800/tamX;
+int HEIGHT = 650/tamY;
+int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
 PImage iRony, iEnemy, iBullet, shipBullet, iShip;
 PImage wasd, space, icon;
 PFont fuente;
-//PVector v = new PVector(300,750);
 
 PGraphics buffer;
 PImage mapa1;
 PImage mapa2;
 PImage mapa3;
 PGraphics combinacion;
+
 //tipo de archivos necesarios para el audio
 AudioSnippet s2;
 AudioSnippet flush;
@@ -41,10 +44,19 @@ AudioSnippet flush;
 Minim minim;
 Minim s2min;
 
+<<<<<<< HEAD
 int tamX = 50, tamY = 20;
 int WIDTH = 2200/tamX;
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
+=======
+AudioPlayer player;
+Minim back;
+
+AudioPlayer playerCount;
+Minim count;
+
+>>>>>>> countdown
 
 int offset;
 
@@ -80,7 +92,6 @@ void setup(){ //flScreen();
    buffer = createGraphics(width, height, P2D);
    
    start = new Animation("../Sprites/menuinicio/menuinicio", 89, 0, height/2, width, height);
-
    //fuente = createFont("../fonts/majorforce.ttf", 32);
    fuente = createFont("../fonts/justice.ttf", 32);
    vid = new Videogame();
@@ -94,10 +105,16 @@ void setup(){ //flScreen();
    s2 = s2min.loadSnippet("bullet.mp3");
    
    back = new Minim(this);
+   count = new Minim(this);
    player = back.loadFile("piratas.mp3",2048);
+   playerCount = count.loadFile("countdown.mp3", 2048);
    player.loop();
+<<<<<<< HEAD
    
    offset = 0;
+=======
+   count = new Minim(this);
+>>>>>>> countdown
 }
 
 void draw(){
@@ -286,11 +303,6 @@ class Videogame{
     }
     rony.move(left, right, up, gravity);
   }
-  
-  void gana(){
-    println("Ora pinches vergas");
-    
-}
   
   void pintate(){
    //mapa.pintate(rony);
