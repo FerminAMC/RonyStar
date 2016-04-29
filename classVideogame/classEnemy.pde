@@ -89,7 +89,7 @@ class Enemy extends Element{
   
   void pintate(){
     buffer.pushMatrix();
-    buffer.translate(position.x, position.y);
+    buffer.translate(position.x+offset, position.y);
     buffer.scale(-direction, 1);
     buffer.imageMode(CENTER);
     buffer.image(image, 0, 0);
@@ -110,6 +110,7 @@ class Enemy extends Element{
     
     //Walk left and right
     velocity.x = direction * walkSpeed;
+    
     
     
     float xSpeed = velocity.x;
@@ -141,7 +142,7 @@ class Enemy extends Element{
    
     
     for ( ; yRep > 0; yRep-- ) {
-      if ( place_free(x-24,y+offsetY+signY) && place_free(x+24,y+offsetY+signY) ) {
+      if ( place_free(x-24 + offset,y+offsetY+signY) && place_free(x+24 + offset,y+offsetY+signY) ) {
         y += signY;
       }
       else {
@@ -150,7 +151,7 @@ class Enemy extends Element{
       }
     }
     for ( ; xRep > 0; xRep-- ) {
-      if ( place_free(x+offsetX+signX,y) && place_free(x+offsetX+signX,y+12) ) {
+      if ( place_free(x+offsetX+signX+offset,y) && place_free(x+offsetX+signX+offset,y+12) ) {
         x += signX;
       }
       else {
@@ -161,7 +162,7 @@ class Enemy extends Element{
     
     position.x = x;
     position.y = y;
-    velocity.x = xSpeed - offset;
+    velocity.x = xSpeed;
     velocity.y = ySpeed;
   }
   
