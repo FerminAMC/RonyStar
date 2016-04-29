@@ -23,7 +23,7 @@ float right, left, up, gravity = .25;
 boolean MENU;
 int ln;
 int tamX = 50, tamY = 20;
-int WIDTH = 800/tamX;
+int WIDTH = 2200/tamX;
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
