@@ -38,8 +38,7 @@ PImage mapa3;
 PGraphics combinacion;
 
 //tipo de archivos necesarios para el audio
-AudioSnippet s2;
-AudioSnippet flush;
+AudioPlayer flush;
 //objetos minim
 Minim minim;
 Minim s2min;
@@ -95,8 +94,7 @@ void setup(){ //flScreen();
    
    minim = new Minim(this);
    s2min = new Minim(this);
-   flush = minim.loadSnippet("bullet.mp3");
-   s2 = s2min.loadSnippet("bullet.mp3");
+   flush = minim.loadFile("bullet.mp3");
    
    back = new Minim(this);
    count = new Minim(this);
@@ -104,16 +102,12 @@ void setup(){ //flScreen();
    playerCount = count.loadFile("countdown.mp3", 2048);
    player.loop();   
    offset = 0;
-   count = new Minim(this);
 
 }
 
 void draw(){
-  
-  s2.rewind();
-  s2.play();
   offset = int(offset - rony.xSpeed);
-  println(offset);
+  //println(offset);
   buffer.beginDraw();
   mapa.drawboard(0.0, offset);
   vid.pintate();
@@ -289,7 +283,7 @@ class Videogame{
           flush.play();
           if(e.getTipo() == "volador"){
             bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() + offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy"));
-          }else{
+          }else if(e.getTipo() == "normal"){
             bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 + offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
           }
         }
