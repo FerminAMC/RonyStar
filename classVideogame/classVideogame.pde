@@ -17,7 +17,7 @@ ArrayList<Animation> animacion;
 HUD hud;
 Level l;
 Menu menu;
-
+int enemies = 0;
 
 float right, left, up, gravity = .25;
 boolean MENU;
@@ -54,8 +54,10 @@ Minim count;
 
 int offset;
 
+
+//cargar archivos
 void setup(){ //flScreen(); 
-    size(800, 650, P2D);
+    size(800, 650,P2D);
     //frameRate(60);
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
@@ -108,12 +110,14 @@ void setup(){ //flScreen();
 
 }
 
+
+//ejecutar juego
 void draw(){
   
   s2.rewind();
   s2.play();
   offset = int(offset - rony.xSpeed);
-  println(offset);
+  //println(offset);
   buffer.beginDraw();
   mapa.drawboard(0.0, offset);
   vid.pintate();
@@ -128,6 +132,7 @@ void draw(){
       }
     }
     buffer.noStroke();
+    
     for ( int ix = 0; ix < WIDTH; ix++ ) {
       for ( int iy = 0; iy < HEIGHT; iy++ ) {
         if(iy == 25){
@@ -318,16 +323,18 @@ class Videogame{
       }
       int interval = 5;
       int spawnT = interval - int(millis()/10);
+      
+     if (enemies < l.getEnemiesNumber()){
+      
       if(spawnT % 103 == 0){
-        //frameRate(5);
         enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "normal"));
+        enemies++;
       }
       if(spawnT % 203 == 0){
-        //frameRate(5);
         enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "brincador"));
+        enemies++;
       }
-      //frameRate(60);
-      //System.out.println(spawnT);
+     }
       boolean aux = false;
       for(Bullet b : bala){
         b.pintate();
@@ -349,15 +356,13 @@ class Videogame{
         anim.pintate();
       }
       
-      
+ 
     }
     if(rony.getPosX() >= 750 && enemy.size()==1){
         text("Has ganado", height/2, width/2);
         //aumentar de nivel y reiniciar tiempo
         increaseLevel();
         Level l2 = new Level(50,2,60);
-        
-        
      }
     }
   }

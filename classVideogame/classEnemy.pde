@@ -31,6 +31,7 @@ class Enemy extends Element{
     position.x = posX;
   }
   
+  
   void setPosY(float posY){
     position.y = posY;
   }

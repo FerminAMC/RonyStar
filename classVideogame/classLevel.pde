@@ -18,6 +18,10 @@ int maxSeconds;
     return enemiesNumber;
   }
   
+  int getEnemiesNumber(){
+    return enemiesNumber;
+  }
+  
   void setEnemiesNumber(int en){
      enemiesNumber = en;
   }
