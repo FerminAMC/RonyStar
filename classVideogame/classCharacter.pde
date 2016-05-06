@@ -34,14 +34,14 @@ class Character {
     //Si direction es = NULL todo rony se va al carajo
     direction = 1;
   }
-  void move(float right, float left, float up, float movX) {
-    if ( right != 0 ) {
+  void move(float left, float right, float up, float movX) {
+    if ( left != 0 ) {
       xSpeed += accel;
       if ( xSpeed > maxXspd ) {
         xSpeed = maxXspd;
       }
     }
-    else if ( left != 0) {
+    else if ( right != 0) {
       xSpeed -= accel;
       if ( xSpeed < -maxXspd ) {
         xSpeed = -maxXspd;
@@ -90,7 +90,7 @@ class Character {
     int signY = (ySpeed<0) ? -1 : 1;
     //when the player is moving a direction collision is tested for only in that direction
     //the offset variables are used for this in the for loops below
-    int offsetX = (xSpeed<0) ? -24 : 24;
+    int offsetX = (xSpeed<0) ? -24 : 24;   // Estos offsets son el (tamaño de la imagen/ 2) - 1
     int offsetY = (ySpeed<0) ? -24 : 24;
     
     if ( xSave >= 1 ) {
@@ -110,8 +110,8 @@ class Character {
         ySpeed = 0;
       }
     }
-    for ( ; xRep > 0; xRep-- ) {
-      if ( place_free(x+offsetX+signX,y) && place_free(x+offsetX+signX,y+12) ) {
+    for ( ; xRep >= 0; xRep-- ) {
+      if ( place_free(x -offsetX-signX,y-24) && place_free(x -offsetX-signX, y) && place_free(x -offsetX-signX,y+24) ) {
         //x += signX;
       }
       else {
@@ -130,6 +130,9 @@ class Character {
   float getDirection(){
     return direction;
   }
+  float getXSpeed(){
+    return xSpeed;
+  }
   
   void setDirection(float dir){
     this.direction = dir;
@@ -142,14 +145,7 @@ class Character {
     buffer.imageMode(CENTER);
     buffer.image(icon, 0, 0);
     buffer.popMatrix();
-    
-    /*pushMatrix();
-    fill(255,0,0);
-    noStroke();
-    rectMode(CORNER);
-    rect(x,y,50,50);
-    fill(255,255,255);
-    popMatrix();*/
+   
   }
   
   boolean die(){

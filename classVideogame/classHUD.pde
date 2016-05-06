@@ -75,6 +75,7 @@ class HUD{
   
   void pintate(){
     int interval = 60;
+    
     time = interval - int(millis()/1000);
     if(time > 9){
       

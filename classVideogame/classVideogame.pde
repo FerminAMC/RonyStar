@@ -38,8 +38,7 @@ PImage mapa3;
 PGraphics combinacion;
 
 //tipo de archivos necesarios para el audio
-AudioSnippet s2;
-AudioSnippet flush;
+AudioPlayer flush;
 //objetos minim
 Minim minim;
 Minim s2min;
@@ -57,7 +56,7 @@ int offset;
 
 //cargar archivos
 void setup(){ //flScreen(); 
-    size(800, 650,P2D);
+    size(800, 650);
     //frameRate(60);
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
@@ -85,7 +84,7 @@ void setup(){ //flScreen();
    wasd = loadImage("../Sprites/wasd.png");
    space = loadImage("../Sprites/spaceKey.png");
    
-   buffer = createGraphics(width, height, P2D);
+   buffer = createGraphics(width, height);
    
    start = new Animation("../Sprites/menuinicio/menuinicio", 89, 0, height/2, width, height);
    //fuente = createFont("../fonts/majorforce.ttf", 32);
@@ -97,8 +96,7 @@ void setup(){ //flScreen();
    
    minim = new Minim(this);
    s2min = new Minim(this);
-   flush = minim.loadSnippet("bullet.mp3");
-   s2 = s2min.loadSnippet("bullet.mp3");
+   flush = minim.loadFile("bullet.mp3");
    
    back = new Minim(this);
    count = new Minim(this);
@@ -106,18 +104,14 @@ void setup(){ //flScreen();
    playerCount = count.loadFile("countdown.mp3", 2048);
    player.loop();   
    offset = 0;
-   count = new Minim(this);
 
 }
 
 
 //ejecutar juego
 void draw(){
-  
-  s2.rewind();
-  s2.play();
-  offset = int(offset - rony.xSpeed);
-  //println(offset);
+  offset = int(offset - rony.getXSpeed());
+  println(offset + " - " + rony.getXSpeed());
   buffer.beginDraw();
   mapa.drawboard(0.0, offset);
   vid.pintate();
@@ -140,7 +134,7 @@ void draw(){
         }else{
           buffer.fill(240,200,50);
           switch(screen[iy][ix]) {
-            case 1: buffer.rect(ix * tamX + offset,iy*tamY,tamX,tamY);
+            case 1: buffer.rect(ix * tamX - offset,iy*tamY,tamX,tamY); // Cambio de signo
           }
         }
       }
@@ -153,7 +147,8 @@ void draw(){
 boolean place_free(int xx, int yy){
   //checks if a given point (xx,yy) is free (no block at that point) or not
   yy = int(floor((float)yy/tamY));
-  xx += abs(offset);
+  xx += offset; // Cambio signo
+  //xx += abs(offset);
   xx = int(floor((float)xx/tamX));
   if ( xx > -1 && xx < screen[0].length && yy > -1 && yy < screen.length ) {
     if ( screen[yy][xx] == 0 ) {
@@ -182,8 +177,8 @@ boolean place_free(int xx, int yy){
       if(MENU == true){
         menu.left();
       }else{
-        left = 1;
-        //right = 1;
+        //left = 1;
+        right = 1;
         rony.setDirection(1);
       }
     }
@@ -191,8 +186,8 @@ boolean place_free(int xx, int yy){
       if(MENU == true){
         menu.right();
       }else{
-        right = 1;
-        //left = 1;
+        //right = 1;
+        left = 1;
         rony.setDirection(-1);
         
       }
@@ -234,11 +229,11 @@ boolean place_free(int xx, int yy){
   void keyReleased(){
     if(key == 'd' || key == 'D'){
       if(!MENU)
-      left = 0;
+      right = 0;
     }
     if(key == 'a' || key == 'A'){
       if(!MENU)
-      right = 0;
+      left = 0;
     }
     if(key == 'w' || key == 'W'){
       if(!MENU)
@@ -293,9 +288,9 @@ class Videogame{
           flush.rewind();
           flush.play();
           if(e.getTipo() == "volador"){
-            bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() + offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy"));
-          }else{
-            bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 + offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
+            bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() - offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy")); // Cambio de signo
+          }else if(e.getTipo() == "normal"){
+            bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 - offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy")); // Cambio de signo
           }
         }
       }
@@ -348,16 +343,8 @@ class Videogame{
         }
         if(aux)break;
       }
-      for(Animation anim : animacion){
-      if(anim.turnOff()){
-        animacion.remove(anim);
-        break;
-      }else{
-        anim.pintate();
-      }
-      
- 
-    }
+      //Aquí borré un for con animaciones que no necesitamos
+
     if(rony.getPosX() >= 750 && enemy.size()==1){
         text("Has ganado", height/2, width/2);
         //aumentar de nivel y reiniciar tiempo
@@ -371,6 +358,6 @@ class Videogame{
 void mousePressed() {
 //Left click creates/destroys a block
   if ( mouseButton == LEFT ) {
-    screen[int(floor((float)mouseY/tamY))][int(floor((float)(mouseX + abs(offset)) / tamX))] ^= 1;
+    screen[int(floor((float)mouseY/tamY))][int(floor((float)(mouseX + offset)/ tamX))] ^= 1;
   }
 }
