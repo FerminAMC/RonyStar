@@ -89,7 +89,7 @@ class Enemy extends Element{
   
   void pintate(){
     buffer.pushMatrix();
-    buffer.translate(position.x+offset, position.y);
+    buffer.translate(position.x-offset, position.y); //Cambio signo
     buffer.scale(-direction, 1);
     buffer.imageMode(CENTER);
     buffer.image(image, 0, 0);
@@ -128,7 +128,7 @@ class Enemy extends Element{
     int signY = (ySpeed<0) ? -1 : 1;
     //when the player is moving a direction collision is tested for only in that direction
     //the offset variables are used for this in the for loops below
-    int offsetX = (xSpeed<0) ? -24 : 24;
+    int offsetX = (xSpeed<0) ? -24 : (image.width/2)-1;
     int offsetY = (ySpeed<0) ? -24 : 24;
     
     if ( xSave >= 1 ) {
@@ -142,7 +142,7 @@ class Enemy extends Element{
    
     
     for ( ; yRep > 0; yRep-- ) {
-      if ( place_free(x-24 + offset,y+offsetY+signY) && place_free(x+24 + offset,y+offsetY+signY) ) {
+      if ( place_free(x-24 - offset,y+offsetY+signY) && place_free(x+24 - offset,y+offsetY+signY) ) { // Cambio de signo
         y += signY;
       }
       else {
@@ -151,7 +151,7 @@ class Enemy extends Element{
       }
     }
     for ( ; xRep > 0; xRep-- ) {
-      if ( place_free(x+offsetX+signX+offset,y) && place_free(x+offsetX+signX+offset,y+12) ) {
+      if ( place_free(x+offsetX+signX-offset,y) && place_free(x+offsetX+signX-offset,y+12) ) { // Cambio de signo
         x += signX;
       }
       else {

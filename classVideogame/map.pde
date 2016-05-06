@@ -38,7 +38,7 @@ class Map {
   } 
    void drawboard(float position,int offset) {
     //XUnit unit;
-    int x = (background.width/2) + offset;
+    int x = (background.width/2) - offset; //Cambio de signo
     /*for (int i=(xunits.size()-1);i>1;i--) {
       unit = (XUnit)xunits.get(i);
       unit.drawunit(x);
