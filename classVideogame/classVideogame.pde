@@ -30,6 +30,7 @@ int lastBulletRony = 0;
 PImage iRony, iEnemy, iBullet, shipBullet, iShip;
 PImage wasd, space, icon;
 PFont fuente;
+boolean isRunning;
 
 PGraphics buffer;
 PImage mapa1;
@@ -94,7 +95,7 @@ void setup(){ //flScreen();
    animacion = new ArrayList();
    textFont(fuente);
    MENU = true;
-   
+   isRunning = false;
    minim = new Minim(this);
    s2min = new Minim(this);
    flush = minim.loadSnippet("bullet.mp3");
@@ -123,6 +124,7 @@ void draw(){
   vid.pintate();
   if(!MENU){
     vid.move(right, left, up, gravity);
+    isRunning = true;
     for(Animation anim : animacion){
       if(anim.turnOff()){
         animacion.remove(anim);
@@ -216,7 +218,10 @@ boolean place_free(int xx, int yy){
     }
     
     if(key == 'p' || key == 'P'){
+      isRunning = false;
       player.pause();
+      println(isRunning);
+      hud.pintate();
       if(MENU == true && menu.menuNumber == 2){
           MENU = false;
           player.play();
@@ -312,6 +317,7 @@ class Videogame{
     }
     else{
       rony.pintate();
+      if(isRunning == true)
       hud.pintate();
       for(Enemy e : enemy){
         e.pintate();
