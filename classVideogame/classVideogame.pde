@@ -112,7 +112,6 @@ void setup(){ //flScreen();
 //ejecutar juego
 void draw(){
   offset = int(offset - rony.getXSpeed());
-  println(offset + " - " + rony.getXSpeed());
   buffer.beginDraw();
   mapa.drawboard(0.0, offset);
   vid.pintate();
@@ -215,7 +214,6 @@ boolean place_free(int xx, int yy){
     if(key == 'p' || key == 'P'){
       isRunning = false;
       player.pause();
-      println(isRunning);
       hud.pintate();
       if(MENU == true && menu.menuNumber == 2){
           MENU = false;
@@ -259,8 +257,8 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2, "equis"));
-    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, "volador"));
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2,1, "equis"));
+    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2,1, "volador"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, String tipo){
     hud = new HUD();
@@ -290,12 +288,14 @@ class Videogame{
       for(Enemy e : enemy){
         e.move(gravity);
         if(e.getTiempoVida() % 103 == 0){
-          flush.rewind();
-          flush.play();
           if(e.getTipo() == "volador"){
             bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() - offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy")); // Cambio de signo
+            flush.rewind();
+            flush.play();
           }else if(e.getTipo() == "normal"){
             bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 - offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy")); // Cambio de signo
+            flush.rewind();
+            flush.play();
           }
         }
       }
@@ -328,11 +328,11 @@ class Videogame{
      if (enemies < l.getEnemiesNumber()){
       
       if(spawnT % 103 == 0){
-        enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "normal"));
+        enemy.add(new Enemy(iEnemy, 1, 100, width, 450, 20, 2, -1, "normal"));
         enemies++;
       }
       if(spawnT % 203 == 0){
-        enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "brincador"));
+        enemy.add(new Enemy(iEnemy, 1, 100, width, 450, 20, 2,-1, "brincador"));
         enemies++;
       }
      }
@@ -350,9 +350,8 @@ class Videogame{
         if(aux)break;
       }
       //Aquí borré un for con animaciones que no necesitamos
-
-    if(rony.getPosX() >= 750 && enemy.size()==1){
-        text("Has ganado", height/2, width/2);
+    if(rony.getPosX() + offset >= 2112 && enemy.size()==1){
+        buffer.text("Has ganado", height/2, width/2);
         //aumentar de nivel y reiniciar tiempo
         increaseLevel();
         Level l2 = new Level(50,2,60);

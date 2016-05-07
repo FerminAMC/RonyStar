@@ -91,22 +91,18 @@ class HUD {
         
       }
       timeElapsed = interval;
-      println("Timer:" +interval);
     } else if (isRunning == false) {
       cont++;
       if(cont % 2 == 0){
       
-      println("cont %2 :"+cont);
         timePaused = int (millis()/1000 - (+timePaused));
       
       }else{
        cont++;
-      println("cont :"+cont);
       timePaused = int (millis()/1000 - (timePaused));
       }
       if (timePaused >= 60)
         timePaused -= 60;
-      println("Paused" + timePaused);
     }
 
 

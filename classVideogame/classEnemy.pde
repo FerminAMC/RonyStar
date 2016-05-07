@@ -8,12 +8,12 @@ class Enemy extends Element{
   boolean jump = false;
   int tiempoVida;
   
-  public Enemy(PImage image, int resistance, int value, float posX, float posY, float jumpSpeed, float walkSpeed, String tipo){
+  public Enemy(PImage image, int resistance, int value, float posX, float posY, float jumpSpeed, float walkSpeed, int direction, String tipo){
     this.image = image;
     this.resistance = resistance;
     this.value = value;
     position = new PVector(posX, posY);
-    direction = 1;
+    this.direction = direction;
     velocity = new PVector(0, 0);
     this.jumpSpeed = jumpSpeed;
     this.walkSpeed = walkSpeed;
@@ -101,9 +101,8 @@ class Enemy extends Element{
   void move(float gravity){
     
     if(tipo == "brincador" && jump == true){
-      if ( !place_free(round(position.x),round(position.y)+25) || !place_free(round(position.x)+24,round(position.y)+25) ) {
         velocity.y = -8.3;
-      }
+        jump = false;
     }
     if(tipo != "volador"){
       velocity.y += gravity;
@@ -147,7 +146,7 @@ class Enemy extends Element{
         y += signY;
       }
       else {
-        jump = (signY > 0)? true: false;
+        jump = (signY > 0)? true: jump;
         ySpeed = 0;
       }
     }
