@@ -112,9 +112,12 @@ class Character {
     }
     for ( ; xRep >= 0; xRep-- ) {
       if ( place_free(x -offsetX-signX,y-24) && place_free(x -offsetX-signX, y) && place_free(x -offsetX-signX,y+24) ) {
-        //x += signX;
+        //x -= signX;
       }
-      else {
+      else if(x <= 25 || x >= width-25) {
+        x += signX;
+        xSpeed = 0;
+      }else{
         xSpeed = 0;
       }
     }
@@ -123,9 +126,14 @@ class Character {
   float getPosX(){
     return x;
   }
-  
+  void setPosX(int x){
+    this.x = x;
+  }
   float getPosY(){
     return y;
+  }
+  void setPosY(int y){
+    this.y = y;
   }
   float getDirection(){
     return direction;

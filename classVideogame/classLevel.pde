@@ -2,6 +2,7 @@ class Level{
 int enemiesNumber;
 int levelNumber;
 int maxSeconds;
+
   public Level(){
     enemiesNumber = 10;
     levelNumber = 1;

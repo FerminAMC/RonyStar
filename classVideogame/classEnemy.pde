@@ -128,7 +128,7 @@ class Enemy extends Element{
     int signY = (ySpeed<0) ? -1 : 1;
     //when the player is moving a direction collision is tested for only in that direction
     //the offset variables are used for this in the for loops below
-    int offsetX = (xSpeed<0) ? -24 : (image.width/2)-1;
+    int offsetX = (xSpeed<0) ? -24 : 24;
     int offsetY = (ySpeed<0) ? -24 : 24;
     
     if ( xSave >= 1 ) {
@@ -157,6 +157,7 @@ class Enemy extends Element{
       else {
         xSpeed = 0;
         direction *= -1;
+        x += direction * walkSpeed;
       }
     }
     
