@@ -35,7 +35,7 @@ PImage iRony, iEnemy, iBullet, shipBullet, iShip;
 PImage wasd, space, icon;
 PFont fuente;
 boolean isRunning;
-int FPS = 60;
+
 
 PGraphics buffer;
 PImage mapa1;
@@ -70,7 +70,7 @@ void onFinishEvent(CountdownTimer t) {
 //cargar archivos
 void setup(){ //flScreen(); 
     size(800, 650);
-    frameRate(FPS);
+
 
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
@@ -301,6 +301,7 @@ class Videogame{
     enemy.clear();
     enemies = 0;
     offset = 0;
+    timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
 }
   
   void move(float right, float left, float up, float gravity){
