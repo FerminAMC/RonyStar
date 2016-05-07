@@ -23,7 +23,7 @@ float right, left, up, gravity = .25;
 boolean MENU;
 int ln;
 int tamX = 50, tamY = 20;
-int WIDTH = 2200/tamX;
+int WIDTH = 2200/tamX;     //Se generan en base al mapa
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
@@ -58,7 +58,6 @@ int offset;
 //cargar archivos
 void setup(){ //flScreen(); 
     size(800, 650);
-    //frameRate(60);
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
@@ -71,7 +70,7 @@ void setup(){ //flScreen();
     combinacion.image(mapa3,1221,0);
     combinacion.endDraw();
 
-   iRony = loadImage("../Characters/RonyNA.png");
+   iRony = loadImage("../Characters/R_estar.png");
    iEnemy = loadImage("../Characters/robot.png");
    iRony.resize(50, 50);
    iEnemy.resize(50, 50);
@@ -88,11 +87,10 @@ void setup(){ //flScreen();
    buffer = createGraphics(width, height);
    
    start = new Animation("../Sprites/menuinicio/menuinicio", 89, 0, height/2, width, height);
-   //fuente = createFont("../fonts/majorforce.ttf", 32);
-   fuente = createFont("../fonts/justice.ttf", 32);
+   fuente = createFont("../fonts/majorforce.ttf", 32);
+   //fuente = createFont("../fonts/justice.ttf", 32);
    vid = new Videogame();
    animacion = new ArrayList();
-   textFont(fuente);
    MENU = true;
    isRunning = false;
    minim = new Minim(this);
@@ -111,12 +109,14 @@ void setup(){ //flScreen();
 
 //ejecutar juego
 void draw(){
-  offset = int(offset - rony.getXSpeed());
-  println(offset + " - " + rony.getXSpeed());
   buffer.beginDraw();
-  mapa.drawboard(0.0, offset);
+  buffer.textFont(fuente);
+  mapa.drawboard((int)(rony.getPosX()));
   vid.pintate();
   if(!MENU){
+    if(rony.getPosX() > 95 && rony.getPosX() < 105){
+      offset = int(offset - rony.getXSpeed());
+    }
     vid.move(right, left, up, gravity);
     isRunning = true;
     for(Animation anim : animacion){
@@ -215,7 +215,6 @@ boolean place_free(int xx, int yy){
     if(key == 'p' || key == 'P'){
       isRunning = false;
       player.pause();
-      println(isRunning);
       hud.pintate();
       if(MENU == true && menu.menuNumber == 2){
           MENU = false;
@@ -259,10 +258,9 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2, "equis"));
-    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, "volador"));
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
-    //float jumpSpeed, float walkSpeed, String tipo){
+    //float jumpSpeed, float walkSpeed, int direction,  String tipo){
     hud = new HUD();
   }
   
@@ -273,16 +271,13 @@ class Videogame{
     rony.icon = iRony;
     rony.lives = 3;
     rony.score = 0;
-    rony.powerUp[0] = false;
-    rony.x = 45;
-    rony.y = height - iRony.height;
+    rony.x = 100;
+    rony.y = 400;
     rony.jumpSpeed = 20;
     rony.walkSpeed = 2;
-    for(Enemy e : enemy){
-      e.resistance = 2;
-      e.position.x = width - 100;
-      e.position.y = height - iEnemy.height - (gravity*5);
-    }
+    enemy.clear();
+    enemies = 0;
+    offset = 0;
 }
   
   void move(float right, float left, float up, float gravity){
@@ -290,12 +285,14 @@ class Videogame{
       for(Enemy e : enemy){
         e.move(gravity);
         if(e.getTiempoVida() % 103 == 0){
-          flush.rewind();
-          flush.play();
           if(e.getTipo() == "volador"){
             bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() - offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy")); // Cambio de signo
+            flush.rewind();
+            flush.play();
           }else if(e.getTipo() == "normal"){
             bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 - offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy")); // Cambio de signo
+            flush.rewind();
+            flush.play();
           }
         }
       }
@@ -328,11 +325,15 @@ class Videogame{
      if (enemies < l.getEnemiesNumber()){
       
       if(spawnT % 103 == 0){
-        enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "normal"));
+        enemy.add(new Enemy(iEnemy, 1, 100, width + offset, 450, 20, 2, -1, "normal"));
         enemies++;
       }
       if(spawnT % 203 == 0){
-        enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "brincador"));
+        enemy.add(new Enemy(iEnemy, 1, 100, width + offset, 450, 20, 2, -1, "brincador"));
+        enemies++;
+      }
+      if(spawnT % 303 == 0){
+        enemy.add(new Enemy(iShip, 2, 100, width + offset, 100, 20, 2, -1, "volador"));
         enemies++;
       }
      }
@@ -350,12 +351,10 @@ class Videogame{
         if(aux)break;
       }
       //Aquí borré un for con animaciones que no necesitamos
-
-    if(rony.getPosX() >= 750 && enemy.size()==1){
-        text("Has ganado", height/2, width/2);
+    if(rony.getPosX() + offset >= 2112 && enemy.size()==1){
+        buffer.text("Has ganado", height/2, width/2);
         //aumentar de nivel y reiniciar tiempo
         increaseLevel();
-        Level l2 = new Level(50,2,60);
      }
     }
   }
