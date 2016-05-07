@@ -76,62 +76,32 @@ class HUD {
   }
 
   void pintate() {
-    int interval = 60;
 
 
-    if (isRunning) {
-     
-      if (cont%2 == 0){
-   
-        interval = interval - int(millis()/1000 - (timePaused));  
-      }
-      else{
- 
-        interval = interval - int(millis()/1000 +(timePaused)); 
-        
-      }
-      timeElapsed = interval;
-      println("Timer:" +interval);
-    } else if (isRunning == false) {
-      cont++;
-      if(cont % 2 == 0){
-      
-      println("cont %2 :"+cont);
-        timePaused = int (millis()/1000 - (+timePaused));
-      
-      }else{
-       cont++;
-      println("cont :"+cont);
-      timePaused = int (millis()/1000 - (timePaused));
-      }
-      if (timePaused >= 60)
-        timePaused -= 60;
-      println("Paused" + timePaused);
-    }
+  
 
-
-    if (interval > 9) {
+    if (timer.getTimeLeftUntilFinish()/1000 > 9) {
 
       buffer.fill(255);
-      buffer.text("Time: " + interval, width-500, 30);
+      buffer.text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-500, 30);
     } else {
 
       buffer.textSize(40);
       buffer.fill(255, 0, 50);
-      buffer.text("Time: " + interval, width-510, 35);
+      buffer.text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-510, 35);
 
       player.close();
       playerCount.play();
 
       textSize(40);
       fill(255, 0, 50);
-      text("Time: " + interval, width-510, 35);
+      text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-510, 35);
     }
     buffer.fill(255);
     buffer.textSize(28);
     buffer.text("Score: " +rony.score, width-200, 30);
     buffer.text("Lives: " +livesText, width -800, 30); 
-    if (interval == 0) {
+    if (timer.getTimeLeftUntilFinish()/1000 == 0) {
       buffer.textSize(58);
       buffer.fill(0);
       buffer.text("Game Over", 278, 400);

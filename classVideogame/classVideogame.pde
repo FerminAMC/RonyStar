@@ -5,8 +5,11 @@ import ddf.minim.signals.*;
 import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
 import processing.sound.*;
+import com.dhchoi.CountdownTimer;
+import com.dhchoi.CountdownTimerService;
 
 
+CountdownTimer timer;
 Animation start;
 Map mapa;
 Videogame vid;
@@ -21,6 +24,7 @@ int enemies = 0;
 
 float right, left, up, gravity = .25;
 boolean MENU;
+String timerCallbackInfo = "";
 int ln;
 int tamX = 50, tamY = 20;
 int WIDTH = 2200/tamX;
@@ -31,6 +35,7 @@ PImage iRony, iEnemy, iBullet, shipBullet, iShip;
 PImage wasd, space, icon;
 PFont fuente;
 boolean isRunning;
+int FPS = 60;
 
 PGraphics buffer;
 PImage mapa1;
@@ -54,17 +59,24 @@ Minim count;
 
 int offset;
 
+void onTickEvent(CountdownTimer t, long timeLeftUntilFinish) {
+  timerCallbackInfo = "[tick] - timeLeft: " + timeLeftUntilFinish/1000 + "ms";
+}
+
+void onFinishEvent(CountdownTimer t) {
+  timerCallbackInfo = "[finished]";
+}
 
 //cargar archivos
 void setup(){ //flScreen(); 
     size(800, 650);
-    //frameRate(60);
+    frameRate(FPS);
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
     
     combinacion = createGraphics(2200, 650, JAVA2D);
-    
+    timer = CountdownTimerService.getNewCountdownTimer(this).configure(100, 60000);
     combinacion.beginDraw();
     combinacion.image(mapa1, 0,0);
     combinacion.image(mapa2, 611, 0);
@@ -116,9 +128,11 @@ void draw(){
   buffer.beginDraw();
   mapa.drawboard(0.0, offset);
   vid.pintate();
+  println("Timer:" + timer.getTimeLeftUntilFinish());
   if(!MENU){
-    vid.move(right, left, up, gravity);
+    timer.start();
     isRunning = true;
+    vid.move(right, left, up, gravity);
     for(Animation anim : animacion){
       if(anim.turnOff()){
         animacion.remove(anim);
@@ -141,6 +155,8 @@ void draw(){
         }
       }
     }
+  }else{
+  timer.stop(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
   }
   buffer.endDraw();
   image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
@@ -213,7 +229,8 @@ boolean place_free(int xx, int yy){
     }
     
     if(key == 'p' || key == 'P'){
-      isRunning = false;
+      isRunning = !isRunning;
+      if(isRunning)
       player.pause();
       println(isRunning);
       hud.pintate();
