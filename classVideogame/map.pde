@@ -36,14 +36,14 @@ class Map {
     float x1;
     if(x < -274){
       x1 = -274;
-      rony.setPosX(positionX - (int)rony.getXSpeed());
+      //rony.setPosX(positionX - (int)rony.getXSpeed());
     }else if(x > 1100){
       x1 = 1100;
-      rony.setPosX(positionX - (int)rony.getXSpeed());
+      //rony.setPosX(positionX - (int)rony.getXSpeed());
     }else{
        x1 = x; 
     }
     
-    buffer.image(background, x1 , y);
+    buffer.image(background, x , y);
   }
 }

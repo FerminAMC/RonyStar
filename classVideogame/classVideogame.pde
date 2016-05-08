@@ -22,12 +22,13 @@ Level l;
 Menu menu;
 int enemies = 0;
 
-float right, left, up, gravity = .25;
+float right, left, up, gravity = .25;    // lvl 1
 boolean MENU;
 String timerCallbackInfo = "";
 int ln;
 int tamX = 50, tamY = 20;
-int WIDTH = 2200/tamX;     //Se generan en base al mapa
+//int WIDTH = 2200/tamX;     //Se generan en base al mapa
+int WIDTH = 8700/tamX;
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
@@ -70,18 +71,19 @@ void onFinishEvent(CountdownTimer t) {
 //cargar archivos
 void setup(){ //flScreen(); 
     size(800, 650);
-
-
-    mapa1 = loadImage("../Sprites/lvl_1.png");
-    mapa2 = loadImage("../Sprites/lvl_2.png");
-    mapa3 = loadImage("../Sprites/lvl_3.png");
+    frameRate(60);
+    mapa1 = loadImage("../Sprites/lvl2_rony.png");   //lvl 2
+    //mapa1 = loadImage("../Sprites/lvl_1.png");   //lvl 1
+    //mapa2 = loadImage("../Sprites/lvl_2.png");   //lvl 1
+    //mapa3 = loadImage("../Sprites/lvl_3.png");   //lvl 1
     
-    combinacion = createGraphics(2200, 650, JAVA2D);
+    //combinacion = createGraphics(2200, 650, JAVA2D);  //lvl 1
+    combinacion = createGraphics(8700, 650, JAVA2D);   // lvl 2
     timer = CountdownTimerService.getNewCountdownTimer(this).configure(100, 60000);
     combinacion.beginDraw();
     combinacion.image(mapa1, 0,0);
-    combinacion.image(mapa2, 611, 0);
-    combinacion.image(mapa3,1221,0);
+    //combinacion.image(mapa2, 611, 0);   //lvl 1
+    //combinacion.image(mapa3,1221,0);    // lvl 1
     combinacion.endDraw();
 
    iRony = loadImage("../Characters/R_estar.png");
@@ -125,9 +127,9 @@ void setup(){ //flScreen();
 void draw(){
   buffer.beginDraw();
   buffer.textFont(fuente);
-  mapa.drawboard((int)(rony.getPosX()));
+  mapa.drawboard((int)(rony.getPosX()));    // Esto tiene que ir dentro del vid.pintate y validar que rony exista
   vid.pintate();
-  println("Timer:" + timer.getTimeLeftUntilFinish());
+  //println("Timer:" + timer.getTimeLeftUntilFinish());
   if(!MENU){
 
     if(rony.getPosX() > 95 && rony.getPosX() < 105){
@@ -151,7 +153,8 @@ void draw(){
     
     for ( int ix = 0; ix < WIDTH; ix++ ) {
       for ( int iy = 0; iy < HEIGHT; iy++ ) {
-        if(iy == 25){
+        //if(iy == 25){             //lvl 1
+        if(iy == 31){             //lvl 2
           screen[iy][ix] = 1;
         }else{
           buffer.fill(240,200,50);
@@ -162,7 +165,8 @@ void draw(){
       }
     }
   }else{
-  timer.stop(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
+    timer.stop(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
+    isRunning = false;
   }
   buffer.endDraw();
   image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
@@ -201,7 +205,6 @@ boolean place_free(int xx, int yy){
       if(MENU == true){
         menu.left();
       }else{
-        //left = 1;
         right = 1;
         rony.setDirection(1);
       }
@@ -210,7 +213,6 @@ boolean place_free(int xx, int yy){
       if(MENU == true){
         menu.right();
       }else{
-        //right = 1;
         left = 1;
         rony.setDirection(-1);
         
@@ -282,13 +284,12 @@ class Videogame{
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
-    //public Enemy(PImage image, int resistance, int value, float posX, float posY,
-    //float jumpSpeed, float walkSpeed, int direction,  String tipo){
     hud = new HUD();
+    ln = 1;
   }
   
   void increaseLevel(){
-    l.setLevelNumber(ln++);
+    l.setLevelNumber(++ln);
   }
   void restart(){
     rony.icon = iRony;
@@ -374,10 +375,10 @@ class Videogame{
         }
         if(aux)break;
       }
-      //Aquí borré un for con animaciones que no necesitamos
-    if(rony.getPosX() + offset >= 2112 && enemy.size()==1){
+      //Has ganado debería ser una función de vidgame porque hace más acciones
+    if(rony.getPosX() + offset >= 2112 && enemy.size()==1){ // lvl 1
         buffer.text("Has ganado", height/2, width/2);
-        //aumentar de nivel y reiniciar tiempo
+        //aumentar de nivel y reiniciar tiempo de acuerdo al nivel
         increaseLevel();
      }
     }
