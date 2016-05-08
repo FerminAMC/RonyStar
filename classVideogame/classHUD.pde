@@ -1,54 +1,18 @@
-int cont = 0;
 int timeElapsed, timePaused;
 class HUD {
   PImage lives;
-  PImage progress[];
   int score;
   int time;
   int livesText = 3;
 
   HUD() {
-    String path;
-    //lives = loadImage(".png");
-    for (int i = 0; i < 100; i++) {
-      path = "" + i + ".png";
-      // progress[i] = loadImage(path);
-    }
     score = 0;
     time = 0;
   }
 
   HUD(int enemies) {
-    String path;
-    //lives = loadImage(".png");
-    for (int i = 0; i < 100; i++) {
-      path = "" + (100/enemies)*i + ".png";
-      progress[i] = loadImage(path);
-    }
     score = 0;
     time = 0;
-  }
-  /*
-  PImage getLives(){
-   return lives;
-   }
-   
-   void setLives(PImage lives){    //Aquí puede ser que reciba el path de la imagen en vez de la imagen
-   this.lives = lives;
-   
-   this.lives = loadImage(lives);
-   
-   }*/
-
-  PImage[] getProgress() {
-    return progress;
-  }
-
-  void setProgress(PImage progress[]) {
-    int i;
-    for (i = 0; i < progress.length; i++) {
-      this.progress[i] = progress[i];
-    }
   }
 
   int getScore() {
@@ -71,7 +35,7 @@ class HUD {
     return livesText;
   }
 
-  void setLivesText() {
+  void setLivesText(int livesText) {
     this.livesText = livesText;
   }
 
@@ -105,22 +69,11 @@ class HUD {
       buffer.text("Game Over", 278, 400);
       //stop();
       playerCount.close();
-
-      textSize(58);
-      fill(0);
-      text("Game Over", 278, 400);
-      stop();
       isRunning = false;
     }
   }
 
   void reset(int enemies) {
-    String path;
-    //lives = loadImage(".png");
-    for (int i = 0; i < 100; i++) {
-      path = "" + (100/enemies)*i + ".png";
-      //progress[i] = loadImage(path);
-    }
     score = 0;
     time = 0;
   }
