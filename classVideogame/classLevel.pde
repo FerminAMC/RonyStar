@@ -35,6 +35,10 @@ int maxSeconds;
     levelNumber = ln;
   }
   
+  int getLevelNumber(){
+    return levelNumber;
+  }
+  
   int maxSeconds(){
     return maxSeconds;
   }
