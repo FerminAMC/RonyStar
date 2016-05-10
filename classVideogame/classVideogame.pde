@@ -87,7 +87,7 @@ void setup(){ //flScreen();
     
     iRonySR = loadImage("../Characters/RonyNA_new.png"); 
     iRonySR.resize(50,50);
-       ronyw = new Sprite();
+    ronyw = new Sprite();
 
    //iRony = loadImage("../Characters/R_estar.png");
    iRony = loadImage("../Characters/sprite_sheet_ronyA.png");
