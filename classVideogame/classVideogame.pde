@@ -70,16 +70,7 @@ void onFinishEvent(CountdownTimer t) {
 //cargar archivos
 void setup(){ //flScreen(); 
     size(800, 650);
-<<<<<<< HEAD
-<<<<<<< HEAD
     frameRate(35);
-=======
-
->>>>>>> parent of d70b38e... rocket
-
-=======
-    //frameRate(60);
->>>>>>> boss
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
@@ -123,9 +114,9 @@ void setup(){ //flScreen();
    
    back = new Minim(this);
    count = new Minim(this);
-   //player = back.loadFile("piratas.mp3",2048);
-   //playerCount = count.loadFile("countdown.mp3", 2048);
-   //player.loop();   
+   player = back.loadFile("piratas.mp3",2048);
+   playerCount = count.loadFile("countdown.mp3", 2048);
+   player.loop();   
    offset = 0;
 
 }
@@ -133,18 +124,7 @@ void setup(){ //flScreen();
 
 //ejecutar juego
 void draw(){
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
   
-  //s2.rewind();
-  //s2.play();
-  offset = int(offset - rony.xSpeed);
-  println(offset);
->>>>>>> boss
-=======
->>>>>>> parent of d70b38e... rocket
   buffer.beginDraw();
   buffer.textFont(fuente);
   mapa.drawboard((int)(rony.getPosX()));
@@ -241,8 +221,8 @@ boolean place_free(int xx, int yy){
     
     if(key == ' ' && millis() - lastBulletRony > 500){
       if(!MENU){
-        //flush.rewind();
-        //flush.play();
+        flush.rewind();
+        flush.play();
         lastBulletRony = millis();
         bala.add(new Bullet(iBullet, -rony.getDirection(), rony.getPosX() , rony.getPosY(), 0, 20 * rony.getDirection(),  0, "rony"));
         //  public Bullet(PImage image, float direction, PVector pos, int damage, float spX, float spY, String tipo){
@@ -257,17 +237,13 @@ boolean place_free(int xx, int yy){
     }
     
     if(key == 'p' || key == 'P'){
-<<<<<<< HEAD
       isRunning = !isRunning;
       if(isRunning)
       player.pause();
       hud.pintate();
-=======
-      //player.pause();
->>>>>>> boss
       if(MENU == true && menu.menuNumber == 2){
           MENU = false;
-          //player.play();
+          player.play();
         }
         right = 0;
         left = 0;
@@ -307,13 +283,9 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-<<<<<<< HEAD
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
-=======
-    enemy.add(new Enemy(iBoss, 100, 10000, width-iBoss.width/2, 150, 20, 1.5, "boss"));
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2, "equis"));
-    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, "volador"));
->>>>>>> boss
+    enemy.add(new Enemy(iBoss, 100, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0, 1, "equis"));
+    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, 1, "volador"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, int direction,  String tipo){
     hud = new HUD();
@@ -341,11 +313,8 @@ class Videogame{
       for(Enemy e : enemy){
         e.move(gravity, rony);
         if(e.getTiempoVida() % 103 == 0){
-<<<<<<< HEAD
-=======
-          //flush.rewind();
-          //flush.play();
->>>>>>> boss
+          flush.rewind();
+          flush.play();
           if(e.getTipo() == "volador"){
             bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() - offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy")); // Cambio de signo
             flush.rewind();
@@ -385,7 +354,6 @@ class Videogame{
       }
       int interval = 5;
       int spawnT = interval - int(millis()/10);
-<<<<<<< HEAD
       
      if (enemies < l.getEnemiesNumber()){
       
@@ -400,17 +368,6 @@ class Videogame{
       if(spawnT % 303 == 0){
         enemy.add(new Enemy(iShip, 2, 100, width + offset, 100, 20, 2, -1, "volador"));
         enemies++;
-=======
-      if(enemy.size() < 8){
-        if(spawnT % 103 == 0){
-          //frameRate(5);
-          enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "normal"));
-        }
-        if(spawnT % 203 == 0){
-          //frameRate(5);
-          enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "brincador"));
-        }
->>>>>>> boss
       }
      }
       boolean aux = false;
