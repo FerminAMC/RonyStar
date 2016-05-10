@@ -98,6 +98,7 @@ class Enemy extends Element{
     tiempoVida++;
   }
   
+<<<<<<< HEAD
   void move(float gravity){
     
     if(tipo == "brincador" && jump == true){
@@ -148,8 +149,69 @@ class Enemy extends Element{
       else {
         jump = (signY > 0)? true: jump;
         ySpeed = 0;
+=======
+  void move(float gravity, Character c){
+    if(tipo == "boss"){
+      
+      //Walk left and right
+      velocity.x = direction * walkSpeed;
+      
+      
+      
+      float xSpeed = velocity.x;
+      float ySpeed = velocity.y;
+      int x = round(position.x);
+      int y = round(position.y);
+      
+      xRep = 0; //should be zero because the for loops count it down but just as a safety
+      yRep = 0;
+      xRep += floor(abs(xSpeed));
+      yRep += floor(abs(ySpeed));
+      xSave += abs(xSpeed)-floor(abs(xSpeed));
+      ySave += abs(ySpeed)-floor(abs(ySpeed));
+      int signX = (xSpeed<0) ? -1 : 1;
+      int signY = (ySpeed<0) ? -1 : 1;
+      //when the player is moving a direction collision is tested for only in that direction
+      //the offset variables are used for this in the for loops below
+      int offsetX = (xSpeed<0) ? -154 : 154;
+      int offsetY = (ySpeed<0) ? -69 : 69;
+      
+      if ( xSave >= 1 ) {
+        xSave -= 1;
+        xRep++;
       }
+      if ( ySave >= 1 ) {
+        ySave -= 1;
+        yRep++;
+      }
+     
+      
+      for ( ; yRep > 0; yRep-- ) {
+        if ( place_free(x-24 + offset,y+offsetY+signY) && place_free(x+24 + offset,y+offsetY+signY) ) {
+          y += signY;
+        }
+        else {
+          jump = (signY > 0)? true: false;
+          ySpeed = 0;
+        }
+      }
+      for ( ; xRep > 0; xRep-- ) {
+        if ( place_free(x+offsetX+signX+offset,y) && place_free(x+offsetX+signX+offset,y+12) ) {
+          x += signX;
+        }
+        else {
+          xSpeed = 0;
+          direction *= -1;
+        }
+>>>>>>> boss
+      }
+      
+      position.x = x;
+      position.y = y;
+      velocity.x = xSpeed;
+      velocity.y = ySpeed;
     }
+<<<<<<< HEAD
     for ( ; xRep > 0; xRep-- ) {
       if ( place_free(x+offsetX+signX-offset,y) && place_free(x+offsetX+signX-offset,y+12) ) { // Cambio de signo
         x += signX;
@@ -158,13 +220,75 @@ class Enemy extends Element{
         xSpeed = 0;
         direction *= -1;
         x += direction * walkSpeed;
+=======
+    else{
+      if(tipo == "brincador" && jump == true){
+        if ( !place_free(round(position.x),round(position.y)+25) || !place_free(round(position.x)+24,round(position.y)+25) ) {
+          velocity.y = -8.3;
+        }
       }
+      if(tipo != "volador"){
+        velocity.y += gravity;
+      }
+      
+      //Walk left and right
+      velocity.x = direction * walkSpeed;
+      
+      
+      
+      float xSpeed = velocity.x;
+      float ySpeed = velocity.y;
+      int x = round(position.x);
+      int y = round(position.y);
+      
+      xRep = 0; //should be zero because the for loops count it down but just as a safety
+      yRep = 0;
+      xRep += floor(abs(xSpeed));
+      yRep += floor(abs(ySpeed));
+      xSave += abs(xSpeed)-floor(abs(xSpeed));
+      ySave += abs(ySpeed)-floor(abs(ySpeed));
+      int signX = (xSpeed<0) ? -1 : 1;
+      int signY = (ySpeed<0) ? -1 : 1;
+      //when the player is moving a direction collision is tested for only in that direction
+      //the offset variables are used for this in the for loops below
+      int offsetX = (xSpeed<0) ? -24 : 24;
+      int offsetY = (ySpeed<0) ? -24 : 24;
+      
+      if ( xSave >= 1 ) {
+        xSave -= 1;
+        xRep++;
+      }
+      if ( ySave >= 1 ) {
+        ySave -= 1;
+        yRep++;
+      }
+     
+      
+      for ( ; yRep > 0; yRep-- ) {
+        if ( place_free(x-24 + offset,y+offsetY+signY) && place_free(x+24 + offset,y+offsetY+signY) ) {
+          y += signY;
+        }
+        else {
+          jump = (signY > 0)? true: false;
+          ySpeed = 0;
+        }
+      }
+      for ( ; xRep > 0; xRep-- ) {
+        if ( place_free(x+offsetX+signX+offset,y) && place_free(x+offsetX+signX+offset,y+12) ) {
+          x += signX;
+        }
+        else {
+          xSpeed = 0;
+          direction *= -1;
+        }
+>>>>>>> boss
+      }
+      
+      position.x = x;
+      position.y = y;
+      velocity.x = xSpeed;
+      velocity.y = ySpeed;
     }
-    
-    position.x = x;
-    position.y = y;
-    velocity.x = xSpeed;
-    velocity.y = ySpeed;
   }
   
   boolean die(){
