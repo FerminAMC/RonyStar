@@ -140,7 +140,7 @@ void draw(){
   mapa.drawboard((int)(rony.getPosX()));    // Esto tiene que ir dentro del vid.pintate y validar que rony exista
   vid.pintate();
   if(onTransition){
-    frameRate(1);
+    frameRate(5);
     MENU = true;
     if(transition.turnOff()){
       onTransition = false;
@@ -343,6 +343,16 @@ class Videogame{
     enemies = 0;
     offset = 0;
     timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
+    for ( int ix = 0; ix < WIDTH; ix++ ) {
+      for ( int iy = 0; iy < HEIGHT; iy++ ) {
+        if(iy == l.getSuelo()){             //lvl 1
+        //if(iy == 31){             //lvl 2
+          screen[iy][ix] = 1;
+        }else{
+          screen[iy][ix] = 0;
+        }
+      }
+    }
 }
   
   void move(float right, float left, float up, float gravity){
