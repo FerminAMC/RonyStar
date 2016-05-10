@@ -26,17 +26,17 @@ class HUD {
   int getTime() {
     return time;
   }
-
-  void setTime() {
+  
+  void setTime(int time){
     this.time = time;
   }
 
   int getLivesText() {
     return livesText;
   }
-
-  void setLivesText(int livesText) {
-    this.livesText = livesText;
+  
+  void setLivesText(int lives){
+    this.livesText = lives;
   }
 
   void pintate() {
@@ -51,6 +51,7 @@ class HUD {
       buffer.textSize(40);
       buffer.fill(255, 0, 50);
       buffer.text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-510, 35);
+
 
       player.close();
       playerCount.play();
@@ -70,6 +71,11 @@ class HUD {
       //stop();
       playerCount.close();
       isRunning = false;
+      //playerCount.close();
+      
+      textSize(58);
+      fill(0);
+      text("Game Over", 278, 400);
     }
   }
 

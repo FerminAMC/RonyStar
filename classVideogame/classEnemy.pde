@@ -98,8 +98,79 @@ class Enemy extends Element{
     tiempoVida++;
   }
   
-  void move(float gravity){
+  void move(float gravity, Character c){
+   if(tipo == "boss"){
+     velocity.y += gravity;
+     if(c.x + offset > position.x + image.width/2){
+       direction = 1;
+     }
+     else if(c.x + offset < position.x - image.width/2) direction = -1;
+     //Walk left and right
+     velocity.x = direction * walkSpeed;
     
+    
+    
+    float xSpeed = velocity.x;
+    float ySpeed = velocity.y;
+    int x = round(position.x);
+    int y = round(position.y);
+    
+    xRep = 0; //should be zero because the for loops count it down but just as a safety
+    yRep = 0;
+    xRep += floor(abs(xSpeed));
+    yRep += floor(abs(ySpeed));
+    xSave += abs(xSpeed)-floor(abs(xSpeed));
+    ySave += abs(ySpeed)-floor(abs(ySpeed));
+    int signX = (xSpeed<0) ? -1 : 1;
+    int signY = (ySpeed<0) ? -1 : 1;
+    //when the player is moving a direction collision is tested for only in that direction
+    //the offset variables are used for this in the for loops below
+    int offsetX = (xSpeed<0) ? -154 : 154;
+    int offsetY = (ySpeed<0) ? -69 : 69;
+    
+    if ( xSave >= 1 ) {
+      xSave -= 1;
+      xRep++;
+    }
+    if ( ySave >= 1 ) {
+      ySave -= 1;
+      yRep++;
+    }
+   
+    
+    for ( ; yRep > 0; yRep-- ) {
+      if ( place_free(x-154 - offset,y+offsetY+signY) && place_free(x+154 - offset,y+offsetY+signY) ) { // Cambio de signo
+        y += signY;
+      }
+      else {
+        jump = (signY > 0)? true: jump;
+        ySpeed = 0;
+      }
+      
+      position.x = x;
+      position.y = y;
+      velocity.x = xSpeed;
+      velocity.y = ySpeed;
+    }
+    for ( ; xRep > 0; xRep-- ) {
+      if ( place_free(x+offsetX+signX-offset,y) && place_free(x+offsetX+signX-offset,y+12) ) { // Cambio de signo
+        x += signX;
+      }
+      else {
+        xSpeed = 0;
+        direction *= -1;
+        x += direction * walkSpeed;
+
+
+      }
+      
+      position.x = x;
+      position.y = y;
+      velocity.x = xSpeed;
+      velocity.y = ySpeed;
+    }
+   }
+   else{ 
     if(tipo == "brincador" && jump == true){
         velocity.y = -8.3;
         jump = false;
@@ -149,6 +220,11 @@ class Enemy extends Element{
         jump = (signY > 0)? true: jump;
         ySpeed = 0;
       }
+      
+      position.x = x;
+      position.y = y;
+      velocity.x = xSpeed;
+      velocity.y = ySpeed;
     }
     for ( ; xRep > 0; xRep-- ) {
       if ( place_free(x+offsetX+signX-offset,y) && place_free(x+offsetX+signX-offset,y+12) ) { // Cambio de signo
@@ -158,13 +234,16 @@ class Enemy extends Element{
         xSpeed = 0;
         direction *= -1;
         x += direction * walkSpeed;
+
+
       }
+      
+      position.x = x;
+      position.y = y;
+      velocity.x = xSpeed;
+      velocity.y = ySpeed;
     }
-    
-    position.x = x;
-    position.y = y;
-    velocity.x = xSpeed;
-    velocity.y = ySpeed;
+   }
   }
   
   boolean die(){
