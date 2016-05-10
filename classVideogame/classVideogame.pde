@@ -10,7 +10,7 @@ import com.dhchoi.CountdownTimerService;
 
 
 CountdownTimer timer;
-Animation start, transition;
+Animation start, transition, transitionFinal;
 Map mapa;
 Videogame vid;
 ArrayList <Bullet> bala;
@@ -120,6 +120,7 @@ void setup(){
    start = new Animation("../Sprites/menuinicio/menuinicio", 89, width/2, height, width, height);
    onTransition = false;
    transition = new Animation("../Sprites/transition_good/frame", 27, width/2, height, width, height);
+   transitionFinal = new Animation("../Sprites/transition/frame", 25, width/2, height, width, height);
    
    fuente = createFont("../fonts/majorforce.ttf", 32);
    //fuente = createFont("../fonts/justice.ttf", 32);
@@ -154,17 +155,30 @@ void draw(){
   if(onTransition){
     frameRate(5);
     MENU = true;
-    if(transition.turnOff()){
-      player.play();
-      onTransition = false;
-      MENU = false;
-      frameRate(60);
-      playerNasa.close();
-    }else{
-      playerCount.pause();
-      player.pause();
-      transition.pintate();
-      playerNasa.play();
+    if(l.getLevelNumber() == 2){
+      if(transition.turnOff()){
+        player.play();
+        onTransition = false;
+        MENU = false;
+        frameRate(60);
+        playerNasa.close();
+      }else{
+        playerCount.pause();
+        player.pause();
+        transition.pintate();
+        playerNasa.play();
+      }
+    }else if(l.getLevelNumber() == 3){
+      if(transitionFinal.turnOff()){
+        player.play();
+        onTransition = false;
+        MENU = false;
+        frameRate(60);
+      }else{
+        playerCount.pause();
+        player.pause();
+        transitionFinal.pintate();
+      }
     }
   }
 
