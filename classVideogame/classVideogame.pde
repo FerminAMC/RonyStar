@@ -20,6 +20,8 @@ ArrayList<Animation> animacion;
 HUD hud;
 Level l;
 Menu menu;
+Sprite ronyw;
+
 int enemies = 0;
 
 float right, left, up;    // lvl 1
@@ -33,6 +35,7 @@ int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
 PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss;
+PImage iRonySR, iRonySL;
 PImage wasd, space, icon;
 PFont fuente;
 boolean isRunning, onTransition;
@@ -73,30 +76,22 @@ void onFinishEvent(CountdownTimer t) {
 void setup(){
     sketchPApplet=this;
     size(800, 650);
-<<<<<<< HEAD
-    frameRate(35);
-    mapa1 = loadImage("../Sprites/lvl_1.png");
-    mapa2 = loadImage("../Sprites/lvl_2.png");
-    mapa3 = loadImage("../Sprites/lvl_3.png");
-    
-    combinacion = createGraphics(2200, 650, JAVA2D);
-    timer = CountdownTimerService.getNewCountdownTimer(this).configure(100, 60000);
-    combinacion.beginDraw();
-    combinacion.image(mapa1, 0,0);
-    combinacion.image(mapa2, 611, 0);
-    combinacion.image(mapa3,1221,0);
-    combinacion.endDraw();
-=======
+    iRonySR = loadImage("../Characters/RonyNA_new.png"); 
+    iRonySR.resize(50,50);
+    iRony = loadImage("../Characters/sprite_sheet_ronyA.png");
+    iRony.resize(200, 41);
+    ronyw = new Sprite();
+
     timer = CountdownTimerService.getNewCountdownTimer(this);
     mapalvl2 = loadImage("../Sprites/lvl2_rony.png");   //lvl 2
     mapa1 = loadImage("../Sprites/lvl_1.png");   //lvl 1
     mapa2 = loadImage("../Sprites/lvl_2.png");   //lvl 1
     mapa3 = loadImage("../Sprites/lvl_3.png");   //lvl 1
->>>>>>> moyom/level2
 
-   iRony = loadImage("../Characters/R_estar.png");
+   //iRony = loadImage("../Characters/R_estar.png");
+   
    iEnemy = loadImage("../Characters/robot.png");
-   iRony.resize(50, 50);
+   
    iEnemy.resize(50, 50);
    iBullet = loadImage("../Sprites/bullet.png");
    iBullet.resize(50,50);
@@ -156,7 +151,7 @@ void draw(){
     }
   }
   if(!MENU){
-
+ronyw.check();
     if(rony.getPosX() > 95 && rony.getPosX() < 105){
       offset = int(offset - rony.getXSpeed());
     }
@@ -309,17 +304,10 @@ class Videogame{
     rony = new Character(iRony, 5, 0, false, 100, 450, 15, 2);
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
-<<<<<<< HEAD
-    mapa = new Map(combinacion, 0);
     enemy.add(new Enemy(iBoss, 50, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0, 1, "equis"));
-    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, 1, "volador"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, int direction,  String tipo){
-=======
-    
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
->>>>>>> moyom/level2
     hud = new HUD();
   }
   
@@ -394,7 +382,7 @@ class Videogame{
       menu.pintate();
     }
     else{
-      rony.pintate();
+      //rony.pintate();
       if(isRunning == true)
       hud.pintate();
       hud.setScore(rony.score);
