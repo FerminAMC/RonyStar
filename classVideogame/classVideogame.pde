@@ -68,6 +68,9 @@ Minim count;
 AudioPlayer playerNasa;
 Minim Nasa;
 
+AudioPlayer playerEx;
+Minim Explosion;
+
 PApplet sketchPApplet;
 int offset;
 
@@ -132,6 +135,7 @@ void setup(){
    minim = new Minim(this);
    s2min = new Minim(this);
    Nasa = new Minim(this);
+   Explosion = new Minim(this);
    flush = minim.loadFile("bullet.mp3");
    
    back = new Minim(this);
@@ -139,6 +143,7 @@ void setup(){
    player = back.loadFile("piratas.mp3",2048);
    playerNasa = back.loadFile("countdownasa.mp3", 2048);
    playerCount = count.loadFile("countdown.mp3", 2048);
+   playerEx = count.loadFile("explosion.mp3", 2048);
    player.loop();   
    offset = 0;
 
@@ -174,10 +179,12 @@ void draw(){
         onTransition = false;
         MENU = false;
         frameRate(60);
+        playerEx.close();
       }else{
         playerCount.pause();
         player.pause();
         transitionFinal.pintate();
+        playerEx.play();
       }
     }
   }
