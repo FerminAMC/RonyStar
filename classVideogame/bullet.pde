@@ -146,7 +146,21 @@ class Bullet{
           return false;
         }
     }
-    
+    else return false;
+  }
+  
+  boolean hitRony(Character c){
+    if(tipo != "rony"){
+      if(this.position.x + this.icon.width/2 >= c.x - c.icon.width/2 &&
+      this.position.x - this.icon.width/2 <= c.x + c.icon.width/2 &&
+      this.position.y + this.icon.height/2 >= c.y - c.icon.height/2 &&
+      this.position.y - this.icon.height/2 <= c.y + c.icon.height/2
+      ){
+        c.lives--;
+        return true;
+      }
+      else return false;
+    }
     else return false;
   }
 }

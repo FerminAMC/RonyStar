@@ -61,7 +61,7 @@ class HUD{
     return time;
   }
   
-  void setTime(){
+  void setTime(int time){
     this.time = time;
   }
   
@@ -69,8 +69,8 @@ class HUD{
     return livesText;
   }
   
-  void setLivesText(){
-    this.livesText = livesText;
+  void setLivesText(int lives){
+    this.livesText = lives;
   }
   
   void pintate(){
@@ -86,8 +86,8 @@ class HUD{
      buffer.fill(255, 0, 50);
      buffer.text("Time: " + time, width-510, 35);
 
-      player.close();
-      playerCount.play();
+      //player.close();
+      //playerCount.play();
       
      textSize(40);
      fill(255, 0, 50);
@@ -103,7 +103,7 @@ class HUD{
       buffer.fill(0);
       buffer.text("Game Over", 278, 400);
       //stop();
-      playerCount.close();
+      //playerCount.close();
       
       textSize(58);
       fill(0);
