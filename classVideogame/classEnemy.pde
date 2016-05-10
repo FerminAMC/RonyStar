@@ -101,10 +101,17 @@ class Enemy extends Element{
   void move(float gravity, Character c){
    if(tipo == "boss"){
      velocity.y += gravity;
+<<<<<<< HEAD
      if(c.x + offset > position.x + image.width/2){
        direction = 1;
      }
      else if(c.x + offset < position.x - image.width/2) direction = -1;
+=======
+     if(c.x + offset - 100 > position.x + image.width/2){
+       direction = 1;
+     }
+     else if(c.x + offset + 100 < position.x - image.width/2) direction = -1;
+>>>>>>> bossMovement
      //Walk left and right
      velocity.x = direction * walkSpeed;
     
