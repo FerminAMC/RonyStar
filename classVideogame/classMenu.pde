@@ -159,14 +159,19 @@ class Menu{
       case 2:
       //Menu pausa
       if(this.getSelectorY() == height/5){
+        player.play();
         return false;
       }else if(this.getSelectorY() == ((height/5*2))){
         v.restart();
+        player.pause();
+        player.rewind();
+        player.play();
         return false;
       }else if(this.getSelectorY() ==(height/5*3)){
         this.setMenuNumber(3); 
         coordenadaX(width/2-110);
         coordenadaY((height/3.0 * 2)-30);
+        
         return true;
       }else if(this.getSelectorY() ==(height/5*4)){
         setup();
@@ -179,7 +184,9 @@ class Menu{
         if(this.getSelectorX() == width/2-110){
          draw();
          coordenadaX(width/2-50);
-         coordenadaY(height/5);           return false;
+         coordenadaY(height/5);  
+         player.play();
+         return false;
         }
       break;
     }

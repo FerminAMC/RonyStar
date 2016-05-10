@@ -20,6 +20,8 @@ ArrayList<Animation> animacion;
 HUD hud;
 Level l;
 Menu menu;
+Sprite ronyw;
+
 int enemies = 0;
 
 float right, left, up, gravity = .25;
@@ -31,7 +33,10 @@ int WIDTH = 2200/tamX;     //Se generan en base al mapa
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
-PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss;
+
+PImage iRony, iEnemy, iBullet, shipBullet, iShip;
+PImage iRonySR, iRonySL;
+
 PImage wasd, space, icon;
 PFont fuente;
 boolean isRunning;
@@ -67,34 +72,36 @@ void onFinishEvent(CountdownTimer t) {
   timerCallbackInfo = "[finished]";
 }
 
+
+
+
 //cargar archivos
 void setup(){ //flScreen(); 
     size(800, 650);
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     frameRate(35);
-=======
-
->>>>>>> parent of d70b38e... rocket
-
-=======
-    //frameRate(60);
->>>>>>> boss
+ 
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
     
     combinacion = createGraphics(2200, 650, JAVA2D);
-    timer = CountdownTimerService.getNewCountdownTimer(this).configure(100, 60000);
+    timer = CountdownTimerService.getNewCountdownTimer(this).configure(100, 10000);
     combinacion.beginDraw();
     combinacion.image(mapa1, 0,0);
     combinacion.image(mapa2, 611, 0);
     combinacion.image(mapa3,1221,0);
     combinacion.endDraw();
-
-   iRony = loadImage("../Characters/R_estar.png");
+    
+    iRonySR = loadImage("../Characters/RonyNA_new.png"); 
+    iRonySR.resize(50,50);
+    
+   //iRony = loadImage("../Characters/R_estar.png");
+   iRony = loadImage("../Characters/sprite_sheet_ronyA.png");
+   ronyw = new Sprite();
+   
    iEnemy = loadImage("../Characters/robot.png");
-   iRony.resize(50, 50);
+   //iRony.resize(150, 50);
    iEnemy.resize(50, 50);
    iBullet = loadImage("../Sprites/bullet.png");
    iBullet.resize(50,50);
@@ -133,25 +140,28 @@ void setup(){ //flScreen();
 
 //ejecutar juego
 void draw(){
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
+  println("Is Running " + isRunning);
+
   
   //s2.rewind();
   //s2.play();
   offset = int(offset - rony.xSpeed);
   println(offset);
->>>>>>> boss
-=======
->>>>>>> parent of d70b38e... rocket
+
   buffer.beginDraw();
   buffer.textFont(fuente);
+
+  //logica del nivel 1
+  if(l.getLevelNumber() == 1){
+  //image(iRony, 0,4);
+ 
   mapa.drawboard((int)(rony.getPosX()));
   vid.pintate();
+   
   println("Timer:" + timer.getTimeLeftUntilFinish());
-  if(!MENU){
-
+  if(!MENU &&  timer.getTimeLeftUntilFinish()/1000 >=0){
+  ronyw.check();
     if(rony.getPosX() > 95 && rony.getPosX() < 105){
       offset = int(offset - rony.getXSpeed());
     }
@@ -188,6 +198,7 @@ void draw(){
   }
   buffer.endDraw();
   image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
+}
  }
 
 boolean place_free(int xx, int yy){
@@ -226,6 +237,7 @@ boolean place_free(int xx, int yy){
         //left = 1;
         right = 1;
         rony.setDirection(1);
+        ronyw.turn(0);
       }
     }
     if(key == 'a' || key == 'A'){
@@ -257,21 +269,22 @@ boolean place_free(int xx, int yy){
     }
     
     if(key == 'p' || key == 'P'){
-<<<<<<< HEAD
-      isRunning = !isRunning;
-      if(isRunning)
+
+      isRunning = false;
+      if(!isRunning){
       player.pause();
-      hud.pintate();
-=======
-      //player.pause();
->>>>>>> boss
+      }
+    
+
       if(MENU == true && menu.menuNumber == 2){
-          MENU = false;
-          //player.play();
-        }
+        MENU= false;
+        player.play();
+      //isRunning = !isRunning;
+      }
         right = 0;
         left = 0;
         up = 0;
+        
         MENU = true;
         menu.setMenuNumber(2);
         
@@ -307,13 +320,11 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-<<<<<<< HEAD
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
-=======
+
     enemy.add(new Enemy(iBoss, 100, 10000, width-iBoss.width/2, 150, 20, 1.5, "boss"));
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2, "equis"));
     enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, "volador"));
->>>>>>> boss
+
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, int direction,  String tipo){
     hud = new HUD();
@@ -341,11 +352,10 @@ class Videogame{
       for(Enemy e : enemy){
         e.move(gravity, rony);
         if(e.getTiempoVida() % 103 == 0){
-<<<<<<< HEAD
-=======
-          //flush.rewind();
-          //flush.play();
->>>>>>> boss
+
+          flush.rewind();
+          flush.play();
+
           if(e.getTipo() == "volador"){
             bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() - offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy")); // Cambio de signo
             flush.rewind();
@@ -369,7 +379,7 @@ class Videogame{
       menu.pintate();
     }
     else{
-      rony.pintate();
+      
       if(isRunning == true)
       hud.pintate();
       hud.setScore(rony.score);
@@ -400,17 +410,7 @@ class Videogame{
       if(spawnT % 303 == 0){
         enemy.add(new Enemy(iShip, 2, 100, width + offset, 100, 20, 2, -1, "volador"));
         enemies++;
-=======
-      if(enemy.size() < 8){
-        if(spawnT % 103 == 0){
-          //frameRate(5);
-          enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "normal"));
-        }
-        if(spawnT % 203 == 0){
-          //frameRate(5);
-          enemy.add(new Enemy(iEnemy, 1, 100, width/2, 450, 20, 2, "brincador"));
-        }
->>>>>>> boss
+
       }
      }
       boolean aux = false;
@@ -446,4 +446,35 @@ void mousePressed() {
   if ( mouseButton == LEFT ) {
     screen[int(floor((float)mouseY/tamY))][int(floor((float)(mouseX + offset)/ tamX))] ^= 1;
   }
+}
+
+class Sprite{
+ PImage cell[];
+  int cnt = 0, step = 0, dir = 0;
+ 
+  Sprite() {
+    cell = new PImage[4];
+    for (int y = 0; y < 1; y++)
+      for (int x = 0; x < 4; x++)
+        cell[y*3+x] = iRony.get(x*50,y*41,50,41);
+  }
+ 
+  void turn(int _dir) {
+    if (_dir >= 0 && _dir < 4) dir = _dir;
+    println (dir);
+  }
+ 
+  void check() {
+    if (cnt++ > 4) {
+      cnt = 0;
+      step++;
+      if (step >= 3)
+        step = 0;
+    }
+    int idx = dir*2 + (step == 3 ? 1 : step);
+    buffer.image(cell[idx], rony.getPosX(), rony.getPosY());
+    //println("Estoy pintando sprites");
+  }
+
+
 }
