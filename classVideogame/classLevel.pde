@@ -27,7 +27,7 @@ int maxSeconds;
      enemiesNumber = en;
   }
   
-  int levelNumber(){
+  int getLevelNumber(){
     return levelNumber;
   }
   

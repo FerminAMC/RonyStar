@@ -20,6 +20,7 @@ ArrayList<Animation> animacion;
 HUD hud;
 Level l;
 Menu menu;
+Sprite ronyw;
 int enemies = 0;
 
 float right, left, up, gravity = .25;
@@ -32,6 +33,7 @@ int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
 PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss;
+PImage iRonySR, iRonySL;
 PImage wasd, space, icon;
 PFont fuente;
 boolean isRunning;
@@ -82,10 +84,16 @@ void setup(){ //flScreen();
     combinacion.image(mapa2, 611, 0);
     combinacion.image(mapa3,1221,0);
     combinacion.endDraw();
+    
+    iRonySR = loadImage("../Characters/RonyNA_new.png"); 
+    iRonySR.resize(50,50);
+       ronyw = new Sprite();
 
-   iRony = loadImage("../Characters/R_estar.png");
+   //iRony = loadImage("../Characters/R_estar.png");
+   iRony = loadImage("../Characters/sprite_sheet_ronyA.png");
    iEnemy = loadImage("../Characters/robot.png");
-   iRony.resize(50, 50);
+   //iRony.resize(150, 50);
+   iRony.resize(200, 50);
    iEnemy.resize(50, 50);
    iBullet = loadImage("../Sprites/bullet.png");
    iBullet.resize(50,50);
@@ -124,6 +132,7 @@ void setup(){ //flScreen();
 
 //ejecutar juego
 void draw(){
+  println("Is Running " + isRunning);
   
   buffer.beginDraw();
   buffer.textFont(fuente);
@@ -131,7 +140,7 @@ void draw(){
   vid.pintate();
   println("Timer:" + timer.getTimeLeftUntilFinish());
   if(!MENU){
-
+  ronyw.check();
     if(rony.getPosX() > 95 && rony.getPosX() < 105){
       offset = int(offset - rony.getXSpeed());
     }
@@ -168,6 +177,14 @@ void draw(){
   }
   buffer.endDraw();
   image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
+  
+    //logica del nivel 2
+  if(l.getLevelNumber() == 2){
+  
+  
+  
+  }
+
  }
 
 boolean place_free(int xx, int yy){
@@ -303,6 +320,8 @@ class Videogame{
     rony.jumpSpeed = 20;
     rony.walkSpeed = 2;
     enemy.clear();
+    bala.clear();
+    animacion.clear();
     enemies = 0;
     offset = 0;
     timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
@@ -410,4 +429,36 @@ void mousePressed() {
   if ( mouseButton == LEFT ) {
     screen[int(floor((float)mouseY/tamY))][int(floor((float)(mouseX + offset)/ tamX))] ^= 1;
   }
+}
+
+
+class Sprite{
+ PImage cell[];
+  int cnt = 0, step = 0, dir = 0;
+ 
+  Sprite() {
+    cell = new PImage[4];
+    for (int y = 0; y < 1; y++)
+      for (int x = 0; x < 4; x++)
+        cell[y*3+x] = iRony.get(x*50,y*41,50,41);
+  }
+ 
+  void turn(int _dir) {
+    if (_dir >= 0 && _dir < 4) dir = _dir;
+    println (dir);
+  }
+ 
+  void check() {
+    if (cnt++ > 4) {
+      cnt = 0;
+      step++;
+      if (step >= 3)
+        step = 0;
+    }
+    int idx = dir*2 + (step == 3 ? 1 : step);
+    buffer.image(cell[idx], rony.getPosX(), rony.getPosY());
+    //println("Estoy pintando sprites");
+  }
+
+
 }
