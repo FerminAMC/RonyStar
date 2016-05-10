@@ -371,8 +371,7 @@ class Videogame{
           }
         }
         if(e.getTiempoVida() % 103 == 0){
-          flush.rewind();
-          flush.play();
+         
           if(e.getTipo() == "volador"){
             bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() - offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy")); // Cambio de signo
             flush.rewind();
