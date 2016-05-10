@@ -283,7 +283,7 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-    enemy.add(new Enemy(iBoss, 100, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
+    enemy.add(new Enemy(iBoss, 50, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0, 1, "equis"));
     enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, 1, "volador"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
@@ -312,6 +312,13 @@ class Videogame{
     if(!MENU){
       for(Enemy e : enemy){
         e.move(gravity, rony);
+        if(millis() % 30 == 0){
+          if(e.getTipo() == "boss"){
+            bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 - offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
+            flush.rewind();
+            flush.play();
+          }
+        }
         if(e.getTiempoVida() % 103 == 0){
           flush.rewind();
           flush.play();
