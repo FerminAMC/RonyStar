@@ -65,6 +65,9 @@ Minim back;
 AudioPlayer playerCount;
 Minim count;
 
+AudioPlayer playerNasa;
+Minim Nasa;
+
 PApplet sketchPApplet;
 int offset;
 
@@ -127,11 +130,13 @@ void setup(){
    isRunning = false;
    minim = new Minim(this);
    s2min = new Minim(this);
+   Nasa = new Minim(this);
    flush = minim.loadFile("bullet.mp3");
    
    back = new Minim(this);
    count = new Minim(this);
    player = back.loadFile("piratas.mp3",2048);
+   playerNasa = back.loadFile("countdownasa.mp3", 2048);
    playerCount = count.loadFile("countdown.mp3", 2048);
    player.loop();   
    offset = 0;
@@ -150,11 +155,16 @@ void draw(){
     frameRate(5);
     MENU = true;
     if(transition.turnOff()){
+      player.play();
       onTransition = false;
       MENU = false;
       frameRate(60);
+      playerNasa.close();
     }else{
+      playerCount.pause();
+      player.pause();
       transition.pintate();
+      playerNasa.play();
     }
   }
 
@@ -282,9 +292,10 @@ boolean place_free(int xx, int yy){
     
     if(key == 'p' || key == 'P'){
       isRunning = !isRunning;
-      if(isRunning)
+      if(!isRunning)
       player.pause();
-      hud.pintate();
+      
+      
       if(MENU == true && menu.menuNumber == 2){
           MENU = false;
           player.play();
@@ -321,8 +332,10 @@ boolean place_free(int xx, int yy){
 class Videogame{
   
   public Videogame(){
+
     l = new Level(25,1,90,.25, 1100, -274, 25, 2112, 2200);
       //public Level(int en, int ln, int ms, float gravity, int limScrIzq, int limScrDer, int suelo, int winPt, int graphicsSize )
+
     enemy = new ArrayList();
     rony = new Character(RonySprite, 5, 0, false, 100, 450, 15, 2);
     bala = new ArrayList();
@@ -357,6 +370,7 @@ class Videogame{
     mapa = new Map(combinacion, 0);
   }
   void restart(){
+
     enemy.clear();
     enemies = 0;
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
@@ -366,11 +380,21 @@ class Videogame{
     }
     rony.icon = RonySprite; // Depende del nivel
     rony.lives = 5;
+
+    playerCount.pause();
+    player.pause();
+    player.rewind();
+    player.play();
+    
+
     rony.score = 0;
     rony.x = 100;
     rony.y = 400;
     rony.jumpSpeed = 20;
     rony.walkSpeed = 2;
+    bala.clear();
+    animacion.clear();
+
     offset = 0;
     timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
     for ( int ix = 0; ix < WIDTH; ix++ ) {
@@ -385,6 +409,7 @@ class Videogame{
 }
   
   void move(float right, float left, float up, float gravity){
+
     if(!MENU){
       for(Enemy e : enemy){
         e.move(gravity, rony);
