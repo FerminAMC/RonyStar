@@ -165,7 +165,7 @@ class Menu{
         v.restart();
         player.pause();
         player.rewind();
-        player.play();
+        //player.play();
         return false;
       }else if(this.getSelectorY() ==(height/5*3)){
         this.setMenuNumber(3); 
