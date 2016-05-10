@@ -31,7 +31,7 @@ int WIDTH = 2200/tamX;     //Se generan en base al mapa
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
-PImage iRony, iEnemy, iBullet, shipBullet, iShip;
+PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss;
 PImage wasd, space, icon;
 PFont fuente;
 boolean isRunning;
@@ -71,7 +71,6 @@ void onFinishEvent(CountdownTimer t) {
 void setup(){ //flScreen(); 
     size(800, 650);
     frameRate(35);
-
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
@@ -94,6 +93,8 @@ void setup(){ //flScreen();
    shipBullet.resize(50,50);
    iShip = loadImage("../Characters/Nave1.gif");
    iShip.resize(50,50);
+   iBoss = loadImage("../Characters/Boss1.png");
+   iBoss.resize(310, 140);
    
    wasd = loadImage("../Sprites/wasd.png");
    space = loadImage("../Sprites/spaceKey.png");
@@ -110,6 +111,7 @@ void setup(){ //flScreen();
    minim = new Minim(this);
    s2min = new Minim(this);
    flush = minim.loadFile("bullet.mp3");
+   
    back = new Minim(this);
    count = new Minim(this);
    player = back.loadFile("piratas.mp3",2048);
@@ -122,11 +124,9 @@ void setup(){ //flScreen();
 
 //ejecutar juego
 void draw(){
-
+  
   buffer.beginDraw();
   buffer.textFont(fuente);
-  //logica del nivel 1
-  if(l.getLevelNumber() == 1){
   mapa.drawboard((int)(rony.getPosX()));
   vid.pintate();
   println("Timer:" + timer.getTimeLeftUntilFinish());
@@ -168,17 +168,6 @@ void draw(){
   }
   buffer.endDraw();
   image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
-  }
-  
-  //logica del nivel 2
-  if(l.getLevelNumber() == 2){
-  
-  
-  
-  }
-  
-  
-  
  }
 
 boolean place_free(int xx, int yy){
@@ -294,7 +283,9 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
+    enemy.add(new Enemy(iBoss, 50, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0, 1, "equis"));
+    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, 1, "volador"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, int direction,  String tipo){
     hud = new HUD();
@@ -303,13 +294,7 @@ class Videogame{
   void increaseLevel(){
     l.setLevelNumber(ln++);
   }
-  void restart(){ 
-    for ( int ix = 0; ix < WIDTH; ix++ ) {
-      for ( int iy = 0; iy < HEIGHT; iy++ ) {
-        screen[iy][ix] = 0;
-      }
-    }
-    
+  void restart(){
     rony.icon = iRony;
     rony.lives = 3;
     rony.score = 0;
@@ -318,19 +303,25 @@ class Videogame{
     rony.jumpSpeed = 20;
     rony.walkSpeed = 2;
     enemy.clear();
-    bala.clear();
-    animacion.clear();
     enemies = 0;
     offset = 0;
     timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
-    
 }
   
   void move(float right, float left, float up, float gravity){
     if(!MENU){
       for(Enemy e : enemy){
-        e.move(gravity);
+        e.move(gravity, rony);
+        if(millis() % 30 == 0){
+          if(e.getTipo() == "boss"){
+            bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 - offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
+            flush.rewind();
+            flush.play();
+          }
+        }
         if(e.getTiempoVida() % 103 == 0){
+          flush.rewind();
+          flush.play();
           if(e.getTipo() == "volador"){
             bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() - offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy")); // Cambio de signo
             flush.rewind();
@@ -357,11 +348,14 @@ class Videogame{
       rony.pintate();
       if(isRunning == true)
       hud.pintate();
+      hud.setScore(rony.score);
+      hud.setLivesText(rony.lives);
       for(Enemy e : enemy){
         e.pintate();
         if(e.die()){
           enemy.remove(e);
           rony.score +=100;
+          rony.lives++;
           break;
         }
       }
@@ -386,6 +380,11 @@ class Videogame{
       boolean aux = false;
       for(Bullet b : bala){
         b.pintate();
+        if(b.hitRony(rony)){
+          animacion.add(new Animation("../Sprites/bulletHit/bulletHit", 25, b.position.x, b.position.y));
+          bala.remove(b);
+          aux = true;
+        }
         for(Enemy e : enemy){
           if(b.hit(e)){
             animacion.add(new Animation("../Sprites/bulletHit/bulletHit", 25, b.position.x, b.position.y));
@@ -401,7 +400,6 @@ class Videogame{
         buffer.text("Has ganado", height/2, width/2);
         //aumentar de nivel y reiniciar tiempo
         increaseLevel();
-        timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
      }
     }
   }
