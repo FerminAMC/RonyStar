@@ -459,6 +459,24 @@ class Videogame{
           break;
         }
       }
+      if(rony.lives < 1){
+        MENU = true;
+        menu = new Menu(1, wasd, space);
+        isRunning = false; 
+        rony.lives = 5;
+        right = 0;
+        left = 0;
+        up = 0;
+        rony.x = 100;
+        rony.y = 400;
+        rony.jumpSpeed = 20;
+        rony.walkSpeed = 2;
+        enemy.clear();
+        bala.clear();
+        enemies = 0;
+        offset = 0;
+        timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
+      }
       int interval = 5;
       int spawnT = interval - int(millis()/10);
       
