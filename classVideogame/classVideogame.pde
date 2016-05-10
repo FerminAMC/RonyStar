@@ -106,7 +106,6 @@ void setup(){ //flScreen();
 }
 //ejecutar juego
 void draw(){
-  
   buffer.beginDraw();
   buffer.textFont(fuente);
   mapa.drawboard((int)(rony.getPosX()));
