@@ -1,85 +1,79 @@
-class HUD{
+int timeElapsed, timePaused;
+class HUD {
   PImage lives;
-  PImage progress[];
   int score;
   int time;
-  
-  HUD(){
-    String path;
-    lives = loadImage(".png");
-    for(int i = 0; i < 100; i++){
-      path = "" + i + ".png";
-      progress[i] = loadImage(path);
-    }
+  int livesText = 3;
+
+  HUD() {
     score = 0;
     time = 0;
   }
-  
-  HUD(int enemies){
-    String path;
-    lives = loadImage(".png");
-    for(int i = 0; i < 100; i++){
-      path = "" + (100/enemies)*i + ".png";
-      progress[i] = loadImage(path);
-    }
+
+  HUD(int enemies) {
     score = 0;
     time = 0;
   }
-  
-  PImage getLives(){
-    return lives;
-  }
-  
-  void setLives(PImage lives){    //Aquí puede ser que reciba el path de la imagen en vez de la imagen
-    this.lives = lives;
-    /*
-    this.lives = loadImage(lives);
-    */
-  }
-  
-  PImage[] getProgress(){
-    return progress;
-  }
-  
-  void setProgress(PImage progress[]){
-    int i;
-    for(i = 0; i < progress.length; i++){
-      this.progress[i] = progress[i];
-    }
-  }
-  
-  int getScore(){
+
+  int getScore() {
     return score;
   }
-  
-  void setScore(int score){
+
+  void setScore(int score) {
     this.score = score;
   }
-  
-  int getTime(){
+
+  int getTime() {
     return time;
   }
-  
-  void setTime(){
+
+  void setTime() {
     this.time = time;
   }
-  
-  void pintate(){
-    int interval = 10;
-    time = interval - int(millis()/1000);
-    text(time, width - 30, 30);
-    if(time == 0){
-      stop();
+
+  int getLivesText() {
+    return livesText;
+  }
+
+  void setLivesText(int livesText) {
+    this.livesText = livesText;
+  }
+
+  void pintate() {
+
+
+    if (timer.getTimeLeftUntilFinish()/1000 > 9) {
+
+      buffer.fill(255);
+      buffer.text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-500, 30);
+    } else {
+
+      buffer.textSize(40);
+      buffer.fill(255, 0, 50);
+      buffer.text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-510, 35);
+
+      player.close();
+      playerCount.play();
+
+      textSize(40);
+      fill(255, 0, 50);
+      text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-510, 35);
+    }
+    buffer.fill(255);
+    buffer.textSize(28);
+    buffer.text("Score: " +rony.score, width-200, 30);
+    buffer.text("Lives: " +livesText, width -800, 30); 
+    if (timer.getTimeLeftUntilFinish()/1000 == 0) {
+      buffer.textSize(58);
+      buffer.fill(0);
+      buffer.text("Game Over", 278, 400);
+      //stop();
+      playerCount.close();
+      isRunning = false;
     }
   }
-  
-  void reset(int enemies){
-    String path;
-    lives = loadImage(".png");
-    for(int i = 0; i < 100; i++){
-      path = "" + (100/enemies)*i + ".png";
-      progress[i] = loadImage(path);
-    }
+
+  void reset(int enemies) {
     score = 0;
     time = 0;
   }

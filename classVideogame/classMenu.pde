@@ -80,17 +80,19 @@ class Menu{
     switch(this.menuNumber){
       case 1:
       //Menu Start
-      background(0);
+      buffer.background(0);
+      
+      start.pintate();
       drawStart();
       drawSelector();
       break;
       case 2:
-      background(0);
+      buffer.background(0);
       drawPause();
       drawSelector();
       break;
       case 3:
-      background(0);
+      buffer.background(0);
       drawInstructions();
       drawSelector();
       break;
@@ -98,48 +100,48 @@ class Menu{
   }
   
   void drawStart(){
-    fill(90);
-    textSize(40);
-    textAlign(CENTER);
-    text("Rony Star", width/2.0 , 50);
-    textSize(30);
-    textAlign(LEFT);
-    text("Empezar juego", width/2.0, height/3.0);
-    text("Instrucciones", width/2.0, height/3.0 * 2);
+    buffer.fill(90);
+    buffer.textSize(40);
+    buffer.textAlign(CENTER);
+    buffer.text("Rony Star", width/2.0 , 50);
+    buffer.textSize(30);
+    buffer.textAlign(LEFT);
+    buffer.text("Empezar juego", width/2.0, height/3.0);
+    buffer.text("Instrucciones", width/2.0, height/3.0 * 2);
   }
   
   void drawInstructions(){
-    imageMode(CORNER);
-    fill(90);
-    textSize(40);
-    textAlign(CENTER);
-    text("¿Cómo jugar?", width/2.0, 50);
-    textSize(30);
-    text("Para moverte usa:", width/5.0 , height/3.0 - 30);
-    image(wasd, width/5.0-150, height/3.0);
-    text("Para disparar usa:", width/3.0 * 2, height/3.0 - 30);
-    image(space, width/3.0 * 2-150, height/3.0);
-    fill(90);
-    text("¡A jugar!", width/2, height/3*2);
+    buffer.imageMode(CORNER);
+    buffer.fill(90);
+    buffer.textSize(40);
+    buffer.textAlign(CENTER);
+    buffer.text("¿Cómo jugar?", width/2.0, 50);
+    buffer.textSize(30);
+    buffer.text("Para moverte usa:", width/5.0 , height/3.0 - 30);
+    buffer.image(wasd, width/5.0-150, height/3.0);
+    buffer.text("Para disparar usa:", width/3.0 * 2, height/3.0 - 30);
+    buffer.image(space, width/3.0 * 2-150, height/3.0);
+    buffer.fill(90);
+    buffer.text("¡A jugar!", width/2, height/3*2);
   }
   
   void drawPause(){
-    fill(180);
-    textSize(40);
-    textAlign(CENTER);
-    text("Rony Star", width/2, 50);
-    textSize(30);
-    textAlign(LEFT);
-    text("Reanudar", width/2, height/5 +30);
-    text("Reiniciar nivel", width/2, (height/5*2)+30);
-    text("Ayuda", width/2, (height/5*3)+30);
-    text("Salir", width/2, (height/5*4)+30);
+    buffer.fill(180);
+    buffer.textSize(40);
+    buffer.textAlign(CENTER);
+    buffer.text("Rony Star", width/2, 50);
+    buffer.textSize(30);
+    buffer.textAlign(LEFT);
+    buffer.text("Reanudar", width/2, height/5 +30);
+    buffer.text("Reiniciar nivel", width/2, (height/5*2)+30);
+    buffer.text("Ayuda", width/2, (height/5*3)+30);
+    buffer.text("Salir", width/2, (height/5*4)+30);
     
   }
   
   void drawSelector(){
-    fill(255);
-    rect(this.selectorX, this.selectorY, 30, 30);
+    buffer.fill(255);
+    buffer.rect(this.selectorX, this.selectorY, 30, 30);
   }
   
   boolean select(Videogame v){
