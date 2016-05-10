@@ -37,11 +37,11 @@ class HUD {
       buffer.fill(255);
       buffer.text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-500, 30);
     } else {
-      buffer.textSize(40);
-      buffer.fill(255, 0, 50);
-      buffer.text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-510, 35);
+     
+
       player.close();
       playerCount.play();
+
       textSize(40);
       fill(255, 0, 50);
       text("Time: " + timer.getTimeLeftUntilFinish()/1000, width-510, 35);

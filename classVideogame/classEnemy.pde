@@ -101,10 +101,7 @@ class Enemy extends Element{
   void move(float gravity, Character c){
    if(tipo == "boss"){
      velocity.y += gravity;
-     if(c.getDirection() == 1){
-       direction = -1;
-     }
-     else direction = 1;
+
      //Walk left and right
      velocity.x = direction * walkSpeed;
     
