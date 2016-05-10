@@ -71,7 +71,11 @@ void onFinishEvent(CountdownTimer t) {
 void setup(){ //flScreen(); 
     size(800, 650);
 <<<<<<< HEAD
+<<<<<<< HEAD
     frameRate(35);
+=======
+
+>>>>>>> parent of d70b38e... rocket
 
 =======
     //frameRate(60);
@@ -116,6 +120,7 @@ void setup(){ //flScreen();
    minim = new Minim(this);
    s2min = new Minim(this);
    flush = minim.loadFile("bullet.mp3");
+   
    back = new Minim(this);
    count = new Minim(this);
    //player = back.loadFile("piratas.mp3",2048);
@@ -129,6 +134,7 @@ void setup(){ //flScreen();
 //ejecutar juego
 void draw(){
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
   
@@ -137,10 +143,10 @@ void draw(){
   offset = int(offset - rony.xSpeed);
   println(offset);
 >>>>>>> boss
+=======
+>>>>>>> parent of d70b38e... rocket
   buffer.beginDraw();
   buffer.textFont(fuente);
-  //logica del nivel 1
-  if(l.getLevelNumber() == 1){
   mapa.drawboard((int)(rony.getPosX()));
   vid.pintate();
   println("Timer:" + timer.getTimeLeftUntilFinish());
@@ -182,17 +188,6 @@ void draw(){
   }
   buffer.endDraw();
   image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
-  }
-  
-  //logica del nivel 2
-  if(l.getLevelNumber() == 2){
-  
-  
-  
-  }
-  
-  
-  
  }
 
 boolean place_free(int xx, int yy){
@@ -327,13 +322,7 @@ class Videogame{
   void increaseLevel(){
     l.setLevelNumber(ln++);
   }
-  void restart(){ 
-    for ( int ix = 0; ix < WIDTH; ix++ ) {
-      for ( int iy = 0; iy < HEIGHT; iy++ ) {
-        screen[iy][ix] = 0;
-      }
-    }
-    
+  void restart(){
     rony.icon = iRony;
     rony.lives = 3;
     rony.score = 0;
@@ -342,12 +331,9 @@ class Videogame{
     rony.jumpSpeed = 20;
     rony.walkSpeed = 2;
     enemy.clear();
-    bala.clear();
-    animacion.clear();
     enemies = 0;
     offset = 0;
     timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
-    
 }
   
   void move(float right, float left, float up, float gravity){
@@ -450,7 +436,6 @@ class Videogame{
         buffer.text("Has ganado", height/2, width/2);
         //aumentar de nivel y reiniciar tiempo
         increaseLevel();
-        timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
      }
     }
   }
