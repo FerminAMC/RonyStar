@@ -10,7 +10,7 @@ import com.dhchoi.CountdownTimerService;
 
 
 CountdownTimer timer;
-Animation start;
+Animation start, transition;
 Map mapa;
 Videogame vid;
 ArrayList <Bullet> bala;
@@ -22,7 +22,7 @@ Level l;
 Menu menu;
 int enemies = 0;
 
-float right, left, up, gravity = .25;    // lvl 1
+float right, left, up;    // lvl 1
 boolean MENU;
 String timerCallbackInfo = "";
 int ln;
@@ -35,7 +35,7 @@ int lastBulletRony = 0;
 PImage iRony, iEnemy, iBullet, shipBullet, iShip;
 PImage wasd, space, icon;
 PFont fuente;
-boolean isRunning;
+boolean isRunning, onTransition;
 
 
 PGraphics buffer;
@@ -95,7 +95,10 @@ void setup(){
    
    buffer = createGraphics(width, height);
    
-   start = new Animation("../Sprites/menuinicio/menuinicio", 89, 0, height/2, width, height);
+   start = new Animation("../Sprites/menuinicio/menuinicio", 89, width/2, height, width, height);
+   onTransition = false;
+   transition = new Animation("../Sprites/menuinicio/menuinicio", 89, width/2, height, width, height);
+   
    fuente = createFont("../fonts/majorforce.ttf", 32);
    //fuente = createFont("../fonts/justice.ttf", 32);
    vid = new Videogame();
@@ -123,6 +126,17 @@ void draw(){
   buffer.textFont(fuente);
   mapa.drawboard((int)(rony.getPosX()));    // Esto tiene que ir dentro del vid.pintate y validar que rony exista
   vid.pintate();
+  if(onTransition){
+    frameRate(1);
+    MENU = true;
+    if(transition.turnOff()){
+      onTransition = false;
+      MENU = false;
+      frameRate(60);
+    }else{
+      transition.pintate();
+    }
+  }
   if(!MENU){
 
     if(rony.getPosX() > 95 && rony.getPosX() < 105){
@@ -283,6 +297,9 @@ class Videogame{
   }
   
   void startLevel(){
+    right = 0;
+    left = 0;
+    up = 0;
     timer.configure(100, l.getMaxSeconds() * 1000);
     
     combinacion = createGraphics(l.getGraphicsSize(), 650, JAVA2D);  //lvl 1
@@ -391,6 +408,7 @@ class Videogame{
         l = new Level(25,2,120,.12, 4350, -2957, 31, 2112, 8700);
         startLevel();
         restart();
+        onTransition = true;
      }
     }
   }

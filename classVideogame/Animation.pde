@@ -39,6 +39,7 @@ class Animation {
   
   void pintate() {
       frame = (frame+1) % imageCount;
+      buffer.imageMode(CENTER);
       buffer.image(images[frame], xpos, ypos - images[frame].height/2);
   }
   
