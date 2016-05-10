@@ -162,6 +162,11 @@ class Menu{
         return false;
       }else if(this.getSelectorY() == ((height/5*2))){
         v.restart();
+
+        player.pause();
+        player.rewind();
+        //player.play();
+
         return false;
       }else if(this.getSelectorY() ==(height/5*3)){
         this.setMenuNumber(3); 
