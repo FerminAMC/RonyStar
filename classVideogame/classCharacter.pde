@@ -146,14 +146,6 @@ class Character {
     this.direction = dir;
   }
   
-  PImage getIcon(){
-    return icon;
-  }
-  
-  void setIcon(PImage icon){
-    this.icon = icon;
-  }
-  
   void pintate() {
     buffer.pushMatrix();
     buffer.translate(x,y);

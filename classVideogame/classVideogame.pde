@@ -7,6 +7,8 @@ import ddf.minim.ugens.*;
 import processing.sound.*;
 import com.dhchoi.CountdownTimer;
 import com.dhchoi.CountdownTimerService;
+
+
 CountdownTimer timer;
 Animation start;
 Map mapa;
@@ -19,6 +21,7 @@ HUD hud;
 Level l;
 Menu menu;
 int enemies = 0;
+
 float right, left, up, gravity = .25;
 boolean MENU;
 String timerCallbackInfo = "";
@@ -32,27 +35,38 @@ PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss;
 PImage wasd, space, icon;
 PFont fuente;
 boolean isRunning;
+
+
 PGraphics buffer;
 PImage mapa1;
 PImage mapa2;
 PImage mapa3;
 PGraphics combinacion;
+
 //tipo de archivos necesarios para el audio
 AudioPlayer flush;
 //objetos minim
 Minim minim;
 Minim s2min;
+
+
 AudioPlayer player;
 Minim back;
+
 AudioPlayer playerCount;
 Minim count;
+
+
 int offset;
+
 void onTickEvent(CountdownTimer t, long timeLeftUntilFinish) {
   timerCallbackInfo = "[tick] - timeLeft: " + timeLeftUntilFinish/1000 + "ms";
 }
+
 void onFinishEvent(CountdownTimer t) {
   timerCallbackInfo = "[finished]";
 }
+
 //cargar archivos
 void setup(){ //flScreen(); 
     size(800, 650);
@@ -68,6 +82,7 @@ void setup(){ //flScreen();
     combinacion.image(mapa2, 611, 0);
     combinacion.image(mapa3,1221,0);
     combinacion.endDraw();
+
    iRony = loadImage("../Characters/R_estar.png");
    iEnemy = loadImage("../Characters/robot.png");
    iRony.resize(50, 50);
@@ -103,20 +118,27 @@ void setup(){ //flScreen();
    playerCount = count.loadFile("countdown.mp3", 2048);
    player.loop();   
    offset = 0;
+
 }
+
+
 //ejecutar juego
 void draw(){
+  
   buffer.beginDraw();
   buffer.textFont(fuente);
   mapa.drawboard((int)(rony.getPosX()));
   vid.pintate();
   println("Timer:" + timer.getTimeLeftUntilFinish());
   if(!MENU){
+
     if(rony.getPosX() > 95 && rony.getPosX() < 105){
       offset = int(offset - rony.getXSpeed());
     }
     vid.move(right, left, up, gravity);
+
     timer.start();
+
     isRunning = true;
     vid.move(right, left, up, gravity);
     for(Animation anim : animacion){
@@ -147,6 +169,7 @@ void draw(){
   buffer.endDraw();
   image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
  }
+
 boolean place_free(int xx, int yy){
   //checks if a given point (xx,yy) is free (no block at that point) or not
   yy = int(floor((float)yy/tamY));
@@ -160,6 +183,7 @@ boolean place_free(int xx, int yy){
   }
   return false;
 }  
+
   void keyPressed(){
   if(keyPressed == true){
     if(key == 'w' || key == 'W'){
@@ -202,6 +226,7 @@ boolean place_free(int xx, int yy){
         lastBulletRony = millis();
         bala.add(new Bullet(iBullet, -rony.getDirection(), rony.getPosX() , rony.getPosY(), 0, 20 * rony.getDirection(),  0, "rony"));
         //  public Bullet(PImage image, float direction, PVector pos, int damage, float spX, float spY, String tipo){
+
       }
     }
     
@@ -248,6 +273,7 @@ boolean place_free(int xx, int yy){
       lastBulletRony = 0;
     }
 }
+
 class Videogame{
   
   public Videogame(){
@@ -257,7 +283,7 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-    enemy.add(new Enemy(iBoss, 100, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
+    enemy.add(new Enemy(iBoss, 50, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0, 1, "equis"));
     enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, 1, "volador"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
@@ -286,6 +312,13 @@ class Videogame{
     if(!MENU){
       for(Enemy e : enemy){
         e.move(gravity, rony);
+        if(millis() % 30 == 0){
+          if(e.getTipo() == "boss"){
+            bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 - offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
+            flush.rewind();
+            flush.play();
+          }
+        }
         if(e.getTiempoVida() % 103 == 0){
           flush.rewind();
           flush.play();
@@ -371,6 +404,7 @@ class Videogame{
     }
   }
 }
+
 void mousePressed() {
 //Left click creates/destroys a block
   if ( mouseButton == LEFT ) {
