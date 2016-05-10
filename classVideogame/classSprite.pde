@@ -22,7 +22,14 @@ class Sprite{
         step = 0;
     }
     int idx = dir*2 + (step == 3 ? 1 : step);
-    buffer.image(cell[idx], rony.getPosX(), rony.getPosY());
+    
+    buffer.pushMatrix();
+    buffer.translate(rony.getPosX(),rony.getPosY());
+    buffer.scale(rony.getDirection(), 1);
+    buffer.imageMode(CENTER);
+    buffer.image(cell[idx], 0, 0);
+    buffer.popMatrix();
+
     //println("Estoy pintando sprites");
   }
 }
