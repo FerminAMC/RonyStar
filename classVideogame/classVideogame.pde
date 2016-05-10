@@ -7,8 +7,6 @@ import ddf.minim.ugens.*;
 import processing.sound.*;
 import com.dhchoi.CountdownTimer;
 import com.dhchoi.CountdownTimerService;
-
-
 CountdownTimer timer;
 Animation start;
 Map mapa;
@@ -20,10 +18,7 @@ ArrayList<Animation> animacion;
 HUD hud;
 Level l;
 Menu menu;
-Sprite ronyw;
-
 int enemies = 0;
-
 float right, left, up, gravity = .25;
 boolean MENU;
 String timerCallbackInfo = "";
@@ -33,75 +28,49 @@ int WIDTH = 2200/tamX;     //Se generan en base al mapa
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
-
-PImage iRony, iEnemy, iBullet, shipBullet, iShip;
-PImage iRonySR, iRonySL;
-
+PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss;
 PImage wasd, space, icon;
 PFont fuente;
 boolean isRunning;
-
-
 PGraphics buffer;
 PImage mapa1;
 PImage mapa2;
 PImage mapa3;
 PGraphics combinacion;
-
 //tipo de archivos necesarios para el audio
 AudioPlayer flush;
 //objetos minim
 Minim minim;
 Minim s2min;
-
-
 AudioPlayer player;
 Minim back;
-
 AudioPlayer playerCount;
 Minim count;
-
-
 int offset;
-
 void onTickEvent(CountdownTimer t, long timeLeftUntilFinish) {
   timerCallbackInfo = "[tick] - timeLeft: " + timeLeftUntilFinish/1000 + "ms";
 }
-
 void onFinishEvent(CountdownTimer t) {
   timerCallbackInfo = "[finished]";
 }
-
-
-
-
 //cargar archivos
 void setup(){ //flScreen(); 
     size(800, 650);
-
     frameRate(35);
- 
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
     mapa3 = loadImage("../Sprites/lvl_3.png");
     
     combinacion = createGraphics(2200, 650, JAVA2D);
-    timer = CountdownTimerService.getNewCountdownTimer(this).configure(100, 10000);
+    timer = CountdownTimerService.getNewCountdownTimer(this).configure(100, 60000);
     combinacion.beginDraw();
     combinacion.image(mapa1, 0,0);
     combinacion.image(mapa2, 611, 0);
     combinacion.image(mapa3,1221,0);
     combinacion.endDraw();
-    
-    iRonySR = loadImage("../Characters/RonyNA_new.png"); 
-    iRonySR.resize(50,50);
-    
-   //iRony = loadImage("../Characters/R_estar.png");
-   iRony = loadImage("../Characters/sprite_sheet_ronyA.png");
-   ronyw = new Sprite();
-   
+   iRony = loadImage("../Characters/R_estar.png");
    iEnemy = loadImage("../Characters/robot.png");
-   //iRony.resize(150, 50);
+   iRony.resize(50, 50);
    iEnemy.resize(50, 50);
    iBullet = loadImage("../Sprites/bullet.png");
    iBullet.resize(50,50);
@@ -130,45 +99,25 @@ void setup(){ //flScreen();
    
    back = new Minim(this);
    count = new Minim(this);
-   //player = back.loadFile("piratas.mp3",2048);
-   //playerCount = count.loadFile("countdown.mp3", 2048);
-   //player.loop();   
+   player = back.loadFile("piratas.mp3",2048);
+   playerCount = count.loadFile("countdown.mp3", 2048);
+   player.loop();   
    offset = 0;
-
 }
-
-
 //ejecutar juego
 void draw(){
-
-  println("Is Running " + isRunning);
-
   
-  //s2.rewind();
-  //s2.play();
-  offset = int(offset - rony.xSpeed);
-  println(offset);
-
   buffer.beginDraw();
   buffer.textFont(fuente);
-
-  //logica del nivel 1
-  if(l.getLevelNumber() == 1){
-  //image(iRony, 0,4);
- 
   mapa.drawboard((int)(rony.getPosX()));
   vid.pintate();
-   
   println("Timer:" + timer.getTimeLeftUntilFinish());
-  if(!MENU &&  timer.getTimeLeftUntilFinish()/1000 >=0){
-  ronyw.check();
+  if(!MENU){
     if(rony.getPosX() > 95 && rony.getPosX() < 105){
       offset = int(offset - rony.getXSpeed());
     }
     vid.move(right, left, up, gravity);
-
     timer.start();
-
     isRunning = true;
     vid.move(right, left, up, gravity);
     for(Animation anim : animacion){
@@ -198,9 +147,7 @@ void draw(){
   }
   buffer.endDraw();
   image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
-}
  }
-
 boolean place_free(int xx, int yy){
   //checks if a given point (xx,yy) is free (no block at that point) or not
   yy = int(floor((float)yy/tamY));
@@ -214,7 +161,6 @@ boolean place_free(int xx, int yy){
   }
   return false;
 }  
-
   void keyPressed(){
   if(keyPressed == true){
     if(key == 'w' || key == 'W'){
@@ -237,7 +183,6 @@ boolean place_free(int xx, int yy){
         //left = 1;
         right = 1;
         rony.setDirection(1);
-        ronyw.turn(0);
       }
     }
     if(key == 'a' || key == 'A'){
@@ -253,12 +198,11 @@ boolean place_free(int xx, int yy){
     
     if(key == ' ' && millis() - lastBulletRony > 500){
       if(!MENU){
-        //flush.rewind();
-        //flush.play();
+        flush.rewind();
+        flush.play();
         lastBulletRony = millis();
         bala.add(new Bullet(iBullet, -rony.getDirection(), rony.getPosX() , rony.getPosY(), 0, 20 * rony.getDirection(),  0, "rony"));
         //  public Bullet(PImage image, float direction, PVector pos, int damage, float spX, float spY, String tipo){
-
       }
     }
     
@@ -269,22 +213,17 @@ boolean place_free(int xx, int yy){
     }
     
     if(key == 'p' || key == 'P'){
-
-      isRunning = false;
-      if(!isRunning){
+      isRunning = !isRunning;
+      if(isRunning)
       player.pause();
-      }
-    
-
+      hud.pintate();
       if(MENU == true && menu.menuNumber == 2){
-        MENU= false;
-        player.play();
-      //isRunning = !isRunning;
-      }
+          MENU = false;
+          player.play();
+        }
         right = 0;
         left = 0;
         up = 0;
-        
         MENU = true;
         menu.setMenuNumber(2);
         
@@ -310,7 +249,6 @@ boolean place_free(int xx, int yy){
       lastBulletRony = 0;
     }
 }
-
 class Videogame{
   
   public Videogame(){
@@ -320,11 +258,9 @@ class Videogame{
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     mapa = new Map(combinacion, 0);
-
-    enemy.add(new Enemy(iBoss, 100, 10000, width-iBoss.width/2, 150, 20, 1.5, "boss"));
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 2, "equis"));
-    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, "volador"));
-
+    enemy.add(new Enemy(iBoss, 100, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0, 1, "equis"));
+    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, 1, "volador"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, int direction,  String tipo){
     hud = new HUD();
@@ -352,10 +288,8 @@ class Videogame{
       for(Enemy e : enemy){
         e.move(gravity, rony);
         if(e.getTiempoVida() % 103 == 0){
-
           flush.rewind();
           flush.play();
-
           if(e.getTipo() == "volador"){
             bala.add(new Bullet(shipBullet, e.getDirection(), e.getPosX() - offset, e.getPosY(), 0, 0, 20 * e.getDirection(), "shipEnemy")); // Cambio de signo
             flush.rewind();
@@ -379,7 +313,7 @@ class Videogame{
       menu.pintate();
     }
     else{
-      
+      rony.pintate();
       if(isRunning == true)
       hud.pintate();
       hud.setScore(rony.score);
@@ -395,7 +329,6 @@ class Videogame{
       }
       int interval = 5;
       int spawnT = interval - int(millis()/10);
-<<<<<<< HEAD
       
      if (enemies < l.getEnemiesNumber()){
       
@@ -410,7 +343,6 @@ class Videogame{
       if(spawnT % 303 == 0){
         enemy.add(new Enemy(iShip, 2, 100, width + offset, 100, 20, 2, -1, "volador"));
         enemies++;
-
       }
      }
       boolean aux = false;
@@ -440,41 +372,9 @@ class Videogame{
     }
   }
 }
-
 void mousePressed() {
 //Left click creates/destroys a block
   if ( mouseButton == LEFT ) {
     screen[int(floor((float)mouseY/tamY))][int(floor((float)(mouseX + offset)/ tamX))] ^= 1;
   }
-}
-
-class Sprite{
- PImage cell[];
-  int cnt = 0, step = 0, dir = 0;
- 
-  Sprite() {
-    cell = new PImage[4];
-    for (int y = 0; y < 1; y++)
-      for (int x = 0; x < 4; x++)
-        cell[y*3+x] = iRony.get(x*50,y*41,50,41);
-  }
- 
-  void turn(int _dir) {
-    if (_dir >= 0 && _dir < 4) dir = _dir;
-    println (dir);
-  }
- 
-  void check() {
-    if (cnt++ > 4) {
-      cnt = 0;
-      step++;
-      if (step >= 3)
-        step = 0;
-    }
-    int idx = dir*2 + (step == 3 ? 1 : step);
-    buffer.image(cell[idx], rony.getPosX(), rony.getPosY());
-    //println("Estoy pintando sprites");
-  }
-
-
 }
