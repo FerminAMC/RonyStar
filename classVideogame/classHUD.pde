@@ -67,7 +67,7 @@ class HUD {
       buffer.textSize(58);
       buffer.fill(0);
       buffer.text("Game Over", 278, 400);
-      //stop();
+      noLoop();
       playerCount.close();
       isRunning = false;
     }
