@@ -34,12 +34,9 @@ int WIDTH = 8700/tamX;
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
-<<<<<<< HEAD
-PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss;
+
 PImage iRonySR, iRonySL;
-=======
 PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss, bossBullet;
->>>>>>> bossMovement
 PImage wasd, space, icon;
 PFont fuente;
 boolean isRunning, onTransition;
@@ -310,14 +307,8 @@ class Videogame{
     rony = new Character(iRony, 5, 0, false, 100, 450, 15, 2);
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
-<<<<<<< HEAD
-    enemy.add(new Enemy(iBoss, 50, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
-=======
-    mapa = new Map(combinacion, 0);
+
     enemy.add(new Enemy(iBoss, 50, 10000, width-iBoss.width/2, 150, 20, .7, 1, "boss"));
-    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0, 1, "equis"));
-    enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, 1, "volador"));
->>>>>>> bossMovement
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, int direction,  String tipo){
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
@@ -364,11 +355,7 @@ class Videogame{
         e.move(gravity, rony);
         if(millis() % 30 == 0){
           if(e.getTipo() == "boss"){
-<<<<<<< HEAD
-            bala.add(new Bullet(iBullet, -e.getDirection(), e.getPosX()+50 - offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
-=======
             bala.add(new Bullet(bossBullet, -e.getDirection(), e.getPosX()+50 - offset, e.getPosY(), 0, 10 * e.getDirection(), 0, "normalEnemy"));
->>>>>>> bossMovement
             flush.rewind();
             flush.play();
           }
