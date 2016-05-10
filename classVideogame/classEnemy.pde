@@ -100,6 +100,10 @@ class Enemy extends Element{
   
   void move(float gravity, Character c){
    if(tipo == "boss"){
+     if(jump == true){
+        velocity.y = -15;
+        jump = false;
+    }
      velocity.y += gravity;
      if(c.x + offset - 100 > position.x + image.width/2){
        direction = 1;

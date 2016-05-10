@@ -21,7 +21,7 @@ class Character {
     y = _y;
     xSpeed = 0;
     ySpeed = 0;
-    lives = 3;
+    this.lives = lives;
     accel = 0.5;
     deccel = 0.5;
     maxXspd = 5;

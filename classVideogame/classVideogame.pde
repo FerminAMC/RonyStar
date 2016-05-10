@@ -49,6 +49,7 @@ PImage mapa1;
 PImage mapa2;
 PImage mapa3;
 PImage mapalvl2;
+PImage mapaBoss;
 PGraphics combinacion;
 
 //tipo de archivos necesarios para el audio
@@ -91,7 +92,7 @@ void setup(){
     mapa1 = loadImage("../Sprites/lvl_1.png");   //lvl 1
     mapa2 = loadImage("../Sprites/lvl_2.png");   //lvl 1
     mapa3 = loadImage("../Sprites/lvl_3.png");   //lvl 1
-
+    mapaBoss = loadImage("../Sprites/boss_level.png");
    //iRony = loadImage("../Characters/R_estar.png");
    
    iEnemy = loadImage("../Characters/robot.png");
@@ -320,14 +321,13 @@ boolean place_free(int xx, int yy){
 class Videogame{
   
   public Videogame(){
-    l = new Level(10,1,70,.25, 1100, -274, 25, 2112, 2200);
+    l = new Level(25,1,90,.25, 1100, -274, 25, 2112, 2200);
       //public Level(int en, int ln, int ms, float gravity, int limScrIzq, int limScrDer, int suelo, int winPt, int graphicsSize )
     enemy = new ArrayList();
     rony = new Character(RonySprite, 5, 0, false, 100, 450, 15, 2);
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
 
-    enemy.add(new Enemy(iBoss, 50, 10000, width-iBoss.width/2, 150, 20, .7, 1, "boss"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, int direction,  String tipo){
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
@@ -349,27 +349,33 @@ class Videogame{
       combinacion.image(mapa2, 611, 0);   //lvl 1
       combinacion.image(mapa3,1221,0);    // lvl 1
     }else if(l.getLevelNumber() == 2){
-      combinacion.image(mapalvl2,0, 0);
+      combinacion.image(mapalvl2,0, 0);   //lvl luna
+    }else if(l.getLevelNumber() == 3){
+      combinacion.image(mapaBoss, 0, 0);  //Boss lvl
     }
     combinacion.endDraw();
     mapa = new Map(combinacion, 0);
   }
   void restart(){
-    rony.icon = iRony; // Depende del nivel
-    rony.lives = 3;
+    enemy.clear();
+    enemies = 0;
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
+    if(l.getLevelNumber() == 3){
+      enemy.add(new Enemy(iBoss, 150, 10000, width-iBoss.width/2, 150, 20, .7, -1, "boss"));
+      enemies++;
+    }
+    rony.icon = RonySprite; // Depende del nivel
+    rony.lives = 5;
     rony.score = 0;
     rony.x = 100;
     rony.y = 400;
     rony.jumpSpeed = 20;
     rony.walkSpeed = 2;
-    enemy.clear();
-    enemies = 0;
     offset = 0;
     timer.reset(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
     for ( int ix = 0; ix < WIDTH; ix++ ) {
       for ( int iy = 0; iy < HEIGHT; iy++ ) {
-        if(iy == l.getSuelo()){             //lvl 1
-        //if(iy == 31){             //lvl 2
+        if(iy == l.getSuelo()){ 
           screen[iy][ix] = 1;
         }else{
           screen[iy][ix] = 0;
@@ -469,7 +475,12 @@ class Videogame{
         buffer.text("Has ganado", height/2, width/2);
         timer.stop(CountdownTimer.StopBehavior.STOP_IMMEDIATELY);
         timer = CountdownTimerService.getNewCountdownTimer(sketchPApplet);
-        l = new Level(25,2,120,.12, 4350, -2957, 31, 2112, 8700);
+        if(l.getLevelNumber() == 1){
+          l = new Level(50,2,180,.12, 4350, -2957, 31, 8000, 8700);
+        }else if(l.getLevelNumber() == 2){
+          l = new Level(1,3, 180 , .20 , 536, 281, 29, 0, 1080);
+        }
+        
         startLevel();
         restart();
         onTransition = true;
