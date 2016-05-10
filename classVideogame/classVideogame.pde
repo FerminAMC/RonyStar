@@ -10,7 +10,7 @@ import com.dhchoi.CountdownTimerService;
 
 
 CountdownTimer timer;
-Animation start;
+Animation start, transition;
 Map mapa;
 Videogame vid;
 ArrayList <Bullet> bala;
@@ -22,25 +22,27 @@ Level l;
 Menu menu;
 int enemies = 0;
 
-float right, left, up, gravity = .25;
+float right, left, up;    // lvl 1
 boolean MENU;
 String timerCallbackInfo = "";
 int ln;
 int tamX = 50, tamY = 20;
-int WIDTH = 2200/tamX;     //Se generan en base al mapa
+//int WIDTH = 2200/tamX;     //Se generan en base al nivel
+int WIDTH = 8700/tamX;
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
 PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss;
 PImage wasd, space, icon;
 PFont fuente;
-boolean isRunning;
+boolean isRunning, onTransition;
 
 
 PGraphics buffer;
 PImage mapa1;
 PImage mapa2;
 PImage mapa3;
+PImage mapalvl2;
 PGraphics combinacion;
 
 //tipo de archivos necesarios para el audio
@@ -56,7 +58,7 @@ Minim back;
 AudioPlayer playerCount;
 Minim count;
 
-
+PApplet sketchPApplet;
 int offset;
 
 void onTickEvent(CountdownTimer t, long timeLeftUntilFinish) {
@@ -68,8 +70,10 @@ void onFinishEvent(CountdownTimer t) {
 }
 
 //cargar archivos
-void setup(){ //flScreen(); 
+void setup(){
+    sketchPApplet=this;
     size(800, 650);
+<<<<<<< HEAD
     frameRate(35);
     mapa1 = loadImage("../Sprites/lvl_1.png");
     mapa2 = loadImage("../Sprites/lvl_2.png");
@@ -82,6 +86,13 @@ void setup(){ //flScreen();
     combinacion.image(mapa2, 611, 0);
     combinacion.image(mapa3,1221,0);
     combinacion.endDraw();
+=======
+    timer = CountdownTimerService.getNewCountdownTimer(this);
+    mapalvl2 = loadImage("../Sprites/lvl2_rony.png");   //lvl 2
+    mapa1 = loadImage("../Sprites/lvl_1.png");   //lvl 1
+    mapa2 = loadImage("../Sprites/lvl_2.png");   //lvl 1
+    mapa3 = loadImage("../Sprites/lvl_3.png");   //lvl 1
+>>>>>>> moyom/level2
 
    iRony = loadImage("../Characters/R_estar.png");
    iEnemy = loadImage("../Characters/robot.png");
@@ -101,10 +112,14 @@ void setup(){ //flScreen();
    
    buffer = createGraphics(width, height);
    
-   start = new Animation("../Sprites/menuinicio/menuinicio", 89, 0, height/2, width, height);
+   start = new Animation("../Sprites/menuinicio/menuinicio", 89, width/2, height, width, height);
+   onTransition = false;
+   transition = new Animation("../Sprites/menuinicio/menuinicio", 89, width/2, height, width, height);
+   
    fuente = createFont("../fonts/majorforce.ttf", 32);
    //fuente = createFont("../fonts/justice.ttf", 32);
    vid = new Videogame();
+   vid.startLevel();
    animacion = new ArrayList();
    MENU = true;
    isRunning = false;
@@ -127,20 +142,30 @@ void draw(){
   
   buffer.beginDraw();
   buffer.textFont(fuente);
-  mapa.drawboard((int)(rony.getPosX()));
+  mapa.drawboard((int)(rony.getPosX()));    // Esto tiene que ir dentro del vid.pintate y validar que rony exista
   vid.pintate();
-  println("Timer:" + timer.getTimeLeftUntilFinish());
+  if(onTransition){
+    frameRate(1);
+    MENU = true;
+    if(transition.turnOff()){
+      onTransition = false;
+      MENU = false;
+      frameRate(60);
+    }else{
+      transition.pintate();
+    }
+  }
   if(!MENU){
 
     if(rony.getPosX() > 95 && rony.getPosX() < 105){
       offset = int(offset - rony.getXSpeed());
     }
-    vid.move(right, left, up, gravity);
+    vid.move(right, left, up, l.getGravity());
 
     timer.start();
 
     isRunning = true;
-    vid.move(right, left, up, gravity);
+    //vid.move(right, left, up, gravity);
     for(Animation anim : animacion){
       if(anim.turnOff()){
         animacion.remove(anim);
@@ -153,7 +178,8 @@ void draw(){
     
     for ( int ix = 0; ix < WIDTH; ix++ ) {
       for ( int iy = 0; iy < HEIGHT; iy++ ) {
-        if(iy == 25){
+        if(iy == l.getSuelo()){             //lvl 1
+        //if(iy == 31){             //lvl 2
           screen[iy][ix] = 1;
         }else{
           buffer.fill(240,200,50);
@@ -164,7 +190,8 @@ void draw(){
       }
     }
   }else{
-  timer.stop(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
+    timer.stop(CountdownTimer.StopBehavior.STOP_AFTER_INTERVAL);
+    isRunning = false;
   }
   buffer.endDraw();
   image(buffer.get(0, 0, buffer.width, buffer.height), 0, 0);
@@ -176,7 +203,8 @@ boolean place_free(int xx, int yy){
   xx += offset; // Cambio signo
   //xx += abs(offset);
   xx = int(floor((float)xx/tamX));
-  if ( xx > -1 && xx < screen[0].length && yy > -1 && yy < screen.length ) {
+  //if ( xx > -1 && xx < screen[0].length && yy > -1 && yy < screen.length ) {
+    if ( xx > -1 && xx < l.getGraphicsSize()/tamX && yy > -1 && yy < screen.length ) {
     if ( screen[yy][xx] == 0 ) {
       return true;
     }
@@ -203,7 +231,6 @@ boolean place_free(int xx, int yy){
       if(MENU == true){
         menu.left();
       }else{
-        //left = 1;
         right = 1;
         rony.setDirection(1);
       }
@@ -212,7 +239,6 @@ boolean place_free(int xx, int yy){
       if(MENU == true){
         menu.right();
       }else{
-        //right = 1;
         left = 1;
         rony.setDirection(-1);
         
@@ -277,25 +303,48 @@ boolean place_free(int xx, int yy){
 class Videogame{
   
   public Videogame(){
-    l = new Level();
+    l = new Level(10,1,70,.25, 1100, -274, 25, 2112, 2200);
+      //public Level(int en, int ln, int ms, float gravity, int limScrIzq, int limScrDer, int suelo, int winPt, int graphicsSize )
     enemy = new ArrayList();
     rony = new Character(iRony, 5, 0, false, 100, 450, 15, 2);
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
+<<<<<<< HEAD
     mapa = new Map(combinacion, 0);
     enemy.add(new Enemy(iBoss, 50, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
     enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0, 1, "equis"));
     enemy.add(new Enemy(iShip, 2, 100, width/2, 100, 20, 2, 1, "volador"));
     //public Enemy(PImage image, int resistance, int value, float posX, float posY,
     //float jumpSpeed, float walkSpeed, int direction,  String tipo){
+=======
+    
+    enemy.add(new Enemy(iEnemy, 2, 100, -100000, 1000000, 20, 0,1, "equis"));
+>>>>>>> moyom/level2
     hud = new HUD();
   }
   
-  void increaseLevel(){
-    l.setLevelNumber(ln++);
+  void startLevel(){
+    right = 0;
+    left = 0;
+    up = 0;
+    timer.configure(100, l.getMaxSeconds() * 1000);
+    
+    combinacion = createGraphics(l.getGraphicsSize(), 650, JAVA2D);  //lvl 1
+    //combinacion = createGraphics(8700, 650, JAVA2D);   // lvl 2
+    
+    combinacion.beginDraw();
+    if(l.getLevelNumber() == 1){
+      combinacion.image(mapa1, 0,0);     //lvl 1
+      combinacion.image(mapa2, 611, 0);   //lvl 1
+      combinacion.image(mapa3,1221,0);    // lvl 1
+    }else if(l.getLevelNumber() == 2){
+      combinacion.image(mapalvl2,0, 0);
+    }
+    combinacion.endDraw();
+    mapa = new Map(combinacion, 0);
   }
   void restart(){
-    rony.icon = iRony;
+    rony.icon = iRony; // Depende del nivel
     rony.lives = 3;
     rony.score = 0;
     rony.x = 100;
@@ -333,7 +382,7 @@ class Videogame{
           }
         }
       }
-      rony.move(left, right, up, gravity);
+      rony.move(left, right, up, l.getGravity());
     }
   }
   
@@ -395,11 +444,15 @@ class Videogame{
         }
         if(aux)break;
       }
-      //Aquí borré un for con animaciones que no necesitamos
-    if(rony.getPosX() + offset >= 2112 && enemy.size()==1){
+      //Has ganado debería ser una función de vidgame porque hace más acciones
+    if(rony.getPosX() + offset >= l.getWinPt() && enemy.size()==1){ 
         buffer.text("Has ganado", height/2, width/2);
-        //aumentar de nivel y reiniciar tiempo
-        increaseLevel();
+        timer.stop(CountdownTimer.StopBehavior.STOP_IMMEDIATELY);
+        timer = CountdownTimerService.getNewCountdownTimer(sketchPApplet);
+        l = new Level(25,2,120,.12, 4350, -2957, 31, 2112, 8700);
+        startLevel();
+        restart();
+        onTransition = true;
      }
     }
   }

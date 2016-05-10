@@ -2,6 +2,9 @@ class Level{
 int enemiesNumber;
 int levelNumber;
 int maxSeconds;
+float gravity;
+int limScrIzq, limScrDer;
+int suelo, winPt, graphicsSize;
 
   public Level(){
     enemiesNumber = 10;
@@ -9,12 +12,35 @@ int maxSeconds;
     maxSeconds = 60;
   }
   
-  public Level(int en, int ln, int ms){
+  public Level(int en, int ln, int ms, float gravity, int limScrIzq, int limScrDer, int suelo, int winPt, int graphicsSize ){
     enemiesNumber = en;
     levelNumber = ln;
     maxSeconds = ms;
+    this.gravity = gravity;
+    this.limScrIzq = limScrIzq;
+    this.limScrDer = limScrDer;
+    this.suelo = suelo;
+    this.winPt = winPt;
+    this.graphicsSize = graphicsSize;
   }
-  
+  float getGravity(){
+    return this.gravity;
+  }
+  int getLimScrIzq(){
+    return limScrIzq;
+  }
+  int getLimScrDer(){
+    return limScrDer;
+  }
+  int getSuelo(){
+    return suelo;
+  }
+  int getWinPt(){
+    return winPt;
+  }
+  int getGraphicsSize(){
+    return this.graphicsSize;
+  }
   int enemiesNumber(){
     return enemiesNumber;
   }
@@ -27,7 +53,7 @@ int maxSeconds;
      enemiesNumber = en;
   }
   
-  int levelNumber(){
+  int getLevelNumber(){
     return levelNumber;
   }
   
@@ -35,7 +61,7 @@ int maxSeconds;
     levelNumber = ln;
   }
   
-  int maxSeconds(){
+  int getMaxSeconds(){
     return maxSeconds;
   }
   

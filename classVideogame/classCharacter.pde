@@ -5,7 +5,7 @@ class Character {
   float maxXspd,maxYspd;
   float xSave,ySave;
   int xRep,yRep;
-  float gravity;
+  //float gravity;
   PImage icon;
   float direction;
   int lives;
@@ -30,11 +30,11 @@ class Character {
     ySave = 0;
     xRep = 0;
     yRep = 0;
-    gravity = 0.25;
+    //gravity = 0.25;
     //Si direction es = NULL todo rony se va al carajo
     direction = 1;
   }
-  void move(float left, float right, float up, float movX) {
+  void move(float left, float right, float up, float gravity) {
     if ( left != 0 ) {
       xSpeed += accel;
       if ( xSpeed > maxXspd ) {
@@ -64,11 +64,11 @@ class Character {
     
     if ( up != 0) {
       if ( !place_free(x,y+25) || !place_free(x+24,y+25) ) {
-        ySpeed = -6.3;
+        ySpeed = -7.3;
       }
     }
     
-    ySpeed += this.gravity;
+    ySpeed += gravity;
     
     /*
     // The technique used for movement involves taking the integer (without the decimal)

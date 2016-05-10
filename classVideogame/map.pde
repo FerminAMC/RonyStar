@@ -32,18 +32,14 @@ class Map {
    void drawboard(int positionX) {
      
     int x = (background.width/2) - offset; //Cambio de signo
+    println(x);
     float y = h/2;
-    float x1;
-    if(x < -274){
-      x1 = -274;
+    if(x < l.getLimScrDer()){
       rony.setPosX(positionX - (int)rony.getXSpeed());
-    }else if(x > 1100){
-      x1 = 1100;
+    }else if(x > l.getLimScrIzq()){
       rony.setPosX(positionX - (int)rony.getXSpeed());
-    }else{
-       x1 = x; 
     }
     
-    buffer.image(background, x1 , y);
+    buffer.image(background, x , y);
   }
 }
