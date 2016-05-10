@@ -109,7 +109,7 @@ void setup(){
    
    start = new Animation("../Sprites/menuinicio/menuinicio", 89, width/2, height, width, height);
    onTransition = false;
-   transition = new Animation("../Sprites/menuinicio/menuinicio", 89, width/2, height, width, height);
+   transition = new Animation("../Sprites/transition_good/frame", 27, width/2, height, width, height);
    
    fuente = createFont("../fonts/majorforce.ttf", 32);
    //fuente = createFont("../fonts/justice.ttf", 32);
