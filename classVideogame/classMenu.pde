@@ -159,13 +159,13 @@ class Menu{
       case 2:
       //Menu pausa
       if(this.getSelectorY() == height/5){
+        player.play();
         return false;
       }else if(this.getSelectorY() == ((height/5*2))){
         v.restart();
-
         player.pause();
         player.rewind();
-        //player.play();
+        player.play();
 
         return false;
       }else if(this.getSelectorY() ==(height/5*3)){
@@ -184,7 +184,10 @@ class Menu{
         if(this.getSelectorX() == width/2-110){
          draw();
          coordenadaX(width/2-50);
-         coordenadaY(height/5);           return false;
+         coordenadaY(height/5); 
+         player.play();
+         return false;
+         
         }
       break;
     }

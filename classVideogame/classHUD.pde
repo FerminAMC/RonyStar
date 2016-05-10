@@ -63,7 +63,8 @@ class HUD {
     buffer.fill(255);
     buffer.textSize(28);
     buffer.text("Score: " +rony.score, width-200, 30);
-    buffer.text("Lives: " +livesText, width -800, 30); 
+    buffer.text("Lives: " +livesText, width -800, 30);
+    buffer.text("Level: " +l.getLevelNumber(), width-650,30);
     if (timer.getTimeLeftUntilFinish()/1000 == 0) {
       buffer.textSize(58);
       buffer.fill(0);
