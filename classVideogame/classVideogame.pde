@@ -34,7 +34,7 @@ int WIDTH = 8700/tamX;
 int HEIGHT = 650/tamY;
 int[][] screen = new int[HEIGHT][WIDTH];
 int lastBulletRony = 0;
-PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss;
+PImage iRony, iEnemy, iBullet, shipBullet, iShip, iBoss, RonySprite;
 PImage iRonySR, iRonySL;
 PImage wasd, space, icon;
 PFont fuente;
@@ -81,7 +81,8 @@ void setup(){
     iRony = loadImage("../Characters/sprite_sheet_ronyA.png");
     iRony.resize(200, 41);
     ronyw = new Sprite();
-
+    RonySprite = loadImage("../Characters/sprite_1.png");
+    RonySprite.resize(50,50);
     timer = CountdownTimerService.getNewCountdownTimer(this);
     mapalvl2 = loadImage("../Sprites/lvl2_rony.png");   //lvl 2
     mapa1 = loadImage("../Sprites/lvl_1.png");   //lvl 1
@@ -150,8 +151,23 @@ void draw(){
       transition.pintate();
     }
   }
+
   if(!MENU){
-ronyw.check();
+  
+    if(left != 0)
+    ronyw.check();
+    else{
+      if (right == 0)
+    rony.pintate();
+    }
+    
+    if(right != 0)
+    ronyw.check();
+    else{
+      if(left == 0)
+    rony.pintate();
+    }
+    
     if(rony.getPosX() > 95 && rony.getPosX() < 105){
       offset = int(offset - rony.getXSpeed());
     }
@@ -228,6 +244,7 @@ boolean place_free(int xx, int yy){
       }else{
         right = 1;
         rony.setDirection(1);
+     
       }
     }
     if(key == 'a' || key == 'A'){
@@ -236,7 +253,7 @@ boolean place_free(int xx, int yy){
       }else{
         left = 1;
         rony.setDirection(-1);
-        
+        //iRony.translate(rony.getPosX(), rony.getPosY());
       }
     }
     
@@ -301,7 +318,7 @@ class Videogame{
     l = new Level(10,1,70,.25, 1100, -274, 25, 2112, 2200);
       //public Level(int en, int ln, int ms, float gravity, int limScrIzq, int limScrDer, int suelo, int winPt, int graphicsSize )
     enemy = new ArrayList();
-    rony = new Character(iRony, 5, 0, false, 100, 450, 15, 2);
+    rony = new Character(RonySprite, 5, 0, false, 100, 450, 15, 2);
     bala = new ArrayList();
     menu = new Menu(1, wasd, space);
     enemy.add(new Enemy(iBoss, 50, 10000, width-iBoss.width/2, 150, 20, 1.5, 1, "boss"));
